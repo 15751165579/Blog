@@ -4,13 +4,12 @@
   "description": "improve programming level in practice and thinking",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "daiqingyun",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.1.2",
-    "istanbul": "^0.4.5",
     "mocha": "^5.1.0"
   }
 }
