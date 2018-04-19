@@ -4,4 +4,5 @@ node_js:
   - "9"
 services: mongod
 
-script: make test
+script:
+  - "npm test"
