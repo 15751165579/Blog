@@ -1,0 +1,34 @@
+# 测试
+
+## 测试范式
+
+软件测试中提出两种方法论：BDD 和 TDD
+
+BDD(Behavior-Driven Development)是行为驱动的开发
+
+TDD(Test-Driven Development)是测试驱动的开发
+
+这里选择BDD来进行测试，BDD提供的接口：
+
+- describe() 声明测试套件
+- it() 声明测试用例
+- before() 所有测试用例的前置动作
+- after() 所有测试用例的后置动作
+- beforeEach() 每个测试用例的前置动作
+- afterEach() 每个测试用例的后置动作
+
+## 测试框架集[Mocha](https://mochajs.org/)
+
+## 测试断言框架[chai](http://www.chaijs.com/)
+
+它支持BDD和TDD风格,
+
+- BDD: Expect 和 Should API
+- TDD: Assert
+
+## 测试Http工具[supertest](https://github.com/visionmedia/supertest)
+
+supertest与chai搭配测试Node restful api
+
+## 持续集成工具[travis](https://travis-ci.org)
+
