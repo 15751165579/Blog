@@ -1,4 +1,8 @@
-const expect = require('chai').expect
+const chai = require('chai')
+const expect = chai.expect
+
+const app = require('../app')
+const request = require('supertest')
 
 describe('expect api 使用', function () {
 
@@ -49,17 +53,17 @@ describe('expect api 使用', function () {
     })
   })
 
-  describe('own', function () {
-    it('own 结合 property', function () {
-      Object.prototype.b = 2
-      expect({a: 1}).to.have.property('b').not.own.property('b')
-    })
+  // describe('own', function () {
+  //   it('own 结合 property', function () {
+  //     Object.prototype.b = 2
+  //     expect({a: 1}).to.have.property('b').not.own.property('b')
+  //   })
 
-    it('own 结合 include', function () {
-      Object.prototype.b = 2
-      expect({a: 1}).to.include({b: 2}).but.not.own.include({b: 2})
-    })
-  })
+  //   it('own 结合 include', function () {
+  //     Object.prototype.b = 2
+  //     expect({a: 1}).to.include({b: 2}).but.not.own.include({b: 2})
+  //   })
+  // })
 
   describe('ordered', function () {
     it('ordered 结合 members', function () {
@@ -202,6 +206,44 @@ describe('expect api 使用', function () {
 
     it('members 结合 include', function () {
       expect([1, 2, 3]).to.include.members([2, 3]).but.not.include.ordered.members([2, 3])
+    })
+  })
+})
+
+/**
+ * Mocha的使用方法
+ */
+describe('Mocha 使用方法', function () {
+  // 不可以多次调用done
+
+  // 使用done的例子
+  describe('express 结合 supertest 进行 restful api 测试', function () {
+    it('GET all the students', done => {
+      request(app).get('/api/students')
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body).to.be.a('array')
+        done()
+      })
+    })
+
+    it('DELETE student by name', done => {
+      request(app).delete('/api/students?name=小红')
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body).to.be.a('object')
+        done()
+      })
+    })
+
+    it('POST add a student', done => {
+      request(app).post('/api/students')
+      .send({ name: '小赵', age: 30})
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body).to.be.a('object')
+        done()
+      })
     })
   })
 })

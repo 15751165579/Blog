@@ -4,12 +4,20 @@
   "description": "improve programming level in practice and thinking",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --timeout 10000",
+    "dev": "node app.js"
   },
   "author": "daiqingyun",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.1.2",
-    "mocha": "^5.1.0"
+    "chai-http": "^4.0.0",
+    "mocha": "^5.1.0",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mongoose": "^5.0.15"
   }
 }
