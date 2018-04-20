@@ -1,7 +1,5 @@
 language: node_js
 
-install: travis_wait mvn install
-
 node_js:
   - "8"
   - "9"
@@ -10,5 +8,5 @@ services: mongod
 script:
   - "npm test"
 
-after_sccess:
-  - "npm run coverall"
+# after_sccess:
+#   - "npm run coverall"
