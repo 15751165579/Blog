@@ -32,3 +32,14 @@ supertest与chai搭配测试Node restful api
 
 ## 持续集成工具[travis](https://travis-ci.org)
 
+官网上有很全的教程，主要要熟悉一下.travis.yml的配置项
+
+## 代码覆盖率工具[istanbul](https://istanbul.js.org/)
+
+它拥有四个测试维度:
+- 行覆盖率(line cover)
+- 函数覆盖率(function cover)
+- 分支覆盖率(branch cover)
+- 语句覆盖率(statement cover)
+
+> Tip: 这里注意istanbul2.0 api名字换了，原先0.4版本会出现一些奇妙的问题。。。

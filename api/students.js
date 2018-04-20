@@ -6,13 +6,6 @@ router.post('/students', (req, res, next) => {
   const options = req.body
   const s = new Student(options)
   s.save((err, result) => {
-    if (err) {
-      res.json({
-        code: 0,
-        message: '操作失败'
-      })
-      return
-    }
     res.json(result)
   })
 })
