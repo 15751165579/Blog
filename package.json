@@ -4,7 +4,7 @@
   "description": "improve programming level in practice and thinking",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha -t 5000",
+    "test": "nyc mocha -t 5000 --exit",
     "coverall": "nyc report --reporter=text-lcov | coveralls" ,
     "dev": "node app.js"
   },
