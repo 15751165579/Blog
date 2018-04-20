@@ -47,4 +47,9 @@ supertest与chai搭配测试Node restful api
 
 ## 代码覆盖平台[coveralls](https://coveralls.io)
 
-需要安装依赖coveralls，之后再travis执行完test后，将生成的报告交给coveralls即可。
+使用步骤
+- 安装依赖包coveralls
+- 结合travis使用，那你可以使用travis提供的encrypt方法加密coveralls的repo_token，将加密后的字符串放入travis配置文件
+- 如果你是本地使用，那么创建.coveralls.yml配置文件即可
+
+> Tip: 不要暴露你的coveralls的repo_token

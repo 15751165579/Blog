@@ -1,12 +1,12 @@
 language: node_js
-
 node_js:
-  - "8"
-  - "9"
+- '8'
+- '9'
 services: mongod
-
 script:
-  - "npm test"
-
+- npm test
 after_sccess:
-  - "npm run coverall"
+- npm run coverall
+env:
+  global:
+    secure: VgSE4MjYZUGjlur9ypaocEITz0XcffiYM6looBBhtFMbziu482uWJkX76fTT3nz7s7arR/0t3bZP2be1/KGVas8Yvc+Wa/JXcBwpR0NK8BYMPdZfX0YzMOLJwIajb84c9P9j/bvF1dtIeMM7qbNDU7cLg6gAj/bIUgMDMyZuCFwFzra/khjVNtW2QNDKdrDxk8LvZujknyMIQXVFbyeFXsgoevOq8h4zDG0CGfvwLWEvJ9B4QVFtMfJneJww0N7RTCeGzj5/9FvaimRzMLqxZcmQGtQ/AbHeBEzbbsWvtP1yV/9xlL9U/1AiRrtg82LqfxLfu/xFsiNl1uPmLiUV07GLEzIYBuMJeYmaPXpdJk+U7mojHFOTnB1+ItHXvrNHz9rUlqiyf4+hEB3vOHDNm/xKO6/rCbP9MBQLys/zZpUh5pTfLMYw34DfIltbuRI6DvTWuwvdh0Bc7VPyIOl4UXOQIe1I3hlARYVIVUubfm4FNdI7KCHTT4Ytd5KpQ2A8FP6qj/qsCp7KLECH1eBQr6VOcjErsof5j70yw9HgKaFLQq+kOf5/FtuO06+vdfbXYZTSJI3Imx+JHeFR7typN7woIFJ0qmsgmmfm6vPMc/BGOhsjkwAPkt6xd9EXV0y7zFG9yn7uP0h7xM+8mTVLpV34GSnJzQXmor1Q+FqEzkI=
