@@ -20,7 +20,7 @@ StudentScheme.statics = {
     this.find(options, cb)
   },
   remove_by_name (name, cb) {
-    this.remove({
+    this.deleteOne({
       name
     }, cb)
   }
