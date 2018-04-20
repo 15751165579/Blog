@@ -7,9 +7,7 @@ const uri = 'mongodb://localhost/test'
 global.db = mongoose.createConnection(uri)
 
 const app = express()
-let port = process.env.PORT || (process.argv[2] || 3000)
-port = (typeof port === 'number') ? port : /* istanbul ignore next */3000
-
+let port = 3000
 
 const api = require('./api')
 

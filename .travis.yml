@@ -6,3 +6,6 @@ services: mongod
 
 script:
   - "npm test"
+
+after_sccess:
+  - "npm run coverall"
