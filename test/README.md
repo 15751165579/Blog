@@ -31,7 +31,7 @@ TDD(Test-Driven Development)是测试驱动的开发
 
 supertest与chai搭配测试Node restful api
 
-## 持续集成工具[travis](https://travis-ci.org)
+## 持续集成平台[travis](https://travis-ci.org)
 
 官网上有很全的教程，主要要熟悉一下.travis.yml的配置项
 
@@ -44,3 +44,7 @@ supertest与chai搭配测试Node restful api
 - 语句覆盖率(statement cover)
 
 > Tip: 这里注意istanbul2.0 api名字换了，原先0.4版本会出现一些奇妙的问题。。。
+
+## 代码覆盖平台[coveralls](https://coveralls.io)
+
+需要安装依赖coveralls，之后再travis执行完test后，将生成的报告交给coveralls即可。
