@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha -t 5000",
-    "coverall": "nyc report --reporter=text-locv | coveralls" ,
+    "coverall": "nyc report --reporter=text-lcov | coveralls" ,
     "dev": "node app.js"
   },
   "author": "daiqingyun",
