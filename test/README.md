@@ -1,5 +1,6 @@
 # 测试
 [![Build Status](https://travis-ci.org/15751165579/Blog.svg?branch=master)](https://travis-ci.org/)
+[![Coverage Status](https://coveralls.io/repos/github/15751165579/Blog/badge.svg?branch=master)](https://coveralls.io/github/15751165579/Blog?branch=master)
 
 ## 测试范式
 
@@ -19,6 +20,8 @@ TDD(Test-Driven Development)是测试驱动的开发
 - afterEach() 每个测试用例的后置动作
 
 ## 测试框架集[Mocha](https://mochajs.org/)
+
+支持运行在Node.js和浏览器中，对异步测试也非常友好。
 
 ## 测试断言框架[chai](http://www.chaijs.com/)
 
@@ -53,3 +56,8 @@ supertest与chai搭配测试Node restful api
 - 如果你是本地使用，那么创建.coveralls.yml配置文件即可
 
 > Tip: 不要暴露你的coveralls的repo_token
+
+## 集成coveralls和travis的一些坑
+
+- 通过ruby安装travis时，travis login出现的位置问题[解决方案](https://github.com/travis-ci/travis.rb/issues/190)
+- 另外coveralls更新的时间有点长
