@@ -1,4 +1,5 @@
 # 测试
+[![Build Status](https://travis-ci.org/15751165579/Blog.svg?branch=master)](https://travis-ci.org/)
 
 ## 测试范式
 

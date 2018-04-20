@@ -4,13 +4,15 @@
   "description": "improve programming level in practice and thinking",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha",
+    "test": "nyc mocha -t 5000",
+    "coverall": "nyc report --reporter=text-locv | coveralls" ,
     "dev": "node app.js"
   },
   "author": "daiqingyun",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
     "mocha": "^5.1.1",
     "nyc": "^11.7.1",
     "supertest": "^3.0.0"
