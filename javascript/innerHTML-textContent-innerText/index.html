@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>innerHTML textContent innerText</title>
+</head>
+<body>
+  <div id="demo">
+    some
+    <p style="display: none;">display none</p>
+  </div>
+  <script>
+    // innerHTML是Element对象上的属性 并且它并不是一个标准的方法，获取所有元素后代的序列化HTML代码
+    // 由于innerHTML并不是一个标准化属性，在不同浏览器差异有点大。
+
+    // innerText是Node对象上的属性，它并不会获取所有元素的内容，例如:script标签
+    // innerText意识到元素的样式，并不会返回隐藏元素的内容，所以它会触发重排(reflow)
+
+    // textContent是Node对象上的属性，展现一个节点及其后代元素的文本内容，并且可以防止xss(cross-site scripting)攻击
+    const demoEl = document.getElementById('demo')
+    console.log(' ==== innerHTML ==== ')
+    console.log(demoEl.innerHTML)
+
+    console.log(' ==== textContent ==== ')
+    console.log(demoEl.textContent)
+
+    console.log(' ==== innerText ==== ')
+    console.log(demoEl.innerText)
+  </script>
+</body>
+</html>
