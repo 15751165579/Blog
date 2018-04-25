@@ -1,10 +1,6 @@
 const chai = require('chai')
 const expect = chai.expect
 
-const app = require('../app')
-const Student = require('../models/students')
-const request = require('supertest').agent(app.listen())
-
 describe('expect api 使用', function () {
 
   describe('not', function () {
@@ -207,54 +203,6 @@ describe('expect api 使用', function () {
 
     it('members 结合 include', function () {
       expect([1, 2, 3]).to.include.members([2, 3]).but.not.include.ordered.members([2, 3])
-    })
-  })
-})
-
-/**
- * Mocha的使用方法
- */
-describe('Mocha 使用方法', function () {
-  // 不可以多次调用done
-
-  // 使用done的例子
-  describe('express 结合 supertest 进行 restful api 测试', function () {
-    before(done => {
-      Student.remove({}, err => {
-        if (err) {
-          return done(err)
-        }
-        done()
-      })
-    })
-    it('POST add a student', done => {
-      request.post('/api/students')
-      .send({ name: '小赵', age: 30})
-      .expect(200)
-      .end((err, res) => {
-        expect(res.body).to.be.a('object')
-        done()
-      })
-    })
-    it('GET all the students', done => {
-      request.get('/api/students')
-      .expect(200)
-      .end((err, res) => {
-        expect(res.body).to.be.a('array')
-        done()
-      })
-    })
-
-    it('DELETE student by name', done => {
-      request.delete('/api/students')
-      .query({
-        name: '小赵'
-      })
-      .expect(200)
-      .end((err, res) => {
-        expect(res.body).to.be.a('object')
-        done()
-      })
     })
   })
 })
