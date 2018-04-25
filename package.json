@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha -t 5000 --exit",
-    "coverall": "nyc report --reporter=text-lcov | coveralls" ,
+    "coverall": "nyc report --reporter=text-lcov | coveralls",
     "dev": "node app.js"
   },
   "author": "daiqingyun",
@@ -19,7 +19,11 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+    "config": "file:./config",
     "express": "^4.16.3",
+    "express-jwt": "^5.3.1",
+    "joi": "^13.2.0",
+    "jsonwebtoken": "^8.2.1",
     "mongoose": "^5.0.15"
   }
 }

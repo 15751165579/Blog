@@ -1,7 +1,7 @@
 const Router = require('express').Router
 const router = new Router()
-const student = require('./students')
+const user = require('./user')
 
-router.use(student)
+router.use(user)
 
 module.exports = router
