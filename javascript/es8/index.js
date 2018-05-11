@@ -1,21 +1,34 @@
 /**
- * 丰富多彩的ES8
+ * ES8
  * 6大特性
  * https://medium.freecodecamp.org/here-are-examples-of-everything-new-in-ecmascript-2016-2017-and-2018-d52fa3b5a70e
  */
-// 1、允许参数结尾书写逗号
+// 1、函数参数允许尾后逗号
 
-// 其实对于这个特性的更改，真的是非常非常有感触。在此之前，但你删除或者添加末尾属性时，你不得不去前面删除或添加一个逗号。
+const o = {
+  name: '小云',
+  age: 2,
+}
 
-// 2、String的填充方法
-console.log('￥20'.padStart(10, ' '))
-console.log('￥1938'.padStart(10, ' '))
+console.log(JSON.stringify(o))
 
-// 当设置的长度小于字符串的长度时无效
+// 其实对于这个特性的更改，真的是非常非常有感触。在此之前，当你删除或者添加末尾属性时，你不得不在前面删除或添加一个逗号。
+console.log([1, 2, 3, , ,])
+
+function some (a, b,) {}
+// 2、String中的padStart和 padEnd
+console.log('咦嘻嘻'.padStart(10, '-'))
+console.log('咦嘻嘻'.padEnd(10, '-'))
+
+console.log(('----------' + '咦嘻嘻').slice(-10))
+console.log(('-'.repeat(Math.ceil(10)) + '咦嘻嘻').slice(-10)) // es6
+
+// 当设置的长度小于字符串的长度时返回字符串自身
 // emoji  https://twitter.com/wesbos/status/769229581509332992
-const s = '💕'
+const s = '😀'
+console.log(s.length)
 
-console.log('heart'.padStart(10, s))
+console.log('咦嘻嘻'.padStart(10, s))
 let result = ''
 for (let i = 0, max = s.length; i < max; i++) {
   result += `\\u${s.charCodeAt(i).toString(16)}`
@@ -35,10 +48,13 @@ console.log([...s1])
 
 // 3、values entries (es5 keys)
 
-let fruits = {
+const fruits = {
   apple: 2,
   orange: 10
 }
+console.log(Object.keys(fruits))
+console.log(Object.values(fruits))
+console.log(Object.entries(fruits))
 
 Object.defineProperty(fruits, Symbol('banana'), {
   value: 20
@@ -57,19 +73,11 @@ for (let key in fruits) {
   }
 }
 
-// 使用keys避免这样的情况
-console.log(Object.keys(fruits))
-
-// 而现在新增的两个方法，得到的是这样的结果
-
-console.log(Object.values(fruits))
-console.log(Object.entries(fruits))
-
 // 需要注意的点：
 
 // 1、非枚举对象是遍历不到的，那如何获取到非枚举对象呢？
 
-console.log(Object.getOwnPropertyNames(fruits))
+console.log(Object.getOwnPropertyNames(fruits).filter(item => !fruits.propertyIsEnumerable(item)))
 
 // 2、es6中为了解决字符串作为属性名导致重复的问题，允许Symbol可以作为属性名使用，而这里的遍历方法多无法获取到Symbol类型的属性名
 
@@ -110,9 +118,20 @@ console.log(Object.getOwnPropertyDescriptors(obj))
 
 const obj1 = Object.assign({}, obj)
 
+console.log(Object.getOwnPropertyDescriptor(obj1, 'age'))
+
 // assign并不处理除value之外的描述符属性, 这种情况下我们只能采用 defineProperties 和 getOwnPropertyDescriptor
 
 const obj2 = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj))
+
+function Some (name = '', age = 0) {
+  Object.assign(this, {
+    name,
+    age
+  })
+}
+const som = new Some('哈哈哈', 20)
+console.log(`${som.name} ${som.age}`)
 
 
 // 5、async await 主要在于错误处理
@@ -121,26 +140,35 @@ const obj2 = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj))
 
 // async 的异常处理 个人还是觉得使用try catch 比较好一点。
 
-function doubleAfter (param) {
+function fetchNumber () {
   return new Promise((resolve, reject) => {
     setTimeout(_ => {
-      const val = param * 2
-      isNaN(val) ? reject(new Error(`${param} is not Number`)) : resolve(val)
+      const num = Number.parseInt(Math.random() * 10)
+      if (num >= 5) {
+        resolve(num)
+      } else {
+        reject(new Error(`${num} is smaller than 5`))
+      }
     }, 1000)
   })
 }
 
-async function task (a, b) {
+// async function task () {
+//   try {
+//     const num = await fetchNumber()
+//     return num
+//   } catch (e) {
+//     return Promise.reject(e.message)
+//   }
+// }
+
+async function task () {
   try {
-    a = await doubleAfter(a)
-    b = await doubleAfter(b)
+    const [num1, num2] = await Promise.all([fetchNumber(), fetchNumber()])
+    return [num1, num2]
   } catch (e) {
-    console.log(e)
+    return Promise.reject(e.message)
   }
-  return a + b
 }
 
-task(20, 'abs') // Error: abs is not Number
-
-// 当然也有不采用try catch 的方案 https://blog.grossman.io/how-to-write-async-await-without-try-catch-blocks-in-javascript/
-
+task().then(console.log).catch(console.log)
