@@ -1,4 +1,4 @@
-# 2018都过一半了，还没来得及看ES8？
+# 2018都过一半了，还没来得及看ES8？[![](https://badge.juejin.im/entry/5af56e1c6fb9a07aae153cc9/likes.svg?style=plastic)](https://juejin.im/post/5af564cff265da0b7c07552f)
 
 > 过了一个五一长期之后，发现2018年都过去一半了，尴尬的计划却赶不上时光的变化。
 
@@ -141,7 +141,7 @@
   Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj))
 ```
 
-## async/await
+## 五、async/await
 
   对于这个新特性的出现，真是的是让人眼前一亮。
 
