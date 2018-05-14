@@ -21,30 +21,33 @@ console.log(process.execPath)
 // 1、commander.js
 // commander.js是TJ大神的作品，它让命令行的操作更加简洁，参考Ruby。
 program.option('-a, --age <age>', '年龄')
-.option('-m, --man [man]', '是男生吗？', false)
+.option('-I, --is-man [isMan]', '是男生吗？', false)
 .parse(process.argv)
-console.log(chalk.rgb(123,2,123).underline(program.age))
-console.log(chalk.hex('#ea23fa').bold(program.man))
-console.log(chalk.keyword('orange')('done'))
+
+console.log(`${program.isMan ? '他' : '她'}今年${program.age}岁`)
+
+// console.log(chalk.rgb(123,2,123).underline(program.age))
+// console.log(chalk.hex('#ea23fa').bold(program.man))
+// console.log(chalk.keyword('orange')('done'))
 
 // 3、stdin stdout （ console是调用具有格式化stdout ）
 
-process.stdin.setEncoding('utf8')
+// process.stdin.setEncoding('utf8')
 
-process.stdin.on('readable', () => {
-  const chunk = process.stdin.read();
-  if (chunk !== null) {
-    if (chunk.slice(0, chunk.length - 1) === 'end') {
-      process.stdin.emit('end')
-    } else {
-      process.stdout.write(`data: ${chunk}`)
-    }
-  }
-});
+// process.stdin.on('readable', () => {
+//   const chunk = process.stdin.read()
+//   if (chunk !== null) {
+//     if (chunk.slice(0, chunk.length - 1) === 'end') {
+//       process.stdin.emit('end')
+//     } else {
+//       process.stdout.write(`您输入的是: ${chunk}`)
+//     }
+//   }
+// });
 
-process.stdin.on('end', () => {
-  process.stdout.write('end')
-})
+// process.stdin.on('end', () => {
+//   process.stdout.write('end')
+// })
 
 // const questions = [
 //   {
@@ -55,22 +58,31 @@ process.stdin.on('end', () => {
 // ]
 
 // inquirer.prompt(questions).then(res => {
-//   console.log(chalk.rgb(23,123,222).bold(res.name))
+//   console.log(res.name)
+//   // console.log(chalk.rgb(23,123,222).bold(res.name))
 // })
+
+console.log(chalk.rgb(123,2,123).underline('chalk is nice'))
+console.log(chalk.hex('#8928eb').bold('chalk is nice'))
+console.log(chalk.keyword('orange')('chalk is nice'))
 
 // 4、退出process
 
-// setInterval(_ => {
-//   console.log('定时器')
-// }, 1000)
+setInterval(_ => {
+  console.log('定时器')
+  // process.exit(0)
+  // process.kill(process.pid)
+  process.abort()
+}, 1000)
 
 // process.on('beforeExit', code => {
 //   console.log(`beforeExit: ${code}`)
 // })
 
-// process.on('exit', code => { // 只允许同步操作
-//   console.log(`exit: ${code}`)
-// })
+process.on('exit', code => { 
+  // 只允许同步操作
+  console.log(`exit: ${code}`)
+})
 
 // process.exit(0)
 
