@@ -29,6 +29,10 @@
     "inquirer": "^5.2.0",
     "joi": "^13.2.0",
     "jsonwebtoken": "^8.2.1",
-    "mongoose": "^5.0.15"
+    "lighthouse": "^2.9.4",
+    "mongoose": "^5.0.15",
+    "pixelmatch": "^4.0.2",
+    "pngjs": "^3.3.3",
+    "puppeteer": "^1.4.0"
   }
 }
