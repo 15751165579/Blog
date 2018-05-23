@@ -3,22 +3,25 @@
 // =====================
 
 // 1、typeof运算符
+console.log(' =========== typeof =========== ')
 
-[null, undefined, true, Symbol('foo'), 'string', 20, function () {}, {}].forEach(item => console.log(typeof item))
+console.log(typeof undefined)
+console.log(typeof [])
+console.log(typeof '123')
 
 // 比较特殊的就是null
 
-typeof null === 'object' // true
+console.log('当使用typeof null: ', typeof null)
 
 // typeof只能区别Primitive Value，而对于对象它是无能为力的
 
-console.log(typeof '123')
-console.log(typeof new String('123'))
+console.log('字符串字面量', typeof '123')
+console.log('字符串对象', typeof new String('123'))
 
 // Tip: 对于“JS中万物皆对象”这句话，你要知道这里的万物是不包括Primitive Value
 
 // 2、instanceof运算符 
-
+console.log(' =========== instanceof =========== ')
 // 检查一个构造函数的原型是否存在一个对象的原型链上。
 
 const s = new String('123')
@@ -62,7 +65,7 @@ function Rabbit (name) {
 Rabbit.prototype = Object.create(Animal.prototype)
 
 // 手动设置constructor
-Rabbit.prototype.constructor = Rabbit
+// Rabbit.prototype.constructor = Rabbit
 
 const rabbit1 = new Rabbit('🐰')
 
@@ -72,7 +75,7 @@ console.log(rabbit1.constructor)
 
 
 function type (obj) {
-  return Reflect.apply(Object.prototype.toString, obj, []).replace(/^\[object\s(\w+)\]$/, '$1')
+  return Reflect.apply(Object.prototype.toString, obj, []).replace(/^\[object\s(\w+)\]$/, '$1').toLowerCase()
 }
 
 console.log(type(new String('123')))
@@ -99,6 +102,9 @@ class BMW extends Car {
   static [Symbol.hasInstance] (instance) {
     return instance.name === '1'
   }
+  get [Symbol.toStringTag] () {
+    return 'Car'
+  }
 }
 
 const car = new Car('1')
@@ -108,8 +114,9 @@ console.log(type(car))
 
 console.log(type(bmw))
 
-console.log(bmw instanceof Car)
-console.log(bmw instanceof BMW)
+console.log(type(null))
+
+console.log(null instanceof Object)
 
 
 
