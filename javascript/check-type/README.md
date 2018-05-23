@@ -1,5 +1,7 @@
 # JavaScript中的类型判断，了解一下？
 
+[![](https://badge.juejin.im/entry/5b055559f265da0b7e0ca334/likes.svg?style=plastic)](https://juejin.im/post/5b0554c86fb9a07acb3d3ddc)
+
 > 在前端项目中，谁还没有被对象类型错误坑过？
 
 ### typeof操作符
