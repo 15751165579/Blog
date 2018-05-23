@@ -30,6 +30,7 @@
     "joi": "^13.2.0",
     "jsonwebtoken": "^8.2.1",
     "lighthouse": "^2.9.4",
+    "lodash": "^4.17.10",
     "mongoose": "^5.0.15",
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.3.3",
