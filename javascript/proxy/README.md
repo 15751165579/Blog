@@ -2,6 +2,8 @@
 
 > 的确写Proxy文章很多，那么今天我也不凑字数了，炒两个栗子吧。
 
+[![](https://badge.juejin.im/entry/5b0938166fb9a07ac23b3118/likes.svg?style=plastic)](https://juejin.im/post/5b09234d6fb9a07acf569905)
+
 ### 一、虚拟属性
 
 ```JavaScript
