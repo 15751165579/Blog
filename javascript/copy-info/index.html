@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>JS复制内容加版权</title>
+  <style>
+    *::selection {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <section id="demo">
+    <h3>文章的标题</h3>
+    <p>今天有个好天气</p>
+  </section>
+
+  <script>
+    window.getSelection().selectAllChildren(document.getElementById('demo'))
+    document.addEventListener('copy', _ => {
+      const copyObj = window.getSelection()
+      const copyLink = `<br></br>该文章的版权地址${document.location.href}`
+      const copyText = copyObj + copyLink
+
+      const newDiv = document.createElement('div')
+      newDiv.style.position = 'absolute'
+      newDiv.style.zIndex = '-9999px'
+      document.body.appendChild(newDiv)
+      newDiv.innerHTML = copyText
+      window.getSelection().selectAllChildren(newDiv)
+      setTimeout(_ => {
+        document.body.removeChild(newDiv)
+      }, 0)
+    })
+  </script>
+</body>
+</html>
