@@ -1,0 +1,7 @@
+/**
+ * 
+ */
+
+const splitIntoFibonacci = function (S) {
+
+}
