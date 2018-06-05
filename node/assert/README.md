@@ -1,21 +1,24 @@
 # JavaScript中不得不说的断言?
 
+[![](https://badge.juejin.im/entry/5b1684676fb9a01e6c0b391d/likes.svg?style=plastic)](https://juejin.im/post/5b1683bee51d4506d73f176b)
+
 > 断言主要应用于“调试”与“测试”
 
 ### 一、前端中的断言
 
-  仔细的查找一下JavaScript中的API，实际上并没有多少关于断言的方法。唯一的一个就是console.assert：
+  仔细地查找一下JavaScript中的API，实际上并没有多少关于断言的方法。唯一一个就是console.assert：
 
 ```JavaScript
   // console.assert(condition, message)
   const a = '1'
   console.assert(typeof a === 'number', 'a should be Number')
 ```
-  当condition为false时，该方法则将错误消息写入控制台。如果为true，则无任何反应。
+  当condition为false时，该方法则会将错误消息写入控制台。如果为true，则无任何反应。
   
   实际上，很少使用console.assert方法，如果你阅读过vue或者vuex等开源项目，会发现他们都定制了断言方法：
 
 ```JavaScript
+  // Vuex源码中的工具函数
   function assert (condition, msg) {
     if (!condition) {
       throw new Error(`[Vuex] ${msg}`)
@@ -23,9 +26,9 @@
   }
 ```
 
-### Node中的断言
+### 二、Node中的断言
 
-  Node中内置断言库(assert)，这里我们看一个简单的例子：
+  Node中内置断言库(assert)，这里我们可以看一个简单的例子：
 
 ```JavaScript
   try {
@@ -38,25 +41,25 @@
   }
 ```
 
-  assert模块提供了不少的方法，例如strictEqual、deepStrictEqual、notDeepStrictEqual等，仔细观察这几个方法，我们又要来回顾一下JavaScript中的相等比较算法：
+  assert模块提供了不少的方法，例如strictEqual、deepStrictEqual、notDeepStrictEqual等，仔细观察这几个方法，我们又得来回顾一下JavaScript中的相等比较算法：
 
   - 抽象相等比较算法 (==)
   - 严格相等比较算法 (===)
   - SameValue (Object.is())
   - SameValueZero
 
-  几个方法的区别可以查看【这可能是你学习ES7遗漏的知识点】(https://github.com/15751165579/Blog/issues/2)。
+  几个方法的区别可以查看[这可能是你学习ES7遗漏的知识点](https://github.com/15751165579/Blog/issues/2)。
 
-  在Node10.2.0文档中你会发现像assert.equal、assert.deepEqual这样的api已经被废除，也正是避免==的复杂性带来的易错性。而保留下来的基本上的api基本上多是采用后几种算法，例如：
+  在Node10.2.0文档中你会发现像assert.equal、assert.deepEqual这样的api已经被废除，也正是避免==的复杂性带来的易错性。而保留下来的api基本上多是采用后几种算法，例如：
 
   - strictEqual使用了严格比较算法
   - deepStrictEqual在比较原始值时采用SameValue算法
 
-### chai.js
+### 三、chai.js
 
   从上面的例子可以发现，JavaScript中内置的断言方法并不是特别的全面，所以这里我们可以选择一些三方库来满足我们的需求。
 
-  这里我们可以选择chai.js，它支持三种断言库：
+  这里我们可以选择chai.js，它支持两种风格的断言（TDD和BDD）：
 
 ```JavaScript
   const chai = require('chai')
@@ -76,15 +79,15 @@
   expect(foo).to.be.a('string')
 ```
 
-  大部分人多会选择expect断言库，的确用起来感觉不错。具体可以查看[官方文档](http://www.chaijs.com/)，毕竟确认过眼神，才能遇上对的人。
+  大部分人多会选择expect断言库，的确用起来感觉不错。具体可以查看[官方文档](http://www.chaijs.com/)，毕竟确认过眼神，才能选择适合的库。
 
-### expect.js源码分析
+### 四、expect.js源码分析
 
   expect.js不仅提供了丰富的调用方法，更重要的就是它提供了类似自然语言的链式调用。
 
 #### 链式调用
 
-  谈到链式调用，我们一般会采用在需要连式调用的函数中返回this的方法实现：
+  谈到链式调用，我们一般会采用在需要链式调用的函数中返回this的方法实现：
 
 ```JavaScript
   class Person {
@@ -110,7 +113,7 @@
   p.updateAge(12).updateName('xiao ming').sayHi()
 ```
 
-  然而在expect.js中并不仅仅采用这样的方式链式调用的，首先我们要知道expect实际上是Assertion的实例:
+  然而在expect.js中并不仅仅采用这样的方式实现链式调用，首先我们要知道expect实际上是Assertion的实例:
 
 ```JavaScript
   function expect (obj) {
@@ -137,7 +140,7 @@
       }
     }
 
-    // 递归注册Assertion实例，所以expect实例上已经包含了多有的链式调用方式
+    // 递归注册Assertion实例，所以expect是一个嵌套对象
     var $flags = flag ? flags[flag] : keys(flags)
       , self = this;
     if ($flags) {
@@ -173,7 +176,7 @@
   }
 ```
 
-  为什么要这样设计？我的理解是：首先expect的链式调用充分的体现了调用的逻辑性，而这种嵌套的结构真正的体现了各个修饰符之间的逻辑性。
+  为什么要这样设计？我的理解是：首先expect.js的链式调用充分的体现了调用的逻辑性，而这种嵌套的结构真正的体现了各个修饰符之间的逻辑性。
 
   所以我们可以这样书写：
 
@@ -217,7 +220,7 @@
   expect(student).to.be.a('object').and.to.have.property('name')
 ```
 
-  当然到此你应该已经理解了expect.js的链式调用的原理，总结起来就是两点：
+  到此你应该已经理解了expect.js的链式调用的原理，总结起来就是两点：
 
   - 原型方法还是通过返回this，实现链式调用；
   - 通过嵌套结构的实例对象增强链式调用的逻辑性；
@@ -228,5 +231,3 @@
   // 强烈不推荐 不然怎么能属于BDD风格呢？
   expect(student).a('object').property('name')
 ```
-
-  
