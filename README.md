@@ -5,7 +5,7 @@
 ### JavaScript
 
 | 创建时间 | 文章名称  | -- |
-| :------ | :-------------------------------------------------------------------------------: | :---: |
+| :------ | :------------------------------------------------------------------------------- | :---: |
 | 2018-06-05 | [JavaScript中不得不说的断言?](https://github.com/15751165579/Blog/issues/7) | [![](https://badge.juejin.im/entry/5b1684676fb9a01e6c0b391d/likes.svg?style=plastic)](https://juejin.im/post/5b1683bee51d4506d73f176b) |
 | 2018-05-27 | [快来围观一下JavaScript的Proxy](https://github.com/15751165579/Blog/issues/6)  | [![](https://badge.juejin.im/entry/5b0938166fb9a07ac23b3118/likes.svg?style=plastic)](https://juejin.im/post/5b09234d6fb9a07acf569905) |
 | 2018-05-24 | [JavaScript中的类型判断，了解一下？](https://github.com/15751165579/Blog/issues/5) | [![](https://badge.juejin.im/entry/5b055559f265da0b7e0ca334/likes.svg?style=plastic)](https://juejin.im/post/5b0554c86fb9a07acb3d3ddc) |
@@ -17,5 +17,5 @@
 ### Node.js
 
 | 创建时间 | 文章名称 | -- |
-| :--- | :---------------------------------------------------------------------------: | :---: |
+| :--- | :--------------------------------------------------------------------------- | :---: |
 | 2018-05-15 | [Node.js中process对象的几个小知识点](https://github.com/15751165579/Blog/issues/4) | -- |
