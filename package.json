@@ -6,16 +6,60 @@
   "scripts": {
     "test": "nyc mocha -t 5000 --exit",
     "coverall": "nyc report --reporter=text-lcov | coveralls",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "addChangelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "dev": "node app.js"
+  },
+  "config": {
+    "validate-commit-msg": {
+      "types": [
+        "feat",
+        "fix",
+        "docs",
+        "style",
+        "refactor",
+        "test",
+        "chore"
+      ],
+      "scope": {
+        "required": false,
+        "allowed": [
+          "*"
+        ],
+        "validate": false,
+        "mutiple": false
+      },
+      "warnOnFail": false,
+      "maxSubjectLength": 100,
+      "subjectPattern": ".+",
+      "subjectPatternErrorMsg": "subject does not match subject pattern!",
+      "helpMessage": "",
+      "autoFix": false
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "validate-commit-msg"
+    }
   },
   "author": "daiqingyun",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.1.2",
+    "conventional-changelog": "^2.0.1",
     "coveralls": "^3.0.0",
+    "husky": "^1.0.0-rc.13",
+    "lint-staged": "^7.2.0",
     "mocha": "^5.1.1",
     "nyc": "^11.7.1",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "validate-commit-msg": "^2.14.0"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
