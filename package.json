@@ -44,7 +44,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "commit-msg": "validate-commit-msg"
     }
   },
   "author": "daiqingyun",
