@@ -21,3 +21,4 @@
 | :--- | :--------------------------------------------------------------------------- | :---: |
 | 2018-05-15 | [Node.js中process对象的几个小知识点](https://github.com/15751165579/Blog/issues/4) | -- |
 | 2018-07-11 | [约束你的git操作，让你生无可恋。](https://github.com/15751165579/Blog/issues/9) | [![](https://badge.juejin.im/entry/5b44ed06f265da0f65236eec/likes.svg?style=plastic)](https://juejin.im/post/5b44d0cc5188251aa0162abe) |
+| 2018-07-13 | [打包升级：is-generator-function.js](https://github.com/15751165579/Blog/issues/10) | -- |
