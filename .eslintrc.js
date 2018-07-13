@@ -8,6 +8,7 @@ module.exports = {
     mocha: true
   },
   root: true,
+  parser: "babel-eslint",
   rules: {
     'no-console': 'off'
   }
