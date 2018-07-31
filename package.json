@@ -51,7 +51,6 @@
   "author": "daiqingyun",
   "license": "ISC",
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
     "chai": "^4.1.2",
     "conventional-changelog": "^2.0.1",
     "coveralls": "^3.0.0",
@@ -64,6 +63,7 @@
     "validate-commit-msg": "^2.14.0"
   },
   "dependencies": {
+    "@log4js-node/smtp": "^1.0.1",
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
     "chalk": "^2.4.1",
@@ -83,6 +83,7 @@
     "koa": "^2.5.2",
     "lighthouse": "^2.9.4",
     "lodash": "^4.17.10",
+    "log4js": "^3.0.3",
     "moment": "^2.22.2",
     "mongoose": "^5.0.15",
     "morgan": "^1.9.0",
@@ -90,6 +91,7 @@
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.3.3",
     "puppeteer": "^1.4.0",
+    "stacktrace-js": "^2.0.0",
     "utils-merge": "^1.0.1"
   }
 }
