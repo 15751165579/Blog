@@ -55,6 +55,7 @@
     "chai": "^4.1.2",
     "conventional-changelog": "^2.0.1",
     "coveralls": "^3.0.0",
+    "debug": "^3.1.0",
     "husky": "^1.0.0-rc.13",
     "lint-staged": "^7.2.0",
     "mocha": "^5.1.1",
