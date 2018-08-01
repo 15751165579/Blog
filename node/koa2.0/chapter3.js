@@ -1,8 +1,15 @@
 /**
  * koa中下文实现原理
- * 1、对于koa中context的实现，实际上可以就是代理的使用
+ * 1、对于koa中context的实现，这里实际上你要理解原型链以及this 很好理解这一块内容
+ * es5函数作用域 =》 es6块级作用域
  * 2、Object.create、new、apply、call以及bind实现
- * 3、js中代理的使用
+ * 3、使用的Delegates 就是原型链和this的结合使用
+ * 4、什么是代理？为什么要大费周章的使用代理？代理的用法
+ * 
+ * - 单一职责
+ * - 代理与本体接口的一致性 （1、 方便以后的替换）
+ * - 虚拟代理 缓存函数，当真正需要用到的时候再调用，还不如合并http请求 图片预加载
+ * - 缓存代理 缓存计算结果，缓存请求
  */
 
 // 1、从koa的request 和 response文件中你可以发现，koa是通过get set方法动态的获取相关的扩展参数。其实你看到这里的源码会发现其中大部分调用this来属性
@@ -156,3 +163,38 @@ const newContext = new Proxy(context, {
 console.log(newContext.request.path)
 console.log(newContext.name)
 console.log(newContext.path)
+
+// 代理的一般模式
+
+function Delegate (proto, target) {
+  if (!(this instanceof Delegate)) {
+    return new Delegate(proto, target)
+  }
+  this.proto = proto
+  this.target = target
+}
+
+Delegate.prototype.method = function (name) {
+  var target = this.target
+  this.proto[name] = function () {
+    return target[name].apply(target, arguments)
+  }
+}
+
+const s1 = {}
+
+const s2 = {
+  name: 's2',
+  say () {
+    console.log(this.name)
+  }
+}
+
+Delegate(s1, s2).method('say')
+
+const sss = Object.create(s1)
+sss.name = '123'
+
+console.log(sss)
+
+sss.say()
