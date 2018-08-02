@@ -1,6 +1,6 @@
 /**
  * Morgan 日志的使用。
- * 定位： 记录请求
+ * 定位： 请求的入口和出口 实际上我们可能并不能完全的满足我们的需求
  * 主要的组成  token、format、stream
  */
 const express = require('express')
