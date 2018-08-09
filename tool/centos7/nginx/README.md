@@ -89,3 +89,23 @@
 ```s
   ./nginx -s reload
 ```
+
+### 采用yum安装
+
+  采用编译的方式安装，虽然显得逼格高一点，但是管理起来可能并不是很方便，这里我们采用yum来安装
+
+```s
+  yum install -y nginx
+```
+
+  之后我们就可以很轻松的操作nginx,例如启动nginx:
+
+```s
+  sudo systemctl start nginx.service
+```
+
+  相关的配置配置信息目录:
+
+```s
+  /etc/nginx
+```
