@@ -91,6 +91,7 @@
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.3.3",
     "puppeteer": "^1.4.0",
+    "redis": "^2.8.0",
     "stacktrace-js": "^2.0.0",
     "utils-merge": "^1.0.1"
   }
