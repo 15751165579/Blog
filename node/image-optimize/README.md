@@ -28,3 +28,28 @@
   <link ref="dns-prefetch" href="//img.alicdn.com">
   <link ref="dns-prefetch" href="//tce.alicdn.com">
 ```
+
+### 二、缩减Http请求次数
+
+  前面也提到了浏览器对于并行请求的数量是有限制的，那么我们可以通过各种方式去缩减图片的请求次数：
+
+##### 1、雪碧图
+
+  将许多张小图拼接成大图，再通过CSS的background和background-position获取大图中的小图。
+
+##### 2、base64
+
+  对于一些小于2kb的小图base64直接存储再CSS中，从而减少http请求。
+
+##### 3、iconfont
+
+  随着css3的出现，我们也有更多的玩法，很多以前需要通过图片完成的设计效果，完全可以通过CSS3完成。最让人惊艳的就是iconfont的出现，通过CSS3中自定义字体@font-face以及SVG让我们以更加优雅的方式处理网站中的小图。
+
+##### 4、图片懒加载
+
+
+##### 5、图片预加载
+
+##### 6、采用webp
+
+
