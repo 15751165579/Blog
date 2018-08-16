@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+    <style style="display: block;" contenteditable="true">
+        .demo {
+          position: absolute;
+          width: 200px;
+          height: 200px;
+          background: red;
+          color: #FFF;
+          text-align: center;
+          line-height: 200px;
+          clip:rect(0px 50px 200px 0px);
+        }
+
+        .demo1 {
+          margin-left: 400px;
+          counter-reset: section 10;
+        }
+
+        ul, li {
+          list-style: none;
+        }
+
+        li::before {
+         counter-increment: section 2;
+         content: counter(section);
+         display: inline-block; 
+        }
+        
+        .temp {
+          visibility: hidden;
+          /* display: none; */
+        }
+      </style>
+  <div class="demo" id="demo">
+    哈哈
+  </div>
+
+  <div class="demo" style="top: 300px;" hidden>
+  </div>
+
+  <div class="demo1">
+    <ul>
+      <li>条目</li>
+      <li class="temp">条目</li>
+      <li>条目</li>
+    </ul>
+  </div>
+
+  <script>
+    const demo = document.getElementById('demo')
+    demo.addEventListener('click', _ => {
+      console.log('111')
+    }, false)
+  </script>
+</body>
+</html>
