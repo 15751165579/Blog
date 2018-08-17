@@ -9,4 +9,6 @@ const url = 'http://10.1.1.248:4000/'
       orderId: info.data.data.orderId
     }
   })
+
+  await axios.post(`${url}vedio`)
 })()

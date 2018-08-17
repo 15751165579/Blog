@@ -12,6 +12,8 @@ const getPromise = promisify(client.get).bind(client)
 const removePromise = promisify(client.del).bind(client)
 app.use(kue.app)
 
+jobs.setMaxListeners(1000)
+
 app.get('/score', async (req, res) => {
   const s = await incrPromise('score', 1) // 的确是原子性的
   console.log(s)
@@ -61,5 +63,57 @@ jobs.process('order', 10, (job, done) => {
     }
   })
 })
+
+// 视频转码延迟任务
+app.post('/vedio', (req, res) => {
+  createTask()
+  res.json({
+    message: '视频延迟转码任务加入队列'
+  })
+})
+function createTask () {
+  console.log("启动")
+  const name = ['tobi', 'loki', 'jane', 'many'][Math.random() * 4 || 0]
+  const job = jobs.create('transfer', {
+    title: `convert ${name}`,
+    user: 1,
+    frames: 200
+  })
+
+  job.on('complete', () => {
+    console.log('job complete')
+  }).on('failed', () => {
+    console.log('job failed')
+  }).on('progress', progress => {
+    console.log('\r  job #' + job.id + ' ' + progress + '% complete')
+  })
+
+  job.save()
+}
+
+jobs.process('transfer', 1, (job, done) => {
+  const frames = job.data.frames
+  console.log('转码')
+  function next (i) {
+    convertFrame(i, err => {
+      if (err) {
+        console.log(err)
+        return done(err)
+      }
+      job.progress(i, frames)
+      if (i >= frames) {
+        done()
+      } else {
+        next(i + Math.random() * 10)
+      }
+    })
+  }
+
+  next(0)
+})
+
+function convertFrame (i, fn) {
+  setTimeout(fn, Math.random() * 50)
+}
 
 app.listen(4000)
