@@ -65,6 +65,8 @@
   "dependencies": {
     "@log4js-node/smtp": "^1.0.1",
     "axios": "^0.18.0",
+    "bloom-redis": "^0.0.1",
+    "bloomfilter": "^0.0.18",
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
     "chalk": "^2.4.1",
@@ -97,6 +99,7 @@
     "puppeteer": "^1.4.0",
     "qiniu": "^7.2.1",
     "redis": "^2.8.0",
+    "redis-rebloom": "^1.0.0",
     "stacktrace-js": "^2.0.0",
     "utils-merge": "^1.0.1"
   }
