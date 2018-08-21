@@ -10,4 +10,4 @@
 
 ### 第二次实现
 
-  node-redis中自动使用pipeline。
+  node-redis中自动使用pipeline。通过multi保证redis一系列操作的原子性。通过uuid作为唯一标识，时间戳为score。通过不断删除zset中超出时间限制范围的数据，以便获取当前限制时间内的请求数，从而判断后续请求是否被限流。
