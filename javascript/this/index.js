@@ -87,7 +87,6 @@ Function.prototype.bindAction = function (oThis) {
   fBound.prototype = new fNOP()
   return fBound
 }
-console.log(Baz.prototype)
 
 
 
