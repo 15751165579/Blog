@@ -1,0 +1,1082 @@
+[
+    {
+        "id": 32,
+        "title": "信息工程学院",
+        "children": [
+            {
+                "id": 18,
+                "title": "计算机科学与技术",
+                "children": [
+                    {
+                        "id": 68,
+                        "title": "计算机1701",
+                        "children": [
+                            {
+                                "userId": 283,
+                                "title": "艾霄席1"
+                            },
+                            {
+                                "userId": 284,
+                                "title": "艾霄席2"
+                            },
+                            {
+                                "userId": 285,
+                                "title": "艾霄席3"
+                            },
+                            {
+                                "userId": 286,
+                                "title": "艾霄席4"
+                            },
+                            {
+                                "userId": 287,
+                                "title": "艾霄席5"
+                            },
+                            {
+                                "userId": 288,
+                                "title": "艾霄席6"
+                            },
+                            {
+                                "userId": 289,
+                                "title": "艾霄席7"
+                            },
+                            {
+                                "userId": 290,
+                                "title": "艾霄席8"
+                            },
+                            {
+                                "userId": 291,
+                                "title": "艾霄席9"
+                            },
+                            {
+                                "userId": 292,
+                                "title": "艾霄席10"
+                            },
+                            {
+                                "userId": 293,
+                                "title": "艾霄席11"
+                            },
+                            {
+                                "userId": 294,
+                                "title": "艾霄席12"
+                            },
+                            {
+                                "userId": 295,
+                                "title": "艾霄席13"
+                            },
+                            {
+                                "userId": 296,
+                                "title": "艾霄席14"
+                            },
+                            {
+                                "userId": 297,
+                                "title": "艾霄席15"
+                            },
+                            {
+                                "userId": 298,
+                                "title": "艾霄席16"
+                            },
+                            {
+                                "userId": 299,
+                                "title": "艾霄席17"
+                            },
+                            {
+                                "userId": 300,
+                                "title": "艾霄席18"
+                            },
+                            {
+                                "userId": 301,
+                                "title": "艾霄席19"
+                            },
+                            {
+                                "userId": 302,
+                                "title": "艾霄席20"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 91,
+                        "title": "计算机1702",
+                        "children": [
+                            {
+                                "userId": 303,
+                                "title": "艾霄席21"
+                            },
+                            {
+                                "userId": 304,
+                                "title": "艾霄席22"
+                            },
+                            {
+                                "userId": 305,
+                                "title": "艾霄席23"
+                            },
+                            {
+                                "userId": 306,
+                                "title": "艾霄席24"
+                            },
+                            {
+                                "userId": 307,
+                                "title": "艾霄席25"
+                            },
+                            {
+                                "userId": 308,
+                                "title": "艾霄席26"
+                            },
+                            {
+                                "userId": 309,
+                                "title": "艾霄席27"
+                            },
+                            {
+                                "userId": 310,
+                                "title": "艾霄席28"
+                            },
+                            {
+                                "userId": 311,
+                                "title": "艾霄席29"
+                            },
+                            {
+                                "userId": 312,
+                                "title": "艾霄席30"
+                            },
+                            {
+                                "userId": 313,
+                                "title": "艾霄席31"
+                            },
+                            {
+                                "userId": 314,
+                                "title": "艾霄席32"
+                            },
+                            {
+                                "userId": 315,
+                                "title": "艾霄席33"
+                            },
+                            {
+                                "userId": 316,
+                                "title": "艾霄席34"
+                            },
+                            {
+                                "userId": 317,
+                                "title": "艾霄席35"
+                            },
+                            {
+                                "userId": 318,
+                                "title": "艾霄席36"
+                            },
+                            {
+                                "userId": 319,
+                                "title": "艾霄席37"
+                            },
+                            {
+                                "userId": 320,
+                                "title": "艾霄席38"
+                            },
+                            {
+                                "userId": 321,
+                                "title": "艾霄席39"
+                            },
+                            {
+                                "userId": 322,
+                                "title": "艾霄席40"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 34,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 69,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 33,
+        "title": "机械工程学院",
+        "children": [
+            {
+                "id": 18,
+                "title": "计算机科学与技术",
+                "children": [
+                    {
+                        "id": 68,
+                        "title": "计算机1701",
+                        "children": [
+                            {
+                                "userId": 283,
+                                "title": "艾霄席1"
+                            },
+                            {
+                                "userId": 284,
+                                "title": "艾霄席2"
+                            },
+                            {
+                                "userId": 285,
+                                "title": "艾霄席3"
+                            },
+                            {
+                                "userId": 286,
+                                "title": "艾霄席4"
+                            },
+                            {
+                                "userId": 287,
+                                "title": "艾霄席5"
+                            },
+                            {
+                                "userId": 288,
+                                "title": "艾霄席6"
+                            },
+                            {
+                                "userId": 289,
+                                "title": "艾霄席7"
+                            },
+                            {
+                                "userId": 290,
+                                "title": "艾霄席8"
+                            },
+                            {
+                                "userId": 291,
+                                "title": "艾霄席9"
+                            },
+                            {
+                                "userId": 292,
+                                "title": "艾霄席10"
+                            },
+                            {
+                                "userId": 293,
+                                "title": "艾霄席11"
+                            },
+                            {
+                                "userId": 294,
+                                "title": "艾霄席12"
+                            },
+                            {
+                                "userId": 295,
+                                "title": "艾霄席13"
+                            },
+                            {
+                                "userId": 296,
+                                "title": "艾霄席14"
+                            },
+                            {
+                                "userId": 297,
+                                "title": "艾霄席15"
+                            },
+                            {
+                                "userId": 298,
+                                "title": "艾霄席16"
+                            },
+                            {
+                                "userId": 299,
+                                "title": "艾霄席17"
+                            },
+                            {
+                                "userId": 300,
+                                "title": "艾霄席18"
+                            },
+                            {
+                                "userId": 301,
+                                "title": "艾霄席19"
+                            },
+                            {
+                                "userId": 302,
+                                "title": "艾霄席20"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 91,
+                        "title": "计算机1702",
+                        "children": [
+                            {
+                                "userId": 303,
+                                "title": "艾霄席21"
+                            },
+                            {
+                                "userId": 304,
+                                "title": "艾霄席22"
+                            },
+                            {
+                                "userId": 305,
+                                "title": "艾霄席23"
+                            },
+                            {
+                                "userId": 306,
+                                "title": "艾霄席24"
+                            },
+                            {
+                                "userId": 307,
+                                "title": "艾霄席25"
+                            },
+                            {
+                                "userId": 308,
+                                "title": "艾霄席26"
+                            },
+                            {
+                                "userId": 309,
+                                "title": "艾霄席27"
+                            },
+                            {
+                                "userId": 310,
+                                "title": "艾霄席28"
+                            },
+                            {
+                                "userId": 311,
+                                "title": "艾霄席29"
+                            },
+                            {
+                                "userId": 312,
+                                "title": "艾霄席30"
+                            },
+                            {
+                                "userId": 313,
+                                "title": "艾霄席31"
+                            },
+                            {
+                                "userId": 314,
+                                "title": "艾霄席32"
+                            },
+                            {
+                                "userId": 315,
+                                "title": "艾霄席33"
+                            },
+                            {
+                                "userId": 316,
+                                "title": "艾霄席34"
+                            },
+                            {
+                                "userId": 317,
+                                "title": "艾霄席35"
+                            },
+                            {
+                                "userId": 318,
+                                "title": "艾霄席36"
+                            },
+                            {
+                                "userId": 319,
+                                "title": "艾霄席37"
+                            },
+                            {
+                                "userId": 320,
+                                "title": "艾霄席38"
+                            },
+                            {
+                                "userId": 321,
+                                "title": "艾霄席39"
+                            },
+                            {
+                                "userId": 322,
+                                "title": "艾霄席40"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 34,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 69,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 41,
+        "title": "数控工程学院",
+        "children": [
+            {
+                "id": 18,
+                "title": "计算机科学与技术",
+                "children": [
+                    {
+                        "id": 68,
+                        "title": "计算机1701",
+                        "children": [
+                            {
+                                "userId": 283,
+                                "title": "艾霄席1"
+                            },
+                            {
+                                "userId": 284,
+                                "title": "艾霄席2"
+                            },
+                            {
+                                "userId": 285,
+                                "title": "艾霄席3"
+                            },
+                            {
+                                "userId": 286,
+                                "title": "艾霄席4"
+                            },
+                            {
+                                "userId": 287,
+                                "title": "艾霄席5"
+                            },
+                            {
+                                "userId": 288,
+                                "title": "艾霄席6"
+                            },
+                            {
+                                "userId": 289,
+                                "title": "艾霄席7"
+                            },
+                            {
+                                "userId": 290,
+                                "title": "艾霄席8"
+                            },
+                            {
+                                "userId": 291,
+                                "title": "艾霄席9"
+                            },
+                            {
+                                "userId": 292,
+                                "title": "艾霄席10"
+                            },
+                            {
+                                "userId": 293,
+                                "title": "艾霄席11"
+                            },
+                            {
+                                "userId": 294,
+                                "title": "艾霄席12"
+                            },
+                            {
+                                "userId": 295,
+                                "title": "艾霄席13"
+                            },
+                            {
+                                "userId": 296,
+                                "title": "艾霄席14"
+                            },
+                            {
+                                "userId": 297,
+                                "title": "艾霄席15"
+                            },
+                            {
+                                "userId": 298,
+                                "title": "艾霄席16"
+                            },
+                            {
+                                "userId": 299,
+                                "title": "艾霄席17"
+                            },
+                            {
+                                "userId": 300,
+                                "title": "艾霄席18"
+                            },
+                            {
+                                "userId": 301,
+                                "title": "艾霄席19"
+                            },
+                            {
+                                "userId": 302,
+                                "title": "艾霄席20"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 91,
+                        "title": "计算机1702",
+                        "children": [
+                            {
+                                "userId": 303,
+                                "title": "艾霄席21"
+                            },
+                            {
+                                "userId": 304,
+                                "title": "艾霄席22"
+                            },
+                            {
+                                "userId": 305,
+                                "title": "艾霄席23"
+                            },
+                            {
+                                "userId": 306,
+                                "title": "艾霄席24"
+                            },
+                            {
+                                "userId": 307,
+                                "title": "艾霄席25"
+                            },
+                            {
+                                "userId": 308,
+                                "title": "艾霄席26"
+                            },
+                            {
+                                "userId": 309,
+                                "title": "艾霄席27"
+                            },
+                            {
+                                "userId": 310,
+                                "title": "艾霄席28"
+                            },
+                            {
+                                "userId": 311,
+                                "title": "艾霄席29"
+                            },
+                            {
+                                "userId": 312,
+                                "title": "艾霄席30"
+                            },
+                            {
+                                "userId": 313,
+                                "title": "艾霄席31"
+                            },
+                            {
+                                "userId": 314,
+                                "title": "艾霄席32"
+                            },
+                            {
+                                "userId": 315,
+                                "title": "艾霄席33"
+                            },
+                            {
+                                "userId": 316,
+                                "title": "艾霄席34"
+                            },
+                            {
+                                "userId": 317,
+                                "title": "艾霄席35"
+                            },
+                            {
+                                "userId": 318,
+                                "title": "艾霄席36"
+                            },
+                            {
+                                "userId": 319,
+                                "title": "艾霄席37"
+                            },
+                            {
+                                "userId": 320,
+                                "title": "艾霄席38"
+                            },
+                            {
+                                "userId": 321,
+                                "title": "艾霄席39"
+                            },
+                            {
+                                "userId": 322,
+                                "title": "艾霄席40"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 34,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 69,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 57,
+        "title": "电气工程学院",
+        "children": [
+            {
+                "id": 18,
+                "title": "计算机科学与技术",
+                "children": [
+                    {
+                        "id": 68,
+                        "title": "计算机1701",
+                        "children": [
+                            {
+                                "userId": 283,
+                                "title": "艾霄席1"
+                            },
+                            {
+                                "userId": 284,
+                                "title": "艾霄席2"
+                            },
+                            {
+                                "userId": 285,
+                                "title": "艾霄席3"
+                            },
+                            {
+                                "userId": 286,
+                                "title": "艾霄席4"
+                            },
+                            {
+                                "userId": 287,
+                                "title": "艾霄席5"
+                            },
+                            {
+                                "userId": 288,
+                                "title": "艾霄席6"
+                            },
+                            {
+                                "userId": 289,
+                                "title": "艾霄席7"
+                            },
+                            {
+                                "userId": 290,
+                                "title": "艾霄席8"
+                            },
+                            {
+                                "userId": 291,
+                                "title": "艾霄席9"
+                            },
+                            {
+                                "userId": 292,
+                                "title": "艾霄席10"
+                            },
+                            {
+                                "userId": 293,
+                                "title": "艾霄席11"
+                            },
+                            {
+                                "userId": 294,
+                                "title": "艾霄席12"
+                            },
+                            {
+                                "userId": 295,
+                                "title": "艾霄席13"
+                            },
+                            {
+                                "userId": 296,
+                                "title": "艾霄席14"
+                            },
+                            {
+                                "userId": 297,
+                                "title": "艾霄席15"
+                            },
+                            {
+                                "userId": 298,
+                                "title": "艾霄席16"
+                            },
+                            {
+                                "userId": 299,
+                                "title": "艾霄席17"
+                            },
+                            {
+                                "userId": 300,
+                                "title": "艾霄席18"
+                            },
+                            {
+                                "userId": 301,
+                                "title": "艾霄席19"
+                            },
+                            {
+                                "userId": 302,
+                                "title": "艾霄席20"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 91,
+                        "title": "计算机1702",
+                        "children": [
+                            {
+                                "userId": 303,
+                                "title": "艾霄席21"
+                            },
+                            {
+                                "userId": 304,
+                                "title": "艾霄席22"
+                            },
+                            {
+                                "userId": 305,
+                                "title": "艾霄席23"
+                            },
+                            {
+                                "userId": 306,
+                                "title": "艾霄席24"
+                            },
+                            {
+                                "userId": 307,
+                                "title": "艾霄席25"
+                            },
+                            {
+                                "userId": 308,
+                                "title": "艾霄席26"
+                            },
+                            {
+                                "userId": 309,
+                                "title": "艾霄席27"
+                            },
+                            {
+                                "userId": 310,
+                                "title": "艾霄席28"
+                            },
+                            {
+                                "userId": 311,
+                                "title": "艾霄席29"
+                            },
+                            {
+                                "userId": 312,
+                                "title": "艾霄席30"
+                            },
+                            {
+                                "userId": 313,
+                                "title": "艾霄席31"
+                            },
+                            {
+                                "userId": 314,
+                                "title": "艾霄席32"
+                            },
+                            {
+                                "userId": 315,
+                                "title": "艾霄席33"
+                            },
+                            {
+                                "userId": 316,
+                                "title": "艾霄席34"
+                            },
+                            {
+                                "userId": 317,
+                                "title": "艾霄席35"
+                            },
+                            {
+                                "userId": 318,
+                                "title": "艾霄席36"
+                            },
+                            {
+                                "userId": 319,
+                                "title": "艾霄席37"
+                            },
+                            {
+                                "userId": 320,
+                                "title": "艾霄席38"
+                            },
+                            {
+                                "userId": 321,
+                                "title": "艾霄席39"
+                            },
+                            {
+                                "userId": 322,
+                                "title": "艾霄席40"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 34,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 69,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 58,
+        "title": "材料工程学院",
+        "children": [
+            {
+                "id": 18,
+                "title": "计算机科学与技术",
+                "children": [
+                    {
+                        "id": 68,
+                        "title": "计算机1701",
+                        "children": [
+                            {
+                                "userId": 283,
+                                "title": "艾霄席1"
+                            },
+                            {
+                                "userId": 284,
+                                "title": "艾霄席2"
+                            },
+                            {
+                                "userId": 285,
+                                "title": "艾霄席3"
+                            },
+                            {
+                                "userId": 286,
+                                "title": "艾霄席4"
+                            },
+                            {
+                                "userId": 287,
+                                "title": "艾霄席5"
+                            },
+                            {
+                                "userId": 288,
+                                "title": "艾霄席6"
+                            },
+                            {
+                                "userId": 289,
+                                "title": "艾霄席7"
+                            },
+                            {
+                                "userId": 290,
+                                "title": "艾霄席8"
+                            },
+                            {
+                                "userId": 291,
+                                "title": "艾霄席9"
+                            },
+                            {
+                                "userId": 292,
+                                "title": "艾霄席10"
+                            },
+                            {
+                                "userId": 293,
+                                "title": "艾霄席11"
+                            },
+                            {
+                                "userId": 294,
+                                "title": "艾霄席12"
+                            },
+                            {
+                                "userId": 295,
+                                "title": "艾霄席13"
+                            },
+                            {
+                                "userId": 296,
+                                "title": "艾霄席14"
+                            },
+                            {
+                                "userId": 297,
+                                "title": "艾霄席15"
+                            },
+                            {
+                                "userId": 298,
+                                "title": "艾霄席16"
+                            },
+                            {
+                                "userId": 299,
+                                "title": "艾霄席17"
+                            },
+                            {
+                                "userId": 300,
+                                "title": "艾霄席18"
+                            },
+                            {
+                                "userId": 301,
+                                "title": "艾霄席19"
+                            },
+                            {
+                                "userId": 302,
+                                "title": "艾霄席20"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 91,
+                        "title": "计算机1702",
+                        "children": [
+                            {
+                                "userId": 303,
+                                "title": "艾霄席21"
+                            },
+                            {
+                                "userId": 304,
+                                "title": "艾霄席22"
+                            },
+                            {
+                                "userId": 305,
+                                "title": "艾霄席23"
+                            },
+                            {
+                                "userId": 306,
+                                "title": "艾霄席24"
+                            },
+                            {
+                                "userId": 307,
+                                "title": "艾霄席25"
+                            },
+                            {
+                                "userId": 308,
+                                "title": "艾霄席26"
+                            },
+                            {
+                                "userId": 309,
+                                "title": "艾霄席27"
+                            },
+                            {
+                                "userId": 310,
+                                "title": "艾霄席28"
+                            },
+                            {
+                                "userId": 311,
+                                "title": "艾霄席29"
+                            },
+                            {
+                                "userId": 312,
+                                "title": "艾霄席30"
+                            },
+                            {
+                                "userId": 313,
+                                "title": "艾霄席31"
+                            },
+                            {
+                                "userId": 314,
+                                "title": "艾霄席32"
+                            },
+                            {
+                                "userId": 315,
+                                "title": "艾霄席33"
+                            },
+                            {
+                                "userId": 316,
+                                "title": "艾霄席34"
+                            },
+                            {
+                                "userId": 317,
+                                "title": "艾霄席35"
+                            },
+                            {
+                                "userId": 318,
+                                "title": "艾霄席36"
+                            },
+                            {
+                                "userId": 319,
+                                "title": "艾霄席37"
+                            },
+                            {
+                                "userId": 320,
+                                "title": "艾霄席38"
+                            },
+                            {
+                                "userId": 321,
+                                "title": "艾霄席39"
+                            },
+                            {
+                                "userId": 322,
+                                "title": "艾霄席40"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 34,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 69,
+                "title": "软件技术",
+                "children": [
+                    {
+                        "id": 82,
+                        "title": "test1",
+                        "children": [
+                            {
+                                "userId": 124,
+                                "title": "stu"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
