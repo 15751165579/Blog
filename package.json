@@ -81,6 +81,7 @@
     "file-stream-rotator": "^0.2.1",
     "finalhandler": "^1.1.1",
     "inquirer": "^5.2.0",
+    "ioredis": "^4.0.0",
     "joi": "^13.2.0",
     "jsonwebtoken": "^8.2.1",
     "koa": "^2.5.2",
