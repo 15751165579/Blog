@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Multi Column</title>
+
+  <style>
+    h5 {
+      text-align: center;
+      font-size: 20px;
+    }
+
+    .demo1 {
+      width: 320px;
+      margin: 0 auto;
+      border: 1px solid red;
+      column-count: 3;
+      column-gap: 10px;
+      padding: 10px;
+      counter-reset: number;
+    }
+
+    .demo2 {
+      width: 100px;
+      height: 100px;
+      background: yellow;
+    }
+
+    .demo2::after {
+      counter-increment: number;
+      content: counter(number);
+      display: block;
+      width: 100%;
+      line-height: 100px;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    .demo2:nth-child(2), .demo2:nth-child(3), .demo2:nth-child(5), .demo2:nth-child(6), .demo2:nth-child(8), .demo2:nth-child(9) {
+      margin-top: 10px;
+    }
+
+    .demo3 {
+      width: 400px;
+      /* height: 65px; */
+      border: 1px solid red;
+      column-count: 2;
+    }
+  </style>
+</head>
+<body>
+  <h5>demo one</h5>
+
+  <div class="demo1">
+    <div class="demo2"></div>
+    <div class="demo2"></div>
+    <div class="demo2"></div>
+    <div class="demo2"></div>
+    <div class="demo2"></div>
+    <div class="demo2"></div>
+    <div class="demo2"></div>
+    <div class="demo2"></div>
+    <div class="demo2"></div>
+  </div>
+
+
+  <h5>demo two</h5>
+
+  <div class="demo3">
+    <p style="padding: 0;">A top margin set on the first child element of a multicol container will not collapse with the margins of the multicol container.</p>
+  </div>
+</body>
+</html>
