@@ -43,10 +43,60 @@
     }
 
     .demo3 {
-      width: 400px;
+      width: 800px;
+      margin: 20px auto;
       /* height: 65px; */
       border: 1px solid red;
-      column-count: 2;
+      column-gap: 0;
+      column-count: 4;
+    }
+
+    p {
+      padding: 0;
+      margin: 0;
+    }
+
+    .demo4 {
+      width: 300px;
+      margin: 40px auto;
+      border: 1px solid rgb(213,213,213);
+      padding: 20px;
+      columns: 3;
+    }
+
+    .demo5 {
+      width: 620px;
+      margin: 20px auto;
+      border: 1px solid rgb(213,213,213);
+      padding: 20px;
+      columns: 3;
+      column-gap: 20px;
+      column-rule: 2px dashed rgb(213,213,213);
+      /* letter-spacing: 1px; */
+    }
+
+    .demo6 {
+      width: 400px;
+      margin: 50px auto;
+      padding: 30px;
+      column-gap: 20px;
+      column-rule: 440px solid rgb(213,213,213);
+      border: 1px solid rgb(213,213,213);
+      columns: 2;
+    }
+
+    .demo6 > .item {
+      width: 190px;
+      height: 190px;
+      background: red;
+    }
+
+    .demo7 {
+      width: 500px;
+      margin: 100px auto;
+      padding: 30px;
+      columns: 3;
+      border: 1px solid rgb(213,213,213);
     }
   </style>
 </head>
@@ -69,7 +119,30 @@
   <h5>demo two</h5>
 
   <div class="demo3">
-    <p style="padding: 0;">A top margin set on the first child element of a multicol container will not collapse with the margins of the multicol container.</p>
+    <p style="padding: 0;">哈哈哈哈杀地煞好的哈哈房贷首付核对是否核对是否大师傅核对是否核对是否大师傅哈哈房贷首付核对是否和撒大苏打撒旦撒旦撒地方大师傅大师傅的的犯得上犯得上</p>
+    <!-- <h3>哈哈哈</h3> -->
+    <h3 style="column-span: all; background: red;">哈哈哈</h3>
+    <!-- <span style="column-span: all; background: red;">内联元素</span> -->
+    <p style="padding: 0;">新的内容行的啥的环境杀害房间号多少积分的时间回复的公司发货的价格科技发达看见过开发贷款功率放大给对方个</p>
+  </div>
+
+  <div class="demo4">
+    在默认的书写顺序下，内容是按照自上向下，自左向右的顺序排列的。
+  </div>
+
+  <div class="demo5">
+    <p>数学的集合论中出现了三个著名悖论，理发师悖论就是罗素悖论的一种通俗表达方式。此外还有康托尔悖论、布拉利—福尔蒂悖论。这些悖论特别是罗素悖论，在当时的数学界与逻辑界内引起了极大震动。触发了第三次数学危机。</p>
+  </div>
+
+  <div class="demo6">
+    <div class="item"></div>
+    <div class="item"></div>
+  </div>
+
+  <div class="demo7">
+    <span>数学的集合论中出现了三个著名悖论，理发师悖论就是罗素悖论的一种通俗表达方式。此外还有康托尔悖论、布拉利—福尔蒂悖论。</span>
+    <h5 style="column-span: all;background:#f5f5f5;margin: 0;padding: 20px 0;">电灯泡</h5>
+    <span>这些悖论特别是罗素悖论，在当时的数学界与逻辑界内引起了极大震动。触发了第三次数学危机。</span>
   </div>
 </body>
 </html>
