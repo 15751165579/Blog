@@ -55,3 +55,12 @@
 
   ![column-span效果](http://o8sux93eg.bkt.clouddn.com/mcl-three.png)
 
+### 浅谈应用
+
+  掌握基础结构和用法之后，现在可以对一篇文章进行漂亮的排版了：
+
+  ![文章排版](http://o8sux93eg.bkt.clouddn.com/mcl-four.png)
+
+  看起来的确不错，但是感觉有那么点怪。
+
+  怪在哪里呢？因为你几乎不会看到展示文章的网站中采用这种方式排版。
