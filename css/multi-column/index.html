@@ -15,7 +15,7 @@
     .demo1 {
       width: 320px;
       margin: 0 auto;
-      border: 1px solid red;
+      border: 1px solid yellow;
       column-count: 3;
       column-gap: 10px;
       padding: 10px;
@@ -109,6 +109,28 @@
       column-rule: 2px dashed rgb(213,213,213);
       line-height: 1.5;
     }
+
+    .demo9 {
+      width: 180px;
+      margin: 50px auto;
+      height: 170px;
+      line-height: 30px;
+      font-size: 16px;
+      letter-spacing: 1px;
+      writing-mode:vertical-rl;
+      background: repeating-linear-gradient(to left, #000, #000 3%, #FFF 3%, #FFF);
+      background-size: 30px 100%;
+    }
+
+    .demo10 {
+      width: 300px;
+      margin: 100px auto;
+      columns: 10;
+      column-rule: 1px dashed rgb(213,213,213);
+      direction: rtl;
+      word-wrap: break-word;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -166,6 +188,14 @@
     <p style="text-indent: 2em;">我曾以同样的感情追求知识，我渴望去了解人类的心灵，也渴望知道星星为什么发光，同时我还想理解毕达哥斯拉的力量。</p>
     <p style="text-indent: 2em;">我常常希望用我的微薄之力减轻这样的痛苦。</p>
     <p style="column-span: all;padding-top: 20px;text-indent: 2em;">这就是我的一生，我发现人是值得活的。如果有谁再给我一次生活的机会，我将欣然接受这难得的赐予。</p>
+  </section>
+
+  <section class="demo9">
+    <p>明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间？</p>
+  </section>
+
+  <section class="demo10">
+    <p>明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间？</p>
   </section>
 </body>
 </html>
