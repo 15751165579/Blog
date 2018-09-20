@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>文字截断</title>
+  <style>
+    .demo1 {
+      width: 200px;
+      margin: 50px auto;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .demo2 {
+      margin: 50px auto;
+      width: 100px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <p class="demo1">啥活动啥的hash大厦大厦好的萨达萨达萨达</p>
+
+  <p class="demo2">好好的撒谎的啥活动傻乎乎犯得上犯得上广泛大锅饭大锅饭大概广泛大概梵蒂冈梵蒂冈梵蒂冈傅大规范的</p>
+</body>
+</html>
