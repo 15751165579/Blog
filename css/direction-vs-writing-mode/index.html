@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>demo</title>
+  <style>
+    .demo1 {
+      width: 300px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px dashed red;
+      text-align: right;
+    }
+    .demo2 {
+      width: 300px;
+      margin: 300px auto;
+      padding: 20px;
+      border: 1px dashed red;
+      direction: rtl;
+    }
+
+    .demo3, .demo4 {
+      width: 100px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px dashed red;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .demo3 {
+      text-align: right;
+    }
+    .demo4 {
+      direction: rtl;
+    }
+
+    .demo5 {
+      width: 200px;
+      margin: 40px auto;
+      writing-mode: vertical-rl;
+    }
+
+    h4 {
+      text-align: center;
+      margin: 40px auto;
+    }
+
+    .demo6 {
+      width: 300px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px dashed red;
+    }
+
+    .demo7 {
+      margin: 0 auto;
+      writing-mode: vertical-lr;
+    }
+
+    .demo7 div {
+      width: 600px;
+      height: 200px;
+      background: red;
+      margin: 100px;
+    }
+
+    .demo8 {
+      width: 800px;
+      height: 400px;
+      margin: 0 auto;
+      border: 1px dashed red;
+      writing-mode: vertical-rl;
+    }
+
+    .demo8 div {
+      margin: auto 350px;
+      width: 100px;
+      height: 100px;
+      background: yellow;
+    }
+
+    .demo9 {
+      display: inline-block;
+      margin: 50px auto;
+      padding: 20px;
+      font-size: 20px;
+      background: red;
+      color: #FFF;
+      border-radius: 50%;
+      writing-mode: vertical-lr;
+      cursor: pointer;
+    }
+
+    .demo9:hover {
+      text-indent: 2px;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h4>direction vs text-align</h4>
+    <div class="demo1">
+      <span>我是文字, text-align: right</span>
+      <span>;</span>
+    </div>
+    <div class="demo2">
+      <span>我是文字，direction: rtl</span>
+      <span>;</span>
+    </div>
+    <div class="demo3">
+      <span>我是文字，direction: rtl</span>
+      <span>;</span>
+    </div>
+    <div class="demo4">
+      <span>我是文字，direction: rtl</span>
+      <span>;</span>
+    </div>
+  </section>
+
+  <section>
+    <h4>html dir</h4>
+    <div dir="rtl" style="width: 900px; margin: 40px auto;">
+      <span>我是文字，direction: rtl</span>
+      <span>;</span>
+    </div>
+  </section>
+
+  <section>
+    <h4>writing-mode</h4>
+    <div class="demo5">
+      <span>我是文字，direction: rtl</span>
+      <span>;</span>
+    </div>
+  </section>
+
+  <section>
+    <h4>unicode-bidi</h4>
+    <div class="demo6" dir="rtl">
+      <span>我是文字</span>
+      <span style="unicode-bidi: embed;">我也是文字</span>
+      <span >我是末尾的文字</span>
+    </div>
+  </section>
+
+  <section>
+    <h4>水平方向的margin凹陷</h4>
+    <div class="demo7">
+      <div class="item1"></div>
+      <div class="item2"></div>
+    </div>
+  </section>
+
+  <section>
+    <h4>垂直居中</h4>
+    <div class="demo8">
+      <div></div>
+    </div>
+  </section>
+
+  <section>
+    <h4>文字下沉</h4>
+    <div class="demo9">开</div>
+  </section>
+</body>
+</html>
