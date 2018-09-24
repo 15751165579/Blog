@@ -54,6 +54,33 @@
       padding: 20px;
       border: 1px dashed red;
     }
+
+    .demo7 {
+      margin: 0 auto;
+      writing-mode: vertical-lr;
+    }
+
+    .demo7 div {
+      width: 600px;
+      height: 200px;
+      background: red;
+      margin: 100px;
+    }
+
+    .demo8 {
+      width: 800px;
+      height: 400px;
+      margin: 0 auto;
+      border: 1px dashed red;
+      writing-mode: vertical-rl;
+    }
+
+    .demo8 div {
+      margin: auto 350px;
+      width: 100px;
+      height: 100px;
+      background: yellow;
+    }
   </style>
 </head>
 <body>
@@ -99,6 +126,21 @@
       <span>我是文字</span>
       <span style="unicode-bidi: embed;">我也是文字</span>
       <span >我是末尾的文字</span>
+    </div>
+  </section>
+
+  <section>
+    <h4>水平方向的margin凹陷</h4>
+    <div class="demo7">
+      <div class="item1"></div>
+      <div class="item2"></div>
+    </div>
+  </section>
+
+  <section>
+    <h4>垂直居中</h4>
+    <div class="demo8">
+      <div></div>
     </div>
   </section>
 </body>
