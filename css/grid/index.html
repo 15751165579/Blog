@@ -125,6 +125,31 @@
     .demo3 div:nth-child(5) {
       grid-area: 2 / 3 / 3 / 4;
     }
+
+    .demo4 {
+      position: relative;
+      display: grid;
+      width: 900px;
+      height: 900px;
+      margin: 50px auto;
+      grid: 1fr 1fr 1fr / 1fr 1fr 1fr;
+      border: 1px dashed red;
+    }
+    
+    .demo4 div {
+      box-sizing: border-box;
+      border: 1px dashed red;
+    }
+
+    .item {
+      grid-area: 1 / 2 / 2 / 3;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 100px;
+      height: 100px;
+      background: yellow;
+    }
   </style>
 </head>
 <body>
@@ -171,6 +196,22 @@
       <div>3</div>
       <div>4</div>
       <div>5</div>
+    </div>
+  </section>
+
+  <section>
+    <h5>绝对定位在grid中的应用</h5>
+    <div class="demo4">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div class="item"></div>
     </div>
   </section>
 </body>
