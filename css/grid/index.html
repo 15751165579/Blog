@@ -74,6 +74,57 @@
     .demo1 div:nth-child(4) {
       grid-area: F;
     }
+
+    .demo2 {
+      display: grid;
+      grid: repeat(auto-fill, 100px) / auto-fill 1fr;
+      height: 650px;
+    }
+
+    .demo2 div {
+      box-sizing: border-box;
+      background: red;
+      margin: 10px;
+    }
+
+    @media (max-width: 1000px) {
+      demo2 {
+        grid: auto-flow 1fr / repeat(auto-fill, 100px);
+      }
+    }
+
+    .demo3 {
+      display: grid;
+      margin: 50px auto;
+      grid: 100px 100px / 100px 100px 100px;
+      /* grid-template-columns: 100px 100px 100px; */
+      /* grid-auto-flow: row dense; */
+    }
+
+    .demo3 div {
+      border: 1px dashed red;
+      margin: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+
+    .demo3 div:nth-child(1) {
+      grid-area: 1 / 1 / 2 / 2;
+    }
+    .demo3 div:nth-child(2) {
+      grid-area: 1 / 2 / 2 / 4;
+    }
+    .demo3 div:nth-child(3) {
+      grid-area: 2 / 1 / 3 / 2;
+    }
+    .demo3 div:nth-child(4) {
+      grid-area: 2 / 2 / 3 / 3;
+    }
+    .demo3 div:nth-child(5) {
+      grid-area: 2 / 3 / 3 / 4;
+    }
   </style>
 </head>
 <body>
@@ -98,6 +149,29 @@
         <div></div>
       </div>
     </section>
+  </section>
+
+  <section>
+    <h5>Grid中第二种声明方式</h5>
+    <section>
+      <div class="demo2">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </section>
+  </section>
+
+  <section>
+    <h5>order属性</h5>
+    <div class="demo3">
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+    </div>
   </section>
 </body>
 </html>
