@@ -150,6 +150,18 @@
       height: 100px;
       background: yellow;
     }
+
+    .demo5 {
+      width: 400px;
+      height: 400px;
+      margin: 100px auto;
+      display: grid;
+      grid: 1fr 1fr / 1fr 1fr;
+      gap: 10px;
+    }
+    .demo5 div {
+      border: 1px solid red;
+    }
   </style>
 </head>
 <body>
@@ -214,5 +226,16 @@
       <div class="item"></div>
     </div>
   </section>
+
+  <section>
+    <h5>gap</h5>
+    <div class="demo5">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </section>
+
 </body>
 </html>
