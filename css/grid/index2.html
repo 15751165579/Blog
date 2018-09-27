@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Grid Layout Demo</title>
+
+  <style>
+    .grid {
+      display: grid;
+      width: 900px;
+      height: 900px;
+      margin: 0 auto;
+      grid: repeat(3, 1fr) / repeat(3, 1fr);
+    }
+
+    .grid > div {
+      box-sizing: border-box;
+    }
+
+    .grid > div:nth-child(odd) {
+      background-color: #f5f5f5;
+    }
+
+    .grid > div:nth-child(even) {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</body>
+</html>
