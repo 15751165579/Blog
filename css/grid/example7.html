@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <title>Boostrap中的栅格系统</title>
+  <style>
+    h2 {
+      text-align: center;
+      margin: 50px auto;
+    }
+
+    .grid-item {
+      height: 100px;
+      background: red;
+    }
+  </style>
+</head>
+<body>
+  <!-- 1、container 包裹 2、通过 row col类 区分行和列  row通过负margin抵消容器的padding 3、offset实际上就是通过margin-left百分比 4、本质是上就是百分比 5、 通过媒体查询设置断点 达到响应式设计-->
+  <section>
+    <h2>Demo 1</h2>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-1">
+          <div class="grid-item"></div>
+        </div>
+        <div class="col-md-1">
+            <div class="grid-item"></div>
+        </div>
+        <div class="col-md-1 offset-1">
+            <div class="grid-item"></div>
+        </div>
+        <div class="col-md-1">
+            <div class="grid-item"></div>
+        </div>
+        <div class="col-md-1">
+            <div class="grid-item"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
