@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Grid gap 与 margin</title>
+  <style>
+    h5 {
+      text-align: center;
+      margin: 100px 0;
+    }
+
+    .demo1 {
+      width: 400px;
+      height: 400px;
+      margin: 50px auto;
+      display: grid;
+      grid: repeat(2, 1fr) / repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .demo1 > div {
+      background: red;
+    }
+
+    .demo2 {
+      width: 400px;
+      height: 400px;
+      margin: 50px auto;
+      display: grid;
+      grid: repeat(2, 1fr) / repeat(2, 1fr);
+      border: 1px solid red;
+    }
+
+    .demo2 > div {
+      background: red;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h5>gap</h5>
+    <div class="demo1">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </section>
+
+  <section>
+    <h5>margin</h5>
+    <div class="demo2">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </section>
+</body>
+</html>
