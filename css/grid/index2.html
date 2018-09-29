@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Grid Layout Demo</title>
+
+  <style>
+    h5 {
+      text-align: center;
+      margin: 50px 0;
+    }
+    .grid {
+      display: grid;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+      grid: repeat(3, 1fr) / repeat(3, 1fr);
+      /* grid: 1fr 1fr 1fr / 1fr 1fr 1fr; */
+      /* grid-template-rows: repeat(3, 1fr);
+      grid-template-columns: repeat(3, 1fr); */
+    }
+    .grid > div {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    .grid > div:nth-child(odd) {
+      background-color: #f5f5f5;
+    }
+    .grid > div:nth-child(even) {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h5>通过行列的理解来声明Grid容器</h5>
+    <div class="grid">
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+      <div>6</div>
+      <div>7</div>
+      <div>8</div>
+      <div>9</div>
+    </div>
+  </section>
+</body>
+</html>
