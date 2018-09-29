@@ -6,8 +6,6 @@
 
   相比较Multi-Columns Layout 和Flexible Box Layout，Grid Layuot更像是两者的结合，当然这里并不是说Grid Layout可以取代二者。
 
-  其实和Grid Layout特别相似的是HTML中的table元素，所以可以相互联想一下。
-
   另外Grid Layout与当前非常火热Flexible Box Layout有一个本质上的区别就是维度不一样。在使用Flexible Box Layout使，我们只能通过flex-direction定义主轴沿着某一方向，而在Grid Layout则有两条轴。
 
 
@@ -49,9 +47,7 @@
   }
 ```
 
-  虽然从上面的效果可以很明显的看出九宫格的效果，但是需要注意的是设置grid属性虽然会建立一个九宫格的结构，但是图中子元素之所以会这样放置完全是变成grid-item之后的默认的行为（后面会讲到如何修改这种默认行为）。
-
-  在Grid Layout中有专业的术语描述行与列 -- Grid Track
+  类比table中的单元格，在Grid Layout中
 
 ### 参考资料
  
