@@ -171,7 +171,3 @@
 - [W3C Grid Layout](https://www.w3.org/TR/css-grid-1/)
 - [大漠老师的《使用CSS Grid的九大误区》里面整理了很多参考资料](https://www.w3cplus.com/css/9-biggest-mistakes-with-css-grid.html)
 - [上述所有用例的代码](https://github.com/15751165579/Blog/tree/master/css/grid)
-
-如果看官赏脸的话，可以关注在下的订阅号ε=ε=ε=┏(゜ロ゜;)┛：
-
-![](http://o8sux93eg.bkt.clouddn.com/qrcode.jpg)
