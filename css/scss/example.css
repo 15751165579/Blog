@@ -1,0 +1,29 @@
+.demo {
+  width: 400px;
+  height: 400px;
+  margin: 50px auto; }
+  .demo .item {
+    background: red; }
+
+.demo {
+  font-size: 20px;
+  font-family: '111'; }
+
+.demo {
+  font-size: 20px; }
+  .demo.some {
+    font-size: 10px; }
+
+.base, .demo3 {
+  font-size: 20px; }
+
+.demo3 {
+  font-weight: 700px; }
+
+.demo3-1 {
+  font-size: 100px; }
+
+.demo3-1 {
+  font-weight: 900; }
+
+/*# sourceMappingURL=example.css.map */
