@@ -1,0 +1,37 @@
+// 1、选择器嵌套
+.demo {
+  width: 400px;
+  height: 400px;
+  margin: 50px auto;
+  .item {
+    background: red;
+  }
+}
+
+// 2、属性嵌套
+.demo {
+  font: {
+    size: 20px;
+    family: '111';
+  }
+}
+
+// 2、引用父级选择符
+
+.demo {
+  font-size: 20px;
+  &.some {
+    font-size: 10px;
+  }
+}
+
+// 3、占位选择符 解决extend无法判断其它选择符嵌套了该选择符 会导致编译出来的css会出乎意料
+
+%placeholdbase {
+  font-size: 100px;
+}
+
+.demo3-1 {
+  @extend %placeholdbase;
+  font-weight: 900;
+}
