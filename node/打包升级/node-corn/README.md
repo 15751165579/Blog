@@ -87,8 +87,11 @@
 	}
 ```
 
-##### 3、corn格式解析
+##### 3、cornTime
   
+  &emsp;&emsp;node-corn中主要通过CronTime解析corn格式，并且它还支持Date类型的处理。
+
+  &emsp;&emsp;解析corn格式涉及到很多正则表达式的知识，下面章节会详细介绍。
   
 ##### 4、start函数
 
@@ -130,5 +133,180 @@
 
 ### 三、CronTime
 
+##### 1、基本常量
+
+  &emsp;&emsp;在了解corn解析原理之前，首先需要理解以下几个常量:
+
+  - timeUnits: '* * * * * *' 各个星号的含义；
+  - constraints: 每个时间单元的范围；
+  - monthConstraints: 每个月的天数限制；
+  - parseDefaults: 默认的解析格式；
+  - aliases: 月份的一周的别名。
   
+  &emsp;&emsp;以上常量都是采用数组的格式，正好数组下标一一对应。
+
+##### 2、主要流程
+
+```JavaScript
+  // CronTime函数
+  var that = this;
+	timeUnits.map(function(timeUnit) {
+		that[timeUnit] = {};
+  });
+```
+
+  &emsp;&emsp;上述代码是将6个时间单元挂载到this上，目的是存放corn格式解析后的时间点（what???）：
+
+```JavaScript
+  // 比如解析 '*/10 * * * * *' 也就是没10秒执行一次，那么得到的this就是
+
+  {
+    source: '*/10 * * * * *',
+    second: {
+      '0': true,
+      '10': true,
+      '20': true,
+      '30': true,
+      '40': true,
+      '50': true
+    },
+    minute: {
+      '0': true,
+      ...
+      '59': true
+    },
+    hour: {
+      '0': true,
+      ...
+      '59': true
+    },
+    dayOfMonth: {
+      '1': true,
+      ...
+      '31': true
+    },
+    month: {
+      '0': true,
+      ...
+      '11': true
+    },
+    dayOfWeek: {
+      '0': true,
+      ...
+      '6': true
+    }
+  }
+```
+
+  &emsp;&emsp;接下来根据source的类型判断是普通的Date还是corn格式：
+
+```JavaScript
+  if (this.source instanceof Date || this.source._isAMomentObject) {
+			// 支持Date类型
+			this.source = moment(this.source);
+			this.realDate = true;
+		} else {
+			// 处理corn格式
+			this._parse();
+			this._verifyParse();
+		}
+```
+
+##### 3、_parse方法
+
+  &emsp;&emsp;_parse方法主要就是将有效时间点存放在各个时间单元中，这里采用了大量的正则表达式对字符串进行处理。
+
+  &emsp;&emsp;前面提到月份和一周里的天数是可以采用别名的方式,首先替换这些别名：
+
+```JavaScript
+  /**
+   * [a-z]：a,b,c...z字符集
+   * {1,3}：匹配前面字符至少1次，最多3次
+   */
+  var source = this.source.replace(/[a-z]{1,3}/gi, function(alias) {
+    alias = alias.toLowerCase();
+    if (alias in aliases) {
+      return aliases[alias];
+    }
+    throw new Error('Unknown alias: ' + alias);
+  });
+```
+
+  &emsp;&emsp;提取corn格式中各个时间单元前，需要去除头尾可能存在的空格带来的影响：
+
+```JavaScript
+  /**
+   * ^: 匹配输入的开始
+   * $: 匹配输入的结束
+   * |: 或
+   * *: 匹配前一个表达式0次或者多次 
+   */
+  var split = source.replace(/^\s\s*|\s\s*$/g, '').split(/\s+/);
+
+  // 得到的数组和timeUnits是一一对应的
+```
+
+  &emsp;&emsp;接下来解析各个时间单元：
+
+```JavaScript
+  // 这里必须从timeUnits中遍历，主要由于允许用户前几位采用缺省值填充，设计的很巧妙。
+  for (; i < timeUnits.length; i++) {
+    cur = split[i - (len - split.length)] || CronTime.parseDefaults[i];
+    this._parseField(cur, timeUnits[i], CronTime.constraints[i]);
+  }
+```
+
+##### 4、_parseField方法
+
+  &emsp;&emsp;_parseField方法中主要根据每个时间单元设置的规则提取出有效的时间点。
+
+  &emsp;&emsp;下面以'20-50/4 * * * * *'为例，首先我们需要将*替换成相应的范围:
+
+```JavaScript
+  var low = constraints[0];
+	var high = constraints[1];
+  field = field.replace(/\*/g, low + '-' + high);
+  
+  // 每个时间单元经过上述正则表达式得到：
+  // 20-50/4 0-59 0-23 1-31 0-11 0-6
+```
+
+  &emsp;&emsp;接下来再提取每个时间单元中的最小值、最大值和步长：
+
+```JavaScript
+  // (?:x) 非捕获括号，注意与()捕获括号的区别
+  var rangePattern = /^(\d+)(?:-(\d+))?(?:\/(\d+))?$/g;
+```
+
+  &emsp;&emsp;接下来就是通过最小值、最大值以及步长向this上的时间单元存放有效的时间点：
+
+```JavaScript
+  // _parseField
+  var typeObj = this[type]
+  if (allRanges[i].match(rangePattern)) {
+	  allRanges[i].replace(rangePattern, function($0, lower, upper, step) {
+      step = parseInt(step) || 1;
+      
+      // 这里确保最小值 最大值在安全范围内
+      // 并且采用 ~~的方式避免可能为小数的结果
+      lower = Math.min(Math.max(low, ~~Math.abs(lower)), high);
+      
+      upper = upper ? Math.min(high, ~~Math.abs(upper)) : lower;
+
+			pointer = lower;
+			do {
+				typeObj[pointer] = true;
+				pointer += step;
+			} while (pointer <= upper);
+		});
+	} else {
+		throw new Error('Field (' + field + ') cannot be parsed');
+	}
+```
+
+
+
+
+
+
 
