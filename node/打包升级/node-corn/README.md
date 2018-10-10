@@ -1,10 +1,10 @@
-# 打包升级：node-corn原理详解
+# 打包升级：node-cron原理详解
 
-> node-corn主要用来执行定时任务，它不仅提供corn语法，而且增加了NodeJS子进程执行和直接传入Date类型的功能。
+> node-cron主要用来执行定时任务，它不仅提供cron语法，而且增加了NodeJS子进程执行和直接传入Date类型的功能。
 
 ### 一、前言
 
-  &emsp;&emsp;在理解node-corn之前，需要先知道它的基本用法，下面是一个在每分钟的第20秒到第50秒之间每隔4秒执行一次的定时任务：
+  &emsp;&emsp;在理解node-cron之前，需要先知道它的基本用法，下面是一个在每分钟的第20秒到第50秒之间每隔4秒执行一次的定时任务：
 
 ```javascript
   const CronJob = require('../lib/cron.js').CronJob
@@ -20,16 +20,16 @@
   &emsp;&emsp;接下来会从以下几个方面带你领略node-core的原理：
 
   - 部分注意事项
-  - corn格式的解析
+  - cron格式的解析
   - 定时任务的执行流程
 
 ### 二、注意事项
 
-  &emsp;&emsp;在正式进入源码的探索时，最好了解node-corn的基本用法以及相关参数的含义。
+  &emsp;&emsp;在正式进入源码的探索时，最好了解node-cron的基本用法以及相关参数的含义。
 
 ##### 1、传参方式
 
-  &emsp;&emsp;node-corn提供CronJob函数创建定时任务，并且允许两种传参方式：
+  &emsp;&emsp;node-cron提供CronJob函数创建定时任务，并且允许两种传参方式：
 
   - 载荷形式：a, b, c
   - 对象形式：{ a: a, b: b, c: c }
@@ -57,7 +57,7 @@
 
 ##### 2、回到函数
 
-  &emsp;&emsp;node-corn中有两种回调函数：
+  &emsp;&emsp;node-cron中有两种回调函数：
 
   - onTick: 每个时间节点触发的回调函数；
   - onComplete: 定时任务执行完后的回调函数。
@@ -130,23 +130,39 @@
 	}
 ```
 
-### 三、corn格式解析
+### 三、cron格式解析
 
-  
+  &emsp;&emsp;node-cron中通过CronTime处理时间，而且它还支持普通Date类型：
+
+```JavaScript
+  if (this.source instanceof Date || this.source._isAMomentObject) {
+		// 支持Date类型
+		this.source = moment(this.source);
+		this.realDate = true; // 标识符
+	} else {
+		// 处理cron格式
+		this._parse();
+		this._verifyParse();
+	}
+```
 
 ##### 1、基本常量
 
-  &emsp;&emsp;在了解corn解析原理之前，首先需要理解以下几个常量:
+  &emsp;&emsp;在了解cron解析原理之前，首先需要理解以下几个常量:
 
-  - timeUnits: '* * * * * *' 各个星号的含义；
-  - constraints: 每个时间单元的范围；
+  - timeUnits: second, minute, hour, dayOfMonth, month, dayOfWeek 分别对应'* * * * * *'中的各个星号；
+  - constraints: 每个时间单元的时间范围；
   - monthConstraints: 每个月的天数限制；
   - parseDefaults: 默认的解析格式；
-  - aliases: 月份的一周的别名。
+  - aliases: 月份以及一周的别名。
   
-  &emsp;&emsp;以上常量都是采用数组的格式，正好数组下标一一对应。
+  &emsp;&emsp;以上常量都是采用数组的格式，内容正好与数组下标一一对应。
 
-##### 2、主要流程
+##### 2、解析流程
+
+  &emsp;&emsp;下面以'20-50/4 * * * jan-feb *'为例进行解析过程。
+
+  &emsp;&emsp;第一步，CronTime函数中会根据timeUnits创建各个时间单元：
 
 ```JavaScript
   // CronTime函数
@@ -156,68 +172,9 @@
   });
 ```
 
-  &emsp;&emsp;上述代码是将6个时间单元挂载到this上，目的是存放corn格式解析后的时间点（what???）：
+  &emsp;&emsp;第二步，通过_parse方法处理别名以及分割输入的cron格式。
 
-```JavaScript
-  // 比如解析 '*/10 * * * * *' 也就是没10秒执行一次，那么得到的this就是
-
-  {
-    source: '*/10 * * * * *',
-    second: {
-      '0': true,
-      '10': true,
-      '20': true,
-      '30': true,
-      '40': true,
-      '50': true
-    },
-    minute: {
-      '0': true,
-      ...
-      '59': true
-    },
-    hour: {
-      '0': true,
-      ...
-      '59': true
-    },
-    dayOfMonth: {
-      '1': true,
-      ...
-      '31': true
-    },
-    month: {
-      '0': true,
-      ...
-      '11': true
-    },
-    dayOfWeek: {
-      '0': true,
-      ...
-      '6': true
-    }
-  }
-```
-
-  &emsp;&emsp;接下来根据source的类型判断是普通的Date还是corn格式：
-
-```JavaScript
-  if (this.source instanceof Date || this.source._isAMomentObject) {
-			// 支持Date类型
-			this.source = moment(this.source);
-			this.realDate = true;
-		} else {
-			// 处理corn格式
-			this._parse();
-			this._verifyParse();
-		}
-```
-
-##### 3、_parse方法
-
-  &emsp;&emsp;_parse方法主要就是将有效时间点存放在各个时间单元中，这里采用了大量的正则表达式对字符串进行处理。
-
-  &emsp;&emsp;前面提到月份和一周里的天数是可以采用别名的方式,首先替换这些别名：
+  &emsp;&emsp;因为corn格式是字符串形式的，所以后面会采用很多正则表达式对其处理，下面是替换别名的操作：
 
 ```JavaScript
   /**
@@ -231,9 +188,12 @@
     }
     throw new Error('Unknown alias: ' + alias);
   });
+
+  // 处理后的结果
+  // => 20-50/4 * * * 0-1 *
 ```
 
-  &emsp;&emsp;提取corn格式中各个时间单元前，需要去除头尾可能存在的空格带来的影响：
+  &emsp;&emsp;提取cron中各个时间单元采用split方法，不过这里通常需要注意头尾可能出现的空格带来的影响：
 
 ```JavaScript
   /**
@@ -244,42 +204,58 @@
    */
   var split = source.replace(/^\s\s*|\s\s*$/g, '').split(/\s+/);
 
-  // 得到的数组和timeUnits是一一对应的
+  // 处理后的结果
+  // => ['20-50/4', '*', '*', '*', '0-1', '*']
 ```
 
-  &emsp;&emsp;接下来解析各个时间单元：
+  &emsp;&emsp;下面就是对各个时间单元进行处理，这里需要注意的是在输入cron格式字符串时，我们可以省去前面的几位，一般都是省去第一位的秒（秒的缺省值为0）：
 
 ```JavaScript
-  // 这里必须从timeUnits中遍历，主要由于允许用户前几位采用缺省值填充，设计的很巧妙。
+  // 由于用户输入的cron中的时间单元的长度时不定的，这里必须从timeUnits中遍历，设计的很巧妙。
   for (; i < timeUnits.length; i++) {
     cur = split[i - (len - split.length)] || CronTime.parseDefaults[i];
     this._parseField(cur, timeUnits[i], CronTime.constraints[i]);
   }
 ```
 
-##### 4、_parseField方法
+  &emsp;&emsp;第三步，采用_parseField方法处理时间单元。
 
-  &emsp;&emsp;_parseField方法中主要根据每个时间单元设置的规则提取出有效的时间点。
-
-  &emsp;&emsp;下面以'20-50/4 * * * * *'为例，首先我们需要将*替换成相应的范围:
+  &emsp;&emsp;首先需要将*替换为min-max的格式：
 
 ```JavaScript
   var low = constraints[0];
 	var high = constraints[1];
   field = field.replace(/\*/g, low + '-' + high);
   
-  // 每个时间单元经过上述正则表达式得到：
-  // 20-50/4 0-59 0-23 1-31 0-11 0-6
+  // 得到的结果
+  // => ['20-50/4', '0-59', '0-23', '1-31', '0-1', '0-6']
 ```
 
-  &emsp;&emsp;接下来再提取每个时间单元中的最小值、最大值和步长：
+  &emsp;&emsp;接下来就是最重要的一点，将有效的时间点放入相应的时间单元中，可能这里你还不太明白什么意思，往下看。
 
+  &emsp;&emsp;根据'20-50/4'，可以得到起止时间为20秒，终止时间为50s，步长为4（步长缺省值为1），拿到这些信息之后，结合前面创建的时间单元，最终得到如下结果：
+
+```JavaScript
+  second: {
+    '20': true,
+    '24': true,
+    '28': true,
+    '32': true,
+    '36': true,
+    '40': true,
+		'44': true,
+    '48': true
+  }
+```
+
+  &emsp;&emsp;明白需要将cron中各个值处理成什么效果之后，先看一下如果提取字符串中的最小值、最大值以及步长：
+  
 ```JavaScript
   // (?:x) 非捕获括号，注意与()捕获括号的区别
   var rangePattern = /^(\d+)(?:-(\d+))?(?:\/(\d+))?$/g;
 ```
 
-  &emsp;&emsp;最后通过最小值、最大值以及步长向this上的时间单元存放有效的时间点：
+  &emsp;&emsp;具体的处理方式：
 
 ```JavaScript
   // _parseField
@@ -296,6 +272,7 @@
 
 			pointer = lower;
 			do {
+        // 通过步长记录各个时间点
 				typeObj[pointer] = true;
 				pointer += step;
 			} while (pointer <= upper);
@@ -305,9 +282,9 @@
 	}
 ```
 
-  &emsp;&emsp;当corn格式解析完毕之后，作者又采用_verifyParse对异常值进行检测，避免造成无限循环。
+  &emsp;&emsp;第四步，通过_verifyParse对异常值进行检测，避免造成无限循环。
 
-### 四、
+### 四、定时任务执行流程
 
   &emsp;&emsp;
 
