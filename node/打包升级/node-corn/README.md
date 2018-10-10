@@ -21,7 +21,8 @@
 
   - 部分注意事项
   - cron格式的解析
-  - 定时任务的执行流程
+  - 使用setTiemout执行定时任务时的细节处理
+  - 如果计算每一次的时间间隔
 
 ### 二、注意事项
 
@@ -286,11 +287,62 @@
 
 ### 四、定时任务执行流程
 
-  &emsp;&emsp;
+  &emsp;&emsp;node-cron中通过start方法开启定时任务，大体流程很容易可以想到：
 
+  1. 计算当前距离下次节点的时间间隔。
+  2. setTimeout调用fireOnTick方法。
+  3. 时间间隔无效执行步骤5，否则执行步骤4。
+  4. 执行步骤1。
+  5. 清除定时器，执行onComplete。
 
+##### 1、setTimeout
 
+  &emsp;&emsp;第一点：setTimeout存在一个最大的等待时间，所有并不能直接用时间间隔，需要不断的计算当前有效的时间间隔：
 
+```JavaScript
+  var start = function () {
+    if (this.running) return
+    var MAXDELAY = 2147483647; // setTimout的最大等待时间
+		var timeout = this.cronTime.getTimeout(); // 获取时间间隔
+		var remaining = 0; // 剩余时间
 
+    ...
 
+    if (remaining) {
+      // 确保setTimeout接收安全值
+		  if (remaining > MAXDELAY) {
+			  remaining -= MAXDELAY;
+				timeout = MAXDELAY;
+			} else {
+				timeout = remaining;
+				remaining = 0;
+			}
+			_setTimeout(timeout);
+		} else {
+      // 到达执行时机
+			self.running = false; // 等待期间的标识符
+			if (!self.runOnce) self.start();
+			self.fireOnTick();
+		}
+  }
+```
 
+  &emsp;&emsp;第二点，setTimeout并不是非常的准确，这个特性在浏览器中表现的特别突出，不过好在NodeJS中的setTimeout的延迟非常的小，几乎可以忽略不计，不过源码在这里考虑setTimeout提前执行的情况（试了好久，没测试出这种情况。。）:
+
+```JavaScript
+  function callbackWrapper() {
+    var diff = startTime + timeout - Date.now(); 
+    if (diff > 0) {
+      var newTimeout = self.cronTime.getTimeout(); 
+      if (newTimeout > diff) {
+        newTimeout = diff;
+      }
+      remaining += newTimeout; // 加上减少的时间
+    }
+
+    ...
+
+  }
+```
+
+###### 2、计算时间间隔
