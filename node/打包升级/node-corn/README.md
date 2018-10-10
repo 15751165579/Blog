@@ -17,12 +17,12 @@
   }
 ```
 
-  &emsp;&emsp;接下来会从以下几个方面带你领略node-core的原理：
+  &emsp;&emsp;接下来会从以下几个方面带你了解node-cron的原理：
 
   - 部分注意事项
   - cron格式的解析
   - 使用setTiemout执行定时任务时的细节处理
-  - 如果计算每一次的时间间隔
+  - 如何计算cron格式下的时间间隔
 
 ### 二、注意事项
 
@@ -56,7 +56,7 @@
   }
 ```
 
-##### 2、回到函数
+##### 2、回调函数
 
   &emsp;&emsp;node-cron中有两种回调函数：
 
@@ -65,17 +65,18 @@
 
   &emsp;&emsp;从CronJob函数中可以看到onTick回调函数是放在_callbacks中的，但是通过CronJob只能设置一个onTick函数，如果需要设置多个onTick函数，可以采用CronJob原型上的addCallback方法，并且这些onTick的执行顺序需要注意一下：
 
-```JavaScript
-  var fireOnTick = function() {
-    // 利用_callbacks数组模拟栈的行为 后进先出
-		for (var i = this._callbacks.length - 1; i >= 0; i--)
-			this._callbacks[i].call(this.context, this.onComplete);
-	};
+```javascript
+var fireOnTick = function () {
+  // 利用_callbacks数组模拟栈的行为 后进先出
+	for (var i = this._callbacks.length - 1; i >= 0; i--) {
+    this._callbacks[i].call(this.context, this.onComplete);
+  }
+};
 ```
 
-  &emsp;&emsp;另外通过runOnInit参数决定onTick在定时任务初始化阶段执行一次：
+  &emsp;&emsp;另外通过runOnInit参数决定onTick是否在定时任务初始化阶段执行一次：
 
-```JavaScript
+```javascript
   if (runOnInit) {
 		this.lastExecution = new Date();
 		fireOnTick.call(this);
@@ -84,7 +85,7 @@
 
   &emsp;&emsp;这两种回调函数都允许使用NodeJS子进程处理，举个例子：
 
-```JavaScript
+```javascript
   // examples/basic.js
   const CronJob = require('../lib/cron.js').CronJob;
   const path = require('path');
@@ -103,7 +104,7 @@
 
   &emsp;&emsp;对于这种方式，CronJob函数中采用command2function对onTick和onComplete参数统一处理：
 
-```JavaScript
+```javascript
   function command2function(cmd) {
 		var command;
     var args;
@@ -135,7 +136,7 @@
 
   &emsp;&emsp;node-cron中通过CronTime处理时间，而且它还支持普通Date类型：
 
-```JavaScript
+```javascript
   if (this.source instanceof Date || this.source._isAMomentObject) {
 		// 支持Date类型
 		this.source = moment(this.source);
@@ -165,7 +166,7 @@
 
   &emsp;&emsp;第一步，CronTime函数中会根据timeUnits创建各个时间单元：
 
-```JavaScript
+```javascript
   // CronTime函数
   var that = this;
 	timeUnits.map(function(timeUnit) {
@@ -177,7 +178,7 @@
 
   &emsp;&emsp;因为corn格式是字符串形式的，所以后面会采用很多正则表达式对其处理，下面是替换别名的操作：
 
-```JavaScript
+```javascript
   /**
    * [a-z]：a,b,c...z字符集
    * {1,3}：匹配前面字符至少1次，最多3次
@@ -196,7 +197,7 @@
 
   &emsp;&emsp;提取cron中各个时间单元采用split方法，不过这里通常需要注意头尾可能出现的空格带来的影响：
 
-```JavaScript
+```javascript
   /**
    * ^: 匹配输入的开始
    * $: 匹配输入的结束
@@ -211,19 +212,19 @@
 
   &emsp;&emsp;下面就是对各个时间单元进行处理，这里需要注意的是在输入cron格式字符串时，我们可以省去前面的几位，一般都是省去第一位的秒（秒的缺省值为0）：
 
-```JavaScript
-  // 由于用户输入的cron中的时间单元的长度时不定的，这里必须从timeUnits中遍历，设计的很巧妙。
-  for (; i < timeUnits.length; i++) {
-    cur = split[i - (len - split.length)] || CronTime.parseDefaults[i];
-    this._parseField(cur, timeUnits[i], CronTime.constraints[i]);
-  }
+```javascript
+// 由于用户输入的cron中的时间单元的长度时不定的，这里必须从timeUnits中遍历，设计的很巧妙。
+for (; i < timeUnits.length; i++) {
+  cur = split[i - (len - split.length)] || CronTime.parseDefaults[i];
+  this._parseField(cur, timeUnits[i], CronTime.constraints[i]);
+}
 ```
 
   &emsp;&emsp;第三步，采用_parseField方法处理时间单元。
 
   &emsp;&emsp;首先需要将*替换为min-max的格式：
 
-```JavaScript
+```javascript
   var low = constraints[0];
 	var high = constraints[1];
   field = field.replace(/\*/g, low + '-' + high);
@@ -236,7 +237,7 @@
 
   &emsp;&emsp;根据'20-50/4'，可以得到起止时间为20秒，终止时间为50s，步长为4（步长缺省值为1），拿到这些信息之后，结合前面创建的时间单元，最终得到如下结果：
 
-```JavaScript
+```javascript
   second: {
     '20': true,
     '24': true,
@@ -249,16 +250,16 @@
   }
 ```
 
-  &emsp;&emsp;明白需要将cron中各个值处理成什么效果之后，先看一下如果提取字符串中的最小值、最大值以及步长：
+  &emsp;&emsp;现在明白需要将cron中各个值处理成什么效果之后，先看一下如何提取字符串中的最小值、最大值以及步长：
   
-```JavaScript
+```javascript
   // (?:x) 非捕获括号，注意与()捕获括号的区别
   var rangePattern = /^(\d+)(?:-(\d+))?(?:\/(\d+))?$/g;
 ```
 
   &emsp;&emsp;具体的处理方式：
 
-```JavaScript
+```javascript
   // _parseField
   var typeObj = this[type]
   if (allRanges[i].match(rangePattern)) {
@@ -289,17 +290,16 @@
 
   &emsp;&emsp;node-cron中通过start方法开启定时任务，大体流程很容易可以想到：
 
-  1. 计算当前距离下次节点的时间间隔。
-  2. setTimeout调用fireOnTick方法。
-  3. 时间间隔无效执行步骤5，否则执行步骤4。
-  4. 执行步骤1。
-  5. 清除定时器，执行onComplete。
+  1. 计算当前时间距离下个节点的时间间隔。
+  2. 时间间隔无效执行步骤4，否则执行步骤3。
+  3. setTimeout调用fireOnTick方法，执行步骤1。
+  4. 清除定时器，执行onComplete。
 
 ##### 1、setTimeout
 
   &emsp;&emsp;第一点：setTimeout存在一个最大的等待时间，所有并不能直接用时间间隔，需要不断的计算当前有效的时间间隔：
 
-```JavaScript
+```javascript
   var start = function () {
     if (this.running) return
     var MAXDELAY = 2147483647; // setTimout的最大等待时间
@@ -329,7 +329,7 @@
 
   &emsp;&emsp;第二点，setTimeout并不是非常的准确，这个特性在浏览器中表现的特别突出，不过好在NodeJS中的setTimeout的延迟非常的小，几乎可以忽略不计，不过源码在这里考虑setTimeout提前执行的情况（试了好久，没测试出这种情况。。）:
 
-```JavaScript
+```javascript
   function callbackWrapper() {
     var diff = startTime + timeout - Date.now(); 
     if (diff > 0) {
@@ -346,3 +346,37 @@
 ```
 
 ###### 2、计算时间间隔
+
+  &emsp;&emsp;对于时间间隔的计算无非是起始时间与终止时间毫秒数的计算，但是对于cron格式的输入，问题就转化为了如何通过cron获取下一个节点的终止时间。
+
+  &emsp;&emsp;还记得前面花了很大精力将cron格式转化成时间单元中的有效节点吗？而这里获取终止时间的策咯就是利用当前时间不断的通过这些时间单元校正当前时间，这里我们就拿月份为例：
+
+```javascript
+  // _getNextDateFrom方法
+  ...
+  var date = moment()
+  let i = 0
+  while (true) {
+    i++
+    // 当前的月份是否有效
+    if (!(date.month() in this.month) && Object.keys(this.month).length !== 12) {
+      // 当前月份无效，则向后推移一个月
+			date.add(1, 'M');
+			if (date.month() === prevMonth) {
+			  date.add(1, 'M');
+			}
+      // 重置
+			date.date(1);
+			date.hours(0);
+			date.minutes(0);
+			date.seconds(0);
+			continue;
+		}
+  }
+```
+
+  &emsp;&emsp;以这样的方式不断的校正对应的时间单元，最终得到下一个节点的终止时间，从而得到时间间隔。
+
+### 五、结尾
+
+  &emsp;&emsp;感谢读者耐心的看到这里，更多内容可以关注我的公众号@超爱敲代码。
