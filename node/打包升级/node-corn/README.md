@@ -346,3 +346,39 @@
 ```
 
 ###### 2、计算时间间隔
+
+  &emsp;&emsp;对于时间间隔的计算无非是起时时间与终止时间毫秒数的计算，但是对于cron格式的输入，问题就转化为了如何通过cron获取下一个节点的终止时间。
+
+  &emsp;&emsp;还记得前面花了很大精力将cron格式转化成时间单元中的有效节点吗？而这里获取终止时间的策咯就是，利用当前时间不断的通过这些时间单元校正为下个节点的终止时间。这里我们就拿
+
+月份为例：
+
+```JavaScript
+  // _getNextDateFrom方法
+  ...
+  var date = moment()
+  let i = 0
+  while (true) {
+    i++
+    // 当前的月份是否有效
+    if (!(date.month() in this.month) && Object.keys(this.month).length !== 12) {
+      // 当前月份无效，则向后推移一个月
+			date.add(1, 'M');
+			if (date.month() === prevMonth) {
+			  date.add(1, 'M');
+			}
+      // 重置
+			date.date(1);
+			date.hours(0);
+			date.minutes(0);
+			date.seconds(0);
+			continue;
+		}
+  }
+```
+
+  &emsp;&emsp;以这样的方式不断的校正对应的时间单元，最终得到下一个节点的终止时间，从而得到时间间隔。
+
+### 五、结尾
+
+  &emsp;&emsp;感谢读者耐心的看到这里，更多内容可以关注我的公众号@超爱敲代码。
