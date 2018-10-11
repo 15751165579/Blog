@@ -91,6 +91,7 @@
     "lighthouse": "^2.9.4",
     "lodash": "^4.17.10",
     "log4js": "^3.0.3",
+    "minimist": "^1.2.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "mongoose": "^5.0.15",
