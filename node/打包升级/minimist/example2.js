@@ -4,7 +4,7 @@ const result = []
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
-  prompt: `？${question[result.length]} `
+  prompt: `？${question[0]} `
 });
 rl.prompt();
 
@@ -13,11 +13,10 @@ rl.on('line', (line) => {
   const max = result.length
   if (max === question.length) {
     rl.close()
-    return true
   }
-  rl.setPrompt(`？${question[result.length]} `)
+  rl.setPrompt(`？${question[max]} `)
   rl.prompt();
 }).on('close', () => {
-  console.log('谢谢参与问答');
+  console.log(`谢谢参与问答 *** 姓名: ${result[0]} 年龄: ${result[1]}`);
   process.exit(0);
 }); 
