@@ -185,6 +185,41 @@ rl.on('line', () => {
   process.stdout.write('\x1b[44;37m OK \x1b[0m just do it\n')
 ```
 
+### 四、自定义Node命令
 
+  &emsp;&emsp;接下来就是自定义Node命令，首先需要创建一个命令执行的文件：
 
+```JavaScript
+  // hello.js
+  #!/usr/bin/env node
+  console.log('hello')
+```
 
+  &emsp;&emsp;再利用package.json中的bin配置：
+
+```JavaScript
+  {
+    "bin": {
+      "hello": "./hello.js"
+    },
+  }
+```
+
+  &emsp;&emsp;执行npm的link命令：
+
+```s
+  npm link
+  
+  # 输入自定义命令
+  hello
+
+  # 输出 hello
+```
+
+### 五、总结
+
+  &emsp;&emsp;上面介绍了开发Node-CLI时所需要的一些基本知识，这里介绍几个开发Node-CLI常用的库：
+
+  - [commander.js CLI开发框架](https://github.com/tj/commander.js)
+  - [chalk.js 终端文字样式库](https://github.com/chalk/chalk)
+  - [lnquirer.js 命令行交互信息收集库](https://github.com/SBoudrias/Inquirer.js)
