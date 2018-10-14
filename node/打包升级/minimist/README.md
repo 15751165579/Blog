@@ -216,5 +216,10 @@ rl.on('line', () => {
   # 输出 hello
 ```
 
+### 五、总结
 
+  &emsp;&emsp;上面介绍了开发Node-CLI时所需要的一些基本知识，这里介绍几个开发Node-CLI常用的库：
 
+  - [commander.js CLI开发框架](https://github.com/tj/commander.js)
+  - [chalk.js 终端文字样式库](https://github.com/chalk/chalk)
+  - [lnquirer.js 命令行交互信息收集库](https://github.com/SBoudrias/Inquirer.js)
