@@ -1,4 +1,4 @@
-# 玩转Node-CLI
+# 必知必会的Node-CLI开发基础
 
 > 本文带你了解创建一个Node-CLI工具所需知识点。
 
@@ -190,7 +190,7 @@ rl.on('line', () => {
   &emsp;&emsp;接下来就是自定义Node命令，首先需要创建一个命令执行的文件：
 
 ```JavaScript
-  // hello.js
+  // hello.js 首行需要指定脚本的解释程序
   #!/usr/bin/env node
   console.log('hello')
 ```
@@ -218,11 +218,15 @@ rl.on('line', () => {
 
 ### 五、总结
 
-  &emsp;&emsp;上面介绍了开发Node-CLI时所需要的一些基本知识，下面是几个开发Node-CLI常用的库：
+  &emsp;&emsp;上面介绍了开发Node-CLI时所需要的一些基本知识，但是对于用过诸如webpack-cli、vue-cli工具的你可能会发现这些优秀的CLI工具还具有：
 
-  - [commander.js CLI开发框架](https://github.com/tj/commander.js)
+  - git风格的子命令；
+  - 自动化的帮助信息；
+  - ....
+
+  &emsp;&emsp;那么下面这些成熟的框架会给你很大的帮助：
+
+  - [commander.js 让CLI开发更简单](https://github.com/tj/commander.js)
   - [Yargs 解析命令行参数以及生成优雅的用户界面](https://github.com/yargs/yargs)
   - [chalk.js 终端文字样式库](https://github.com/chalk/chalk)
   - [lnquirer.js 命令行交互信息收集库](https://github.com/SBoudrias/Inquirer.js)
-
-  &emsp;&emsp;
