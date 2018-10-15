@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "hello": "./hello.js"
+    "hello": "./hello.js",
+    "hi": "./example5.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.19.0"
+  }
 }

@@ -1,6 +1,6 @@
 # 玩转Node-CLI
 
-> 本文带你了解如何创建一个Node-CLI工具
+> 本文带你了解创建一个Node-CLI工具所需知识点。
 
 ### 一、命令行参数解析
 
@@ -80,14 +80,14 @@ function parseArgv (argv) {
   }
 ```
 
-  &emsp;&emsp;上面这个示例不仅仅为了展示解析的结果，而且还强调了Unix参数风格只解析单个字母，所以这种风格的参数可能表达的意思不太明确，那么就需要正确的使用这种参数风格：
+  &emsp;&emsp;上面这个示例不仅仅为了展示解析的结果，而且还强调了Unix参数风格只解析单个字母，所以这种风格的参数可能表达的意思不太明确并且数量有限，那么就需要在正确的场景中使用这种风格的参数：
 
 ```s
   npm --save-dev webpack
   npm -D webpack
 ```
 
-  &emsp;&emsp;npm中采用Unix参数风格表示简写，这是一种很好的使用方式，那么前面示例中的-age应该改用为--age更加合理一点。
+  &emsp;&emsp;npm中采用Unix参数风格表示简写，这就是一种很恰当的方式，那么前面示例中的-age按照语义应该改为--age更加合理一点。
 
 ### 二、命令行界面
 
@@ -218,8 +218,11 @@ rl.on('line', () => {
 
 ### 五、总结
 
-  &emsp;&emsp;上面介绍了开发Node-CLI时所需要的一些基本知识，这里介绍几个开发Node-CLI常用的库：
+  &emsp;&emsp;上面介绍了开发Node-CLI时所需要的一些基本知识，下面是几个开发Node-CLI常用的库：
 
   - [commander.js CLI开发框架](https://github.com/tj/commander.js)
+  - [Yargs 解析命令行参数以及生成优雅的用户界面](https://github.com/yargs/yargs)
   - [chalk.js 终端文字样式库](https://github.com/chalk/chalk)
   - [lnquirer.js 命令行交互信息收集库](https://github.com/SBoudrias/Inquirer.js)
+
+  &emsp;&emsp;
