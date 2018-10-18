@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>transform, rotate, scale</title>
+  <style>
+    canvas {
+      margin: 40px auto;
+      display: block;
+      border: 1px dashed red;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = function () {
+      const canvas = document.getElementById('canvas')
+      canvas.width = 1000
+      canvas.height = 600
+
+      const context = canvas.getContext('2d')
+      
+      context.save()
+      context.translate(200, 200)
+      context.strokeRect(20, 20, 100, 100)
+      context.restore()
+
+      context.save()
+      context.translate(300, 300)
+      context.strokeRect(20, 20, 100, 100)
+      context.restore()
+
+      context.save()
+      context.strokeRect(100, 100, 100, 100)
+      context.restore()
+
+      context.save()
+      context.translate(150, 150) // 将旋转中心变换到图形中心点
+      context.rotate(90)
+      context.translate(-150, -150) // 复原位置
+      context.strokeRect(100, 100, 100, 100)
+      context.restore()
+
+      context.save()
+      context.strokeRect(700, 200, 100, 100)
+      context.restore()
+
+      context.save()
+      context.scale(2, 2)
+      context.translate(-350 - 25,-100 - 25) // 整个画布变大 这时需要移动xy 轴的距离 newX = - x / rate - w / rate / 2
+      context.strokeRect(700, 200, 100, 100)
+      context.restore()
+    }
+  </script>
+</body>
+</html>
