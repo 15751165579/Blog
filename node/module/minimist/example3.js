@@ -30,7 +30,6 @@ process.stdin.on('keypress', (s, key) => {
   }
   // 移动光标，并且删除光标右边的内容
   readline.moveCursor(process.stdout, 0, -lineCount)
-  readline.clearLine(process.stdout, -1)
   lineCount -= choices.length
   reader()
 })
