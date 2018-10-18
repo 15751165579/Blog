@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lineJoin</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    
+    window.onload = function () {
+      const canvas = document.getElementById('canvas')
+
+      canvas.width = 800
+      canvas.height = 800
+
+      const context = canvas.getContext('2d')
+      
+      drawStar(context, 300, 100, 400, 400)
+      
+    }
+
+    function drawStar (ctx, outerR, innerR, cx, cy, deg = 0) {
+      ctx.beginPath()
+
+      for (let i = 0; i < 5; i++) {
+        ctx.lineTo(Math.cos((18 + i * 72 - deg) / 180 * Math.PI) * outerR + cx, -Math.sin((18 + i * 72 - deg) / 180 * Math.PI) * outerR + cy)
+        ctx.lineTo(Math.cos((54 + i * 72 - deg) / 180 * Math.PI) * innerR + cx, -Math.sin((54 + i * 72 - deg) / 180 * Math.PI) * innerR + cy)
+      }
+
+      ctx.closePath() 
+      
+      ctx.lineWidth = 20
+      // ctx.lineJoin = 'round'
+      // ctx.lineJoin = 'bevel'
+      ctx.lineJoin = 'miter' // 默认值
+      ctx.miterLimit = 1 // 大于这个值 则采用bevel
+      ctx.stroke()
+    }
+  </script>
+</body>
+</html>

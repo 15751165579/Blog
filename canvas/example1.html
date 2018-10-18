@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>多边形</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = function () {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 1000
+      canvas.height = 1000
+
+      const context = canvas.getContext('2d')
+      
+      context.beginPath()
+      context.moveTo(100, 350)
+      context.lineTo(500, 350)
+      context.lineTo(500, 200)
+      context.lineTo(700, 400)
+      context.lineTo(500, 600)
+      context.lineTo(500, 450)
+      context.lineTo(100, 450)
+      context.closePath()
+      
+      // 绘制的状态
+      context.lineWidth = 10
+      context.fillStyle = 'yellow'
+      context.strokeStyle = 'red'
+
+      context.fill() // 若放在stroke之后则会覆盖部分线条的宽度 为什么？
+      context.stroke()
+      
+    }
+  </script>
+</body>
+</html>

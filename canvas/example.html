@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>canvas</title>
+  <style>
+    canvas {
+      display: block;
+      margin: 10px auto;
+      border: 1px dashed rgb(213,213,213);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // canvas面向状态 它存在一个绘制状态：坐标变换、裁剪以及一些样式的设置。
+    // 特别注意的是当前路径 与 位图 不输入绘制状态的一部分。当前路径是持久化的，只能通过beginPath重置
+
+    // 状态堆栈的操作 save restore
+    window.onload = () => {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 800
+      canvas.height = 800
+      const context = canvas.getContext('2d')
+
+      context.beginPath()
+      context.moveTo(20, 200)
+      context.lineTo(600, 700)
+      context.lineWidth = 10
+      context.strokeStyle = 'red'
+      context.stroke()
+
+      context.beginPath()
+      context.moveTo(100, 400)
+      context.lineTo(300, 600)
+      context.lineWidth = 20
+      context.strokeStyle = 'blue'
+      context.stroke()
+    
+    }  
+  </script>
+</body>
+</html>
