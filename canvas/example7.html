@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>变换矩阵</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = function () {
+
+      const canvas = document.getElementById('canvas')
+
+      canvas.width = 1000
+      canvas.height = 600
+
+      const context = canvas.getContext('2d')
+      
+      // 3 * 3 变换矩阵
+      /**
+       * a c e
+       * b d f
+       * 0 0 1
+       */
+      // a d 水平 垂直缩放
+      // b c 水平 垂直倾斜
+      // e f 水平 垂直位移
+
+      context.save()
+      
+      context.fillStyle = 'red'
+      context.fillRect(100, 100, 200, 200)
+
+      context.restore()
+
+      context.save()
+      context.transform(1,0,0,1,100,100)
+      context.fillRect(100, 100, 200, 200)
+      context.restore()
+    }
+  </script>
+</body>
+</html>
