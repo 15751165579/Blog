@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>圆角矩形</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    
+    window.onload = () => {
+      const canvas = document.getElementById('canvas')
+      canvas.width = 600
+      canvas.height = 600
+
+      const context = canvas.getContext('2d')
+      drawRoundRect(context, 300, 300, 250, 250, 40)
+    }
+    
+    
+    function drawRoundRect (context, cx, cy, width, height, radius = 0) {
+
+      // 实际的宽度
+
+      const halfW = (width - radius * 2) / 2
+      const halfH = (height - radius * 2) / 2
+      
+      drawLine(context, {
+        x: cx - halfW,
+        y: cy - halfW
+      }, {
+        x: cx + halfH,
+        y: cy - halfH
+      })
+      
+      context.beginPath()
+      context.arc(cx + halfH, cy - halfH + radius, radius, 0, -Math.PI / 2, true)
+      context.stroke()
+
+      drawLine(context, {
+        x: cx + halfW + radius,
+        y: cy - halfH + radius
+      }, {
+        x: cx + halfW + radius,
+        y: cy + halfH - radius
+      })
+
+      context.beginPath()
+      context.arc(cx + halfW, cy + halfH - radius, radius, 0, Math.PI / 2, false)
+      context.stroke()
+
+      drawLine(context, {
+        x: cx + halfW,
+        y: cy + halfH
+      }, {
+        x: cx - halfW,
+        y: cy + halfH
+      })
+
+      context.beginPath()
+      context.arc(cx - halfW, cy + halfH - radius, radius, Math.PI / 2, Math.PI, false)
+      context.stroke()
+
+      drawLine(context, {
+        x: cx - halfW - radius,
+        y: cy + halfH - radius
+      }, {
+        x: cx - halfW - radius,
+        y: cy - halfH + radius
+      })
+
+      context.beginPath()
+      context.arc(cx - halfW, cy - halfH + radius, radius, Math.PI, Math.PI * 3 / 2, false)
+      context.stroke()
+    }
+
+    function drawLine (context, point1, point2) {
+      const { x: x1, y: y1 } = point1
+      const { x: x2, y: y2 } = point2
+      context.beginPath()
+      context.moveTo(x1, y1)
+      context.lineTo(x2, y2)
+      context.stroke()
+    }
+  </script>
+</body>
+</html>

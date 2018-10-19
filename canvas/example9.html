@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Radial Gradient</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = () => {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 600
+      canvas.height = 600
+
+      const context = canvas.getContext('2d')
+
+      const radialGradient = context.createRadialGradient(300, 300, 0, 300, 300, 500)
+
+      radialGradient.addColorStop(0.0, 'transparent')
+      radialGradient.addColorStop(0.5, 'blue')
+      radialGradient.addColorStop(1.0, 'transparent')
+
+      context.fillStyle = radialGradient
+
+      context.fillRect(0, 0, 600, 600)
+    }
+  </script>
+</body>
+</html>
