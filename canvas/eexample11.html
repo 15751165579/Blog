@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Arc</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+  
+    window.onload = () => {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 1200
+      canvas.height = 700
+
+      const context = canvas.getContext('2d')
+      
+      context.lineWidth = 2
+      context.arc(200, 200, 100, 0, Math.PI * 2 / 3, false)
+
+      context.stroke()  
+    }
+  </script>
+</body>
+</html>
