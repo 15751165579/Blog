@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>global Composite Operation</title>
+  <style>
+    div {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div>
+      <a href="#">source-over</a>
+      <a href="#">source-in</a>
+      <a href="#">source-out</a>
+      <a href="#">source-atop</a>
+      <a href="#">destination-over</a>
+      <a href="#">destination-in</a>
+      <a href="#">destination-out</a>
+      <a href="#">destination-atop</a>
+      <a href="#">lighter</a>
+      <a href="#">copy</a>
+      <a href="#">xor</a>
+  </div>
+  <script>
+    window.onload = () => {
+      draw('source-over')
+      const a = Array.from(document.getElementsByTagName('a'))
+      for (let i = 0; i < a.length; i++) {
+        a[i].onclick = function () {
+          draw(this.text)
+          return false
+        }
+      }
+    }
+
+    function draw (composite) {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 1200
+      canvas.height = 600
+
+      const context = canvas.getContext('2d')
+
+      context.clearRect(0, 0, canvas.width, canvas.height)
+
+      context.fillStyle = 'red'
+      context.fillRect(400, 200, 200, 200)
+
+      context.globalCompositeOperation = composite
+    
+      context.fillStyle = 'orange'
+      context.fillRect(500, 300, 200, 200)
+      
+      // const r1 = 50
+      // const r2 = 45
+
+      // context.fillStyle = 'red'
+      // context.beginPath()
+      // context.arc(600, 200, r2, 0, Math.PI * 2)
+      // context.closePath()
+      // context.fill()
+      
+
+      // context.fillStyle = 'yellow'
+      // context.beginPath()
+      // context.arc(600 + r1 * Math.cos(Math.PI / 3), 200 + r1 * Math.sin(Math.PI / 3), r2, 0, Math.PI * 2)
+      // context.closePath()
+      // context.fill()
+
+      // context.fillStyle = 'blue'
+      // context.beginPath()
+      // context.arc(600 - r1 * Math.cos(Math.PI / 3), 200 + r1 * Math.sin(Math.PI / 3), r2, 0, Math.PI * 2)
+      // context.closePath()
+      // context.fill()
+    }
+  </script>
+</body>
+</html>
