@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>文字的对齐方式</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+  
+    window.onload = function () {
+      const canvas = document.getElementById('canvas')
+      canvas.width = 600
+      canvas.height = 1600
+
+      const context = canvas.getContext('2d')
+      context.font = 'bold 40px sans-serif'
+      context.textAlign = 'left'
+      context.fillText('Canvas', 300, 100)
+      
+      context.textAlign = 'center'
+      context.fillText('Canvas', 300, 200)
+
+      context.textAlign = 'right'
+      context.fillText('Canvas', 300, 300)
+      
+      context.beginPath()
+      context.moveTo(300, 0)
+      context.lineTo(300, 600)
+      context.stroke()
+      
+      context.textAlign = 'left'
+      context.textBaseline = 'middle'
+      context.fillText('Canvas', 40, 400)
+      context.beginPath()
+      context.moveTo(40, 400)
+      context.lineTo(600, 400)
+      context.stroke()
+
+      context.textAlign = 'left'
+      context.textBaseline = 'top'
+      context.fillText('Canvas', 40, 500)
+      context.beginPath()
+      context.moveTo(40, 500)
+      context.lineTo(600, 500)
+      context.stroke()
+
+      context.textAlign = 'left'
+      context.textBaseline = 'bottom'
+      context.fillText('Canvas', 40, 600)
+      context.beginPath()
+      context.moveTo(40, 600)
+      context.lineTo(600, 600)
+      context.stroke()
+
+      // 垂直方向除了这三个取值， 还有hanging(印度文) alphabetic(拉丁字母) ideographic(中文 日文)
+    }
+  </script>
+</body>
+</html>

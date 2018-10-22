@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>剪辑区域实现探照灯</title>
+  <style>
+    canvas {
+      display: block;
+      margin: 50px auto;
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    window.onload = () => {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 1200
+      canvas.height = 800
+
+      const obj = {
+        cx: canvas.width / 2,
+        cy: canvas.height / 2,
+        r: 200,
+        vx: Math.random() * 5 + 10,
+        vy: Math.random() * 5 + 10
+      }
+
+      const context = canvas.getContext('2d')
+
+      window.requestAnimationFrame(start)
+
+      function start () {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        // 计算
+        const { vx, vy } = obj
+
+        obj.cx += vx
+        obj.cy += vy
+
+        if (obj.cx > canvas.width || obj.cx < 0) {
+          obj.vx *= -1
+        }
+
+        if (obj.cy > canvas.height || obj.cy < 0) {
+          obj.vy *= -1
+        }
+
+        draw()
+        
+        window.requestAnimationFrame(start)
+      }
+
+      function draw () {
+
+        context.fillStyle = '#000'
+        context.fillRect(0, 0, canvas.width, canvas.height)
+        
+        context.save()
+        context.fillStyle = '#FFF'
+        context.beginPath()
+        context.arc(obj.cx, obj.cy, obj.r, 0, Math.PI * 2)
+        context.closePath()
+        context.fill()
+        context.clip()
+        
+        context.font = 'bold 120px sans-serif'
+        context.textAlign = 'center'
+        context.textBaseline = 'middle'
+        context.fillStyle = 'red'
+        context.fillText('Hello Canvas', canvas.width / 2, canvas.height / 2)
+        context.restore()
+      }
+
+    }
+  </script>
+</body>
+</html>

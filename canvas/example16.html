@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>文字的度量</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = function () {
+      // 获取宽度之前需要考虑 文字的绘制样式， 目前只能获取文字的宽度
+      const canvas = document.getElementById('canvas')
+      canvas.width = 600
+      canvas.height = 600
+      
+      const context = canvas.getContext('2d')
+      context.font = 'bold 40px sans-serif'
+      context.fillText('Hello Canvas', 40, 100)
+
+      const textWidth = context.measureText('Hello Canvas').width
+
+      context.fillText(textWidth, 40, 200)
+    }
+  </script>
+</body>
+</html>

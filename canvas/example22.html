@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Canvas交互</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = () => {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 1200
+      canvas.height = 700
+
+      const context = canvas.getContext('2d')
+      const balls = []
+
+      canvas.addEventListener('click', update)
+
+      draw()
+
+      function draw () {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        
+        context.fillStyle = 'orange'
+        for (let i = 0; i < 10; i++) {
+          const ball = {
+            cx: Math.random() * 1200,
+            cy: Math.random() * 700
+          }
+          balls.push(ball)
+          context.beginPath()
+          context.arc(ball.cx, ball.cy, 50, 0, Math.PI * 2)
+          context.closePath()
+          context.fill()
+        }
+      }
+
+      function update (e) {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        const x = e.clientX - canvas.getBoundingClientRect().left
+        const y = e.clientY - canvas.getBoundingClientRect().top
+
+        for (let i = 0; i < balls.length; i++) {
+          context.beginPath()
+          const ball = balls[i]
+          context.fillStyle = 'orange'
+          context.arc(ball.cx, ball.cy, 50, 0, Math.PI * 2)
+          if (context.isPointInPath(x, y)) {
+            context.fillStyle = 'red'
+          }
+          context.closePath()
+          context.fill()
+        }
+      }
+      
+    }
+  </script>
+</body>
+</html>

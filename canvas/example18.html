@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    canvas {
+      border: 1px dashed rgb(213,213,213);  
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = () => {
+      const canvas = document.getElementById('canvas')
+      canvas.width = 1200
+      canvas.height = 700
+
+      const context = canvas.getContext('2d')
+
+      context.globalAlpha = 0.7
+      
+      for (let i = 0; i < 100; i++) {
+        const R = Math.floor(Math.random() * 255)
+        const G = Math.floor(Math.random() * 255)
+        const B = Math.floor(Math.random() * 255)
+
+        context.fillStyle = `rgb(${R},${G},${B})`
+        context.beginPath()
+        context.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 100, 0, Math.PI * 2)
+        context.fill()
+      }
+    }
+  </script>
+</body>
+</html>
