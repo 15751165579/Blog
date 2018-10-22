@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>阴影的绘制</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = function () {
+      // 对于任何绘制 都能采用阴影
+      const canvas = document.getElementById('canvas')
+
+      canvas.width = 600
+      canvas.height = 600
+
+      const context = canvas.getContext('2d')
+
+      context.fillStyle = 'red'
+
+      context.shadowColor = 'gray'
+      context.shadowOffsetX = 20
+      context.shadowOffsetY = 20
+      context.shadowBlur = 5
+
+      context.fillRect(30, 30, 300, 300)
+    }
+  </script>
+</body>
+</html>
