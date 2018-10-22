@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>文字样式</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = function () {
+
+      // font-weight font-size font-family font-variant(small-caps) font-style(normal italic oblique)
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 600
+      canvas.height = 600
+
+      const context = canvas.getContext('2d')
+
+      context.font = 'bolder 40px sans-serif'
+      context.fillText('Hello Canvas', 40,100)
+
+      context.font = 'italic bold 40px sans-serif'
+      context.fillText('Hello Canvas', 40, 200)
+
+      context.font = 'oblique bold 40px sans-serif'
+      context.fillText('Hello Canvas', 40, 300)
+
+      context.font = 'small-caps bold 40px sans-serif'
+      context.fillText('Canvas', 40, 400)
+
+      // font-weight : lighter normal bold bolder 或者 100 ~ 900
+    }
+  </script>
+</body>
+</html>
