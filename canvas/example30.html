@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>像素级别的处理</title>
+  <style>
+    .demo {
+      display: flex;
+      justify-content: space-around;
+      margin: 100px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo">
+      <canvas id="canvas" style="border: 1px solid rgb(213,213,213);"></canvas>
+      <canvas id="canvas-2" style="border: 1px solid rgb(213,213,213);"></canvas>
+  </div>
+
+  <script>
+    window.onload = function () {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 500
+      canvas.height = 300
+
+      const context = canvas.getContext('2d')
+      
+      const image = new Image()
+      image.src = './home.jpg'
+      image.onload = function () {
+
+        context.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+        const canvas2 = document.getElementById('canvas-2')
+        canvas2.width = canvas.width
+        canvas2.height = canvas.height
+
+        const context2 = canvas2.getContext('2d')
+
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+        
+        // 注意与drawImage的区别
+        context2.putImageData(imageData, 0, 0, 100, 100, canvas.width, canvas.height)
+      }
+    }
+  </script>
+</body>
+</html>
