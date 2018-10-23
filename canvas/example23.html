@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>倒计时</title>
+  <script src="./digit.js"></script>
+  <style>
+    canvas {
+      display: block;
+      margin: 20px auto;
+      border: 1px solid rgb(213,213,213);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = function () {
+      const canvas = document.getElementById('canvas')
+      const WIDTH = 1024
+      const HEIGHT = 768
+      canvas.width = WIDTH
+      canvas.height = HEIGHT
+
+      const context = canvas.getContext('2d')
+
+      render( context )
+    }
+
+    function render (ctx) {
+      const hours = 12
+      // const minutes = 34
+      // const seconds = 56
+      renderDigit(100, 100, parseInt(hours / 10), ctx)
+    }
+
+    function renderDigit (x, y, num, ctx) {
+      ctx.fillStyle = 'rgb(0, 102, 153)'
+      const R = 5
+      /* eslint-disable */
+      for (let i = 0; i < digit[num].length; i++) {
+        for (let j = 0; j < digit[num].length; j++) {
+          if (digit[num][i][j] === 1) {
+            ctx.beginPath()
+            ctx.arc(x + j * 2 * (R + 1) + (R + 1), y + i * 2 * (R + 1) + (R + 1), R, 0, Math.PI * 2)
+            ctx.closePath()
+            ctx.fill()
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
