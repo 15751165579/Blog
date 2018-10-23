@@ -7,10 +7,12 @@
   <title>倒计时</title>
   <script src="./digit.js"></script>
   <style>
-    canvas {
-      display: block;
-      margin: 20px auto;
-      border: 1px solid rgb(213,213,213);
+    html, body {
+      height: 100%;
+    }
+    * {
+      margin: 0;
+      padding: 0;
     }
   </style>
 </head>
@@ -19,11 +21,11 @@
 
   <script>
 
-    const WIDTH = 1024
-    const HEIGHT = 768
-    const MARGIN_LEFT = 100
-    const MARGIN_TOP = 100
-    const R = 7 // 小球半径
+    const WIDTH = document.body.clientWidth
+    const HEIGHT = document.body.clientHeight
+    const MARGIN_LEFT = Math.round(WIDTH / 10)
+    const MARGIN_TOP = Math.round(HEIGHT / 10)
+    const R = Math.round(WIDTH * 4 / 5 / 108) - 1 // 小球半径
     const END_TIME = new Date(2018, 9, 23, 20, 0, 0)
     let curShowTimeSeconds = 0
 
@@ -63,15 +65,20 @@
         // 小球绘制的时机
         if (parseInt(nextHours / 10) !== parseInt(curHours / 10)) {
           addBalls(MARGIN_LEFT, MARGIN_TOP, parseInt(curHours / 10))
-        } else if (parseInt(nextHours % 10) !== parseInt(curHours % 10)) {
+        }
+        if (parseInt(nextHours % 10) !== parseInt(curHours % 10)) {
           addBalls(MARGIN_LEFT + 15 * (R + 1), MARGIN_TOP, parseInt(curHours % 10))
-        } else if (parseInt(nextMinutes / 10) !== parseInt(curMinutes / 10)) {
+        }
+        if (parseInt(nextMinutes / 10) !== parseInt(curMinutes / 10)) {
           addBalls(MARGIN_LEFT + 39 * (R + 1), MARGIN_TOP, parseInt(curMinutes / 10))
-        } else if (parseInt(nextMinutes % 10) !== parseInt(curMinutes % 10)) {
+        }
+        if (parseInt(nextMinutes % 10) !== parseInt(curMinutes % 10)) {
           addBalls(MARGIN_LEFT + 54 * (R + 1), MARGIN_TOP, parseInt(curMinutes % 10))
-        } else if (parseInt(nextSeconds / 10) !== parseInt(curSeconds / 10)) {
+        }
+        if (parseInt(nextSeconds / 10) !== parseInt(curSeconds / 10)) {
           addBalls(MARGIN_LEFT + 78 * (R + 1), MARGIN_TOP, parseInt(curSeconds / 10))
-        } else if (parseInt(nextSeconds % 10) !== parseInt(curSeconds % 10)) {
+        }
+        if (parseInt(nextSeconds % 10) !== parseInt(curSeconds % 10)) {
           addBalls(MARGIN_LEFT + 93 * (R + 1), MARGIN_TOP, parseInt(curSeconds / 10))
         }
       }
@@ -103,7 +110,8 @@
         }
       }
       
-      while (balls.length > cnt) {
+      // 这里可能在实践的测试中，可能存在一个极限值
+      while (balls.length > Math.min(300, cnt)) {
         balls.pop()
       }
     }
