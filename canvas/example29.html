@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>canvas实现放大镜效果</title>
+</head>
+<body>
+  <canvas id="canvas" style="display: block; margin: 20px auto;border: 1px solid rgb(213,213,213);"></canvas>
+
+  <script>
+    window.onload = () => {
+
+      const scale = 1.5
+
+      // 离屏处理
+      const offsetCanvas = document.createElement('canvas')
+      offsetCanvas.width = 1500
+      offsetCanvas.height = 1500
+      const offsetContext = offsetCanvas.getContext('2d')
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 1000
+      canvas.height = 600
+      
+      const context = canvas.getContext('2d')
+      
+      const image = new Image()
+      image.src = './home.jpg'
+      image.onload = () => {
+        context.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+        offsetContext.drawImage(image, 0, 0)
+      }
+
+      canvas.addEventListener('mousemove', handleMouse)
+
+      function handleMouse (e) {
+        const x = e.clientX - canvas.getBoundingClientRect().left
+        const y = e.clientY - canvas.getBoundingClientRect().top
+
+        render({
+          x,
+          y
+        })
+      }
+      
+      function render (point) {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        context.drawImage(image, 0, 0, canvas.width, canvas.height)
+        
+        // 绘制放大镜
+        const { x, y } = point
+        const cx = x * scale
+        const cy = y * scale
+
+        // 大小
+        const r = 100
+        
+        const sx = cx - r
+        const sy = cy - r
+        
+        const dx = x - r
+        const dy = y - r
+        context.save()
+        context.beginPath()
+        context.arc(x, y, r, 0, Math.PI * 2)
+        context.clip()
+        context.drawImage(offsetCanvas, sx, sy, 2 * r, 2 * r, dx, dy, 2 * r, 2 * r)
+        context.restore()
+      }
+    }
+  </script>
+</body>
+</html>
