@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="canvas" style="display: block;margin: 20px auto;border: 1px solid rgb(213,213,213);"></canvas>
+  <input type="range" id="js-range" min="0.5" max="3.0" step="0.01" value="1.0" style="display: block;width: 800px;margin: 20px auto;">
+  <script>
+
+    const CANVAS_WIDTH = 1024
+    const CANVAS_HEIGHT = 700
+    window.onload = () => {
+
+      const slider = document.getElementById('js-range')
+      const canvas = document.getElementById('canvas')
+      canvas.width = 1024
+      canvas.height = 700
+
+      const context = canvas.getContext('2d')
+      
+      const image = new Image()
+      image.src = './bg.png'
+      image.onload = function () {
+        drawImageByScale(1)
+      }
+
+      slider.addEventListener('change', function () {
+        drawImageByScale(slider.value)
+      })
+
+      function drawImageByScale (scale) {
+        context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+        const imageWidth = image.width * scale
+        const imageHeight = image.height * scale
+        const dx = (canvas.width - imageWidth) / 2
+        const dy = (canvas.height - imageHeight) / 2
+        context.drawImage(image, dx, dy, imageWidth, imageHeight)
+      }
+    }
+  </script>
+</body>
+</html>
