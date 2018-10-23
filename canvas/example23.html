@@ -19,6 +19,8 @@
 
   <script>
 
+    const WIDTH = 1024
+    const HEIGHT = 768
     const MARGIN_LEFT = 100
     const MARGIN_TOP = 100
     const R = 5 // 小球半径
@@ -27,19 +29,36 @@
 
     window.onload = function () {
       const canvas = document.getElementById('canvas')
-      const WIDTH = 1024
-      const HEIGHT = 768
       canvas.width = WIDTH
       canvas.height = HEIGHT
 
       const context = canvas.getContext('2d')
       
-      curShowTimeSeconds = getCurrentTimeSeconds()
+      setInterval(function () {
+        update(context)
+      }, 50)
+    }
+    
+    function update (context) {
+      let nextShowTimeSeconds = getCurrentTimeSeconds()
 
-      render( context )
+      const nextHours = parseInt(nextShowTimeSeconds / 3600)
+      const nextMinutes = parseInt((nextShowTimeSeconds - nextHours * 3600) / 60 )
+      const nextSeconds = parseInt(nextShowTimeSeconds % 60)
+      
+      const curHours = parseInt(curShowTimeSeconds / 3600)
+      const curMinutes = parseInt((curShowTimeSeconds - curHours * 3600) / 60 )
+      const curSeconds = parseInt(curShowTimeSeconds % 60)
+
+      if (nextSeconds !== curSeconds) {
+        curShowTimeSeconds = nextShowTimeSeconds
+        render( context )
+      }
     }
 
     function render (ctx) {
+
+      ctx.clearRect(0, 0, WIDTH, HEIGHT)
       const hours = parseInt(curShowTimeSeconds / 3600)
       const minutes = parseInt((curShowTimeSeconds - hours * 3600) / 60 )
       const seconds = parseInt(curShowTimeSeconds % 60)
