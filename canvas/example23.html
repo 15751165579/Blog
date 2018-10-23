@@ -18,6 +18,11 @@
   <canvas id="canvas"></canvas>
 
   <script>
+
+    const MARGIN_LEFT = 100
+    const MARGIN_TOP = 100
+    const R = 5 // 小球半径
+
     window.onload = function () {
       const canvas = document.getElementById('canvas')
       const WIDTH = 1024
@@ -32,14 +37,26 @@
 
     function render (ctx) {
       const hours = 12
-      // const minutes = 34
-      // const seconds = 56
-      renderDigit(100, 100, parseInt(hours / 10), ctx)
+      const minutes = 34
+      const seconds = 56
+
+      // 数字框 7 * 2 * (R + 1) + 2 * (R + 1) 冒号 4 * 2 * (R + 1) + 2 * (R + 1)
+      renderDigit(MARGIN_LEFT, MARGIN_TOP, parseInt(hours / 10), ctx)
+      renderDigit(MARGIN_LEFT + 15 * (R + 1), MARGIN_TOP, parseInt(hours % 10), ctx)
+      
+      renderDigit(MARGIN_LEFT + 30 * (R + 1), MARGIN_TOP, 10, ctx)
+
+      renderDigit(MARGIN_LEFT + 39 * (R + 1), MARGIN_TOP, parseInt(minutes / 10), ctx)
+      renderDigit(MARGIN_LEFT + 54 * (R + 1), MARGIN_TOP, parseInt(minutes % 10), ctx)
+
+      renderDigit(MARGIN_LEFT + 69 * (R + 1), MARGIN_TOP, 10, ctx)
+
+      renderDigit(MARGIN_LEFT + 78 * (R + 1), MARGIN_TOP, parseInt(seconds / 10), ctx)
+      renderDigit(MARGIN_LEFT + 93 * (R + 1), MARGIN_TOP, parseInt(seconds % 10), ctx)
     }
 
     function renderDigit (x, y, num, ctx) {
       ctx.fillStyle = 'rgb(0, 102, 153)'
-      const R = 5
       /* eslint-disable */
       for (let i = 0; i < digit[num].length; i++) {
         for (let j = 0; j < digit[num].length; j++) {
