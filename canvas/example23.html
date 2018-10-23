@@ -22,6 +22,8 @@
     const MARGIN_LEFT = 100
     const MARGIN_TOP = 100
     const R = 5 // 小球半径
+    const END_TIME = new Date(2018, 9, 23, 20, 0, 0)
+    let curShowTimeSeconds = 0
 
     window.onload = function () {
       const canvas = document.getElementById('canvas')
@@ -31,14 +33,16 @@
       canvas.height = HEIGHT
 
       const context = canvas.getContext('2d')
+      
+      curShowTimeSeconds = getCurrentTimeSeconds()
 
       render( context )
     }
 
     function render (ctx) {
-      const hours = 12
-      const minutes = 34
-      const seconds = 56
+      const hours = parseInt(curShowTimeSeconds / 3600)
+      const minutes = parseInt((curShowTimeSeconds - hours * 3600) / 60 )
+      const seconds = parseInt(curShowTimeSeconds % 60)
 
       // 数字框 7 * 2 * (R + 1) + 2 * (R + 1) 冒号 4 * 2 * (R + 1) + 2 * (R + 1)
       renderDigit(MARGIN_LEFT, MARGIN_TOP, parseInt(hours / 10), ctx)
@@ -68,6 +72,13 @@
           }
         }
       }
+    }
+
+    function getCurrentTimeSeconds () {
+      const now = Date.now()
+      let ret = END_TIME.getTime() - now
+      ret = Math.round(ret / 1000)
+      return ret > 0 ? ret : 0
     }
   </script>
 </body>
