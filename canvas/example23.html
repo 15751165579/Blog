@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>倒计时</title>
+  <script src="./digit.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+
+    const WIDTH = document.body.clientWidth
+    const HEIGHT = document.body.clientHeight
+    const MARGIN_LEFT = Math.round(WIDTH / 10)
+    const MARGIN_TOP = Math.round(HEIGHT / 10)
+    const R = Math.round(WIDTH * 4 / 5 / 108) - 1 // 小球半径
+    const END_TIME = new Date(2018, 9, 23, 20, 0, 0)
+    let curShowTimeSeconds = 0
+
+    // 小球数组
+    const balls = []
+    const colors = ['#33B5E5','#0099CC','#AA66CC','#9933CC','#99CC00','#669900','#FFBB33','#FF8800','#FF4444','#CC0000']
+
+    window.onload = function () {
+      const canvas = document.getElementById('canvas')
+      canvas.width = WIDTH
+      canvas.height = HEIGHT
+
+      const context = canvas.getContext('2d')
+      
+      curShowTimeSeconds = getCurrentTimeSeconds()
+      setInterval(function () {
+        render(context)
+        update()
+      }, 50)
+    }
+    
+    function update () {
+      /* eslint-disable */
+      let nextShowTimeSeconds = getCurrentTimeSeconds()
+
+      const nextHours = parseInt(nextShowTimeSeconds / 3600)
+      const nextMinutes = parseInt((nextShowTimeSeconds - nextHours * 3600) / 60 )
+      const nextSeconds = parseInt(nextShowTimeSeconds % 60)
+      
+      const curHours = parseInt(curShowTimeSeconds / 3600)
+      const curMinutes = parseInt((curShowTimeSeconds - curHours * 3600) / 60 )
+      const curSeconds = parseInt(curShowTimeSeconds % 60)
+
+      if (nextSeconds !== curSeconds) {
+        curShowTimeSeconds = nextShowTimeSeconds
+
+        // 小球绘制的时机
+        if (parseInt(nextHours / 10) !== parseInt(curHours / 10)) {
+          addBalls(MARGIN_LEFT, MARGIN_TOP, parseInt(curHours / 10))
+        }
+        if (parseInt(nextHours % 10) !== parseInt(curHours % 10)) {
+          addBalls(MARGIN_LEFT + 15 * (R + 1), MARGIN_TOP, parseInt(curHours % 10))
+        }
+        if (parseInt(nextMinutes / 10) !== parseInt(curMinutes / 10)) {
+          addBalls(MARGIN_LEFT + 39 * (R + 1), MARGIN_TOP, parseInt(curMinutes / 10))
+        }
+        if (parseInt(nextMinutes % 10) !== parseInt(curMinutes % 10)) {
+          addBalls(MARGIN_LEFT + 54 * (R + 1), MARGIN_TOP, parseInt(curMinutes % 10))
+        }
+        if (parseInt(nextSeconds / 10) !== parseInt(curSeconds / 10)) {
+          addBalls(MARGIN_LEFT + 78 * (R + 1), MARGIN_TOP, parseInt(curSeconds / 10))
+        }
+        if (parseInt(nextSeconds % 10) !== parseInt(curSeconds % 10)) {
+          addBalls(MARGIN_LEFT + 93 * (R + 1), MARGIN_TOP, parseInt(curSeconds / 10))
+        }
+      }
+
+      // 更新小球
+      updateBalls()
+    }
+
+    function updateBalls () {
+      for (let i = 0; i < balls.length; i++) {
+        const item = balls[i]
+        item.x += item.vx
+        item.y += item.vy
+        item.vy += item.g
+        
+        // 碰撞检测
+        if (item.y > HEIGHT - R) {
+          item.y = HEIGHT - R
+          item.vy = -item.vy * .75
+        }
+      }
+
+      // 维护小球数组 减少运行内存
+      let cnt = 0
+      for (let i = 0; i < balls.length; i++) {
+        const ball = balls[i]
+        if ( ball.x + ball.r  > 0 && ball.x - ball.r < WIDTH) {
+          balls[cnt++] = balls[i] // 将有效的小球放在 0 - cnt
+        }
+      }
+      
+      // 这里可能在实践的测试中，可能存在一个极限值
+      while (balls.length > Math.min(300, cnt)) {
+        balls.pop()
+      }
+    }
+
+    function addBalls (x, y, num) {
+      /* eslint-disable */
+      for (let i = 0; i < digit[num].length; i++) {
+        for (let j = 0; j < digit[num].length; j++) {
+          if (digit[num][i][j] === 1) {
+            // 添加小球
+            const ball = {
+              x: x + j * 2 * (R + 1) + (R + 1),
+              y: y + i * 2 * (R + 1) + (R + 1),
+              r: R,
+              g: 1.5 + Math.random(),
+              vx: Math.pow(-1, Math.ceil(Math.random() * 1000)) * 4,
+              vy: -5,
+              color: colors[Math.floor(Math.random() * colors.length)]
+            }
+
+            balls.push(ball)
+          }
+        }
+      }
+    }
+
+    function render (ctx) {
+
+      ctx.clearRect(0, 0, WIDTH, HEIGHT)
+      const hours = parseInt(curShowTimeSeconds / 3600)
+      const minutes = parseInt((curShowTimeSeconds - hours * 3600) / 60 )
+      const seconds = parseInt(curShowTimeSeconds % 60)
+
+      // 数字框 7 * 2 * (R + 1) + 2 * (R + 1) 冒号 4 * 2 * (R + 1) + 2 * (R + 1)
+      renderDigit(MARGIN_LEFT, MARGIN_TOP, parseInt(hours / 10), ctx)
+      renderDigit(MARGIN_LEFT + 15 * (R + 1), MARGIN_TOP, parseInt(hours % 10), ctx)
+      
+      renderDigit(MARGIN_LEFT + 30 * (R + 1), MARGIN_TOP, 10, ctx)
+
+      renderDigit(MARGIN_LEFT + 39 * (R + 1), MARGIN_TOP, parseInt(minutes / 10), ctx)
+      renderDigit(MARGIN_LEFT + 54 * (R + 1), MARGIN_TOP, parseInt(minutes % 10), ctx)
+
+      renderDigit(MARGIN_LEFT + 69 * (R + 1), MARGIN_TOP, 10, ctx)
+
+      renderDigit(MARGIN_LEFT + 78 * (R + 1), MARGIN_TOP, parseInt(seconds / 10), ctx)
+      renderDigit(MARGIN_LEFT + 93 * (R + 1), MARGIN_TOP, parseInt(seconds % 10), ctx)
+
+      // 绘制小球
+      for (let i = 0; i < balls.length; i++) {
+        const { x, y, color, r } = balls[i]
+        ctx.fillStyle = color
+        ctx.beginPath()
+        ctx.arc(x, y, r, 0, Math.PI * 2)
+        ctx.closePath()
+        ctx.fill()
+      }
+    }
+
+    function renderDigit (x, y, num, ctx) {
+      ctx.fillStyle = 'rgb(0, 102, 153)'
+      /* eslint-disable */
+      for (let i = 0; i < digit[num].length; i++) {
+        for (let j = 0; j < digit[num].length; j++) {
+          if (digit[num][i][j] === 1) {
+            ctx.beginPath()
+            ctx.arc(x + j * 2 * (R + 1) + (R + 1), y + i * 2 * (R + 1) + (R + 1), R, 0, Math.PI * 2)
+            ctx.closePath()
+            ctx.fill()
+          }
+        }
+      }
+    }
+
+    function getCurrentTimeSeconds () {
+      const now = Date.now()
+      let ret = END_TIME.getTime() - now
+      ret = Math.round(ret / 1000)
+      return ret > 0 ? ret : 0
+    }
+  </script>
+</body>
+</html>
