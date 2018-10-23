@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>离屏canvas</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const IMAGE_WIDTH = 324
+    const IMAGE_HEIGHT = 156
+    window.onload = () => {
+
+      const nameCanvas = document.createElement('canvas')
+      nameCanvas.width = IMAGE_WIDTH
+      nameCanvas.height = IMAGE_HEIGHT
+
+      const nameContext = nameCanvas.getContext('2d')
+      nameContext.font = 'normal 14px sans-serif'
+      nameContext.textAlign = 'right'
+      nameContext.textBaseline = 'bottom'
+      nameContext.fillText('** 蒙奇·D·路飞 **', IMAGE_WIDTH - 20, IMAGE_HEIGHT - 20)
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = IMAGE_WIDTH
+      canvas.height = IMAGE_HEIGHT
+      
+      const context = canvas.getContext('2d')
+
+      const image = new Image()
+      image.src = './hzw.jpeg'
+      image.onload = () => {
+        context.drawImage(image, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT)
+        context.drawImage(nameCanvas, 0, 0, nameCanvas.width, nameCanvas.height)
+      }
+
+    }
+  </script>
+</body>
+</html>
