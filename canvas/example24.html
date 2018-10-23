@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>小球运动</title>
+  <style>
+    canvas {
+      display: block;
+      margin: 10px auto;
+      border: 1px solid rgb(213,213,213);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    // 定义小球的数据结构
+    const ball = {
+      x: 512,
+      y: 100,
+      r: 20,
+      g: 2,
+      vx: -4,
+      vy: -10,
+      color: 'red'
+    }
+
+    const CANVAS_WIDTH = 1024
+    const CANVAS_HEIGHT = 700
+    window.onload = function () {
+      const canvas = document.getElementById('canvas')
+      canvas.width = CANVAS_WIDTH
+      canvas.height = CANVAS_HEIGHT
+
+      const context = canvas.getContext('2d')
+
+      // window.requestAnimationFrame(function () {
+      //   render(context)
+      //   update()
+      //   window.requestAnimationFrame(arguments.callee)
+      // })
+
+      setInterval(() => {
+        render(context)
+        update()
+      }, 30)
+    }
+
+    function update () {
+      ball.x += ball.vx
+      ball.y += ball.vy
+      ball.vy += ball.g
+
+      // 碰撞检测
+      if (ball.y >= CANVAS_HEIGHT - ball.r) {
+        ball.y = CANVAS_HEIGHT - ball.r
+        ball.vy = -ball.vy * .5
+      }
+    }
+
+    function render (ctx) {
+      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+      const { x, y, r, color } = ball
+      ctx.fillStyle = color
+      ctx.beginPath()
+      ctx.arc(x, y, r, 0, Math.PI * 2)
+      ctx.closePath()
+      ctx.fill()
+    }
+  </script>
+</body>
+</html>
