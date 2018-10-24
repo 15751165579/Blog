@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>元素的大小与画布的大小</title>
+  <style>
+    canvas {
+      border: 1px solid red;
+      width: 1200px;
+      height: 700px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = () => {
+      // 默认的绘图大小是 300 * 150
+      // 对于canvas实际上有两个尺寸 元素的大小 和 绘图的大小
+      // 通过css设置元素的大小之后，会将绘图大小放大与元素大小一致，从而导致了模糊。
+      // 留意设备的 devicePixelRatio 本质上也是将元素放大，从而导致绘图区域的变形
+      const canvas = document.getElementById('canvas')
+      const context = canvas.getContext('2d')
+      
+      console.log(window.devicePixelRatio)
+
+      context.lineWidth = 2
+      context.strokeRect(20, 20, 100, 100)
+    }
+  </script>
+</body>
+</html>
