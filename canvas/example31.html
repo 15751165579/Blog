@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>滤镜效果</title>
+  <style>
+    .demo {
+      display: flex;
+      justify-content: space-around;
+      margin: 100px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo">
+    <canvas id="canvas" style="border: 1px solid rgb(213,213,213);"></canvas>
+    <canvas id="filterCanvas" style="border: 1px solid rgb(213,213,213);"></canvas>
+  </div>
+
+  <script>
+    // 像素为1维数组 [4 * i] [4 * i + 1] [4 * i + 2] [4 * i + 3] rgba
+
+    // getImageDate
+    
+    const CANVAS_WIDTH = 500
+    const CANVAS_HEIGHT = 300
+    window.onload = function () {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = CANVAS_WIDTH
+      canvas.height = CANVAS_HEIGHT
+
+      const context = canvas.getContext('2d')
+      const image = new Image()
+      image.src = './home.jpg'
+      image.onload = () => {
+
+        context.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+
+        filter()
+      }
+
+      function filter () {
+        const filterCanvas = document.getElementById('filterCanvas')
+        filterCanvas.width = CANVAS_WIDTH
+        filterCanvas.height = CANVAS_HEIGHT
+        const filterContext = filterCanvas.getContext('2d')
+
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+        const pixelData = imageData.data
+
+        for (let i = 0; i < canvas.width * canvas.height; i++) {
+          const r = pixelData[4 * i]
+          const g = pixelData[4 * i + 1]
+          const b = pixelData[4 * i + 2]
+
+          const grey = r * 0.3 + g * 0.59 + b * 0.11 // 灰度 
+          
+          pixelData[4 * i] = grey
+          pixelData[4 * i + 1] = grey
+          pixelData[4 * i + 2] = grey
+        }
+
+        filterContext.putImageData(imageData, 0, 0, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+      }
+
+    }
+  </script>
+</body>
+</html>
