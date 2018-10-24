@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>自定义像素</title>
+</head>
+<body>
+  <canvas id="canvas" style="display: block;margin: 50px auto;"></canvas>
+
+  <script>
+    window.onload = function () {
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = 600
+      canvas.height = 600
+      
+      const context = canvas.getContext('2d')
+
+      const imageData = context.createImageData(600, 600)
+
+      const pixelData = imageData.data
+
+      for (let i = 0; i < 600; i++) {
+        for (let j = 0; j < 600; j++) {
+          const index = i * 600 + j
+
+          pixelData[index * 4] = parseInt(Math.pow(Math.cos(Math.atan2(j - 300, i - 300) / 2), 2) * 255)
+          pixelData[index * 4 + 1] = parseInt(Math.pow(Math.cos(Math.atan2(j - 300, i - 300) / 2 - 2 * Math.acos(-1) / 3), 2) * 255)
+          pixelData[index * 4 + 2] = parseInt(Math.pow(Math.cos(Math.atan2(j - 300, i - 300) / 2 + 2 * Math.acos(-1) / 3), 2) * 255)
+          pixelData[index * 4 + 3] = 255
+        }
+      }
+      context.putImageData(imageData, 0, 0, 0, 0, 600, 600)
+    }
+  </script>
+</body>
+</html>
