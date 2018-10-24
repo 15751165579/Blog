@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>时钟</title>
+  <style>
+    canvas {
+      display: block;
+      margin: 10px auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    window.onload = function () {
+
+      const CANVAS_WIDTH = 800
+      const CANVAS_HEIGHT = 800
+      const SPACE = 10
+      const cx = CANVAS_WIDTH / 2
+      const cy = CANVAS_HEIGHT / 2
+      const r1 = CANVAS_WIDTH / 2 - SPACE
+      const r2 = CANVAS_WIDTH / 2 - SPACE * 3
+      const r3 = CANVAS_WIDTH / 2 - SPACE * 5
+
+      const SMALL_WIDTH = 16
+      const SMALL_HEIGHT = 2
+
+      const canvas = document.getElementById('canvas')
+      canvas.width = CANVAS_WIDTH
+      canvas.height = CANVAS_HEIGHT
+
+      const context = canvas.getContext('2d')
+
+      render()
+
+      function render () {
+        drawDial()
+      }
+      
+      // 绘制表盘
+      function drawDial () {
+        context.save()
+        context.beginPath()
+        context.fillStyle = '#000'
+        context.arc(cx, cy, r1, 0, Math.PI * 2, false)
+        context.arc(cx, cy, r2, 0, Math.PI * 2, true)
+        context.stroke()
+        context.fill()
+        
+        context.beginPath()
+        context.arc(cx, cy, 10, 0, Math.PI * 2)
+        context.stroke()
+        context.fill()
+
+        // 绘制刻度
+        
+        for (let i = 0; i < 60; i++) {
+          const angle = i * (Math.PI / 30)
+          const x = cx - r3 * Math.cos(angle)
+          const y = cy - r3 * Math.sin(angle)
+
+          if (i % 5 === 0) {
+            drawRect(x, y, SMALL_WIDTH * 2, SMALL_HEIGHT * 5, angle)
+          } else {
+            drawRect(x, y, SMALL_WIDTH, SMALL_HEIGHT, angle)
+          }
+        }
+        
+        context.restore()
+      }
+
+      // 矩形的绘制
+      function drawRect (cx, cy, w, h, rotate = 0, color = '#000') {
+        // 旋转的时候 先移动中心点 -> 旋转 -> 在重置中心点位置
+        context.save()
+        context.translate(cx, cy)
+        context.rotate(rotate)
+        context.translate(-cx, -cy)
+        context.fillStyle = color
+        context.fillRect(cx - w / 2, cy - h / 2, w, h)
+        context.restore()
+      }
+    }
+  </script>
+</body>
+</html>
