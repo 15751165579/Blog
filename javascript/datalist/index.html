@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>datalist</title>
+  <style>
+    .goods::-webkit-input-placeholder { /* WebKit browsers */
+      color: rgb(213,213,213);
+      font-size: 14px;
+    }
+    .goods:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+      color: rgb(213,213,213);
+      font-size: 14px;
+    }
+    .goods::-moz-placeholder { /* Mozilla Firefox 19+ */
+      color: rgb(213,213,213);
+      font-size: 14px;
+    }
+    .goods:-ms-input-placeholder { /* Internet Explorer 10+ */
+      color: rgb(213,213,213);
+      font-size: 14px;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    .wrap {
+      margin: 100px auto;
+      width: 300px;
+      position: relative;
+    }
+
+    .goods {
+      width: 300px;
+      height: 40px;
+      padding: 0 10px;
+      border: 2px solid red;
+      outline: none;
+    }
+
+    .query-list {
+      position: absolute;
+      top: 40px;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: none;
+      border-bottom: 2px solid rgb(213,213,213);
+    }
+
+    .query-list > li {
+      padding: 10px;
+      border-left: 2px solid rgb(213,213,213);
+      border-right: 2px solid rgb(213,213,213);
+    }
+
+    .query-list >li:hover {
+      color: #FFF;
+      background-color: red;
+      border-color: red;
+    }
+  </style>
+</head>
+<body>
+    <div class="wrap">
+      <input id="js-goods" class="goods" type="text" placeholder="search goods">
+      <ul class="query-list" id="js-querystring">
+      </ul>
+    </div>
+
+    <script>
+      
+      var datalist = ['男裤','男鞋','男士外套','男士内衣','男袜','男士洗面奶','男士皮带'];
+      var base = '<li>*</li>';
+      var tip = document.getElementById('js-querystring');
+      var goods = document.getElementById('js-goods');
+      goods.addEventListener('input',function(){
+        if(this.value) {
+          //当有值得时候，查找对应的提示项。
+          //这里我就用少量数据模拟了。
+          update(this.value);
+        }
+        else {
+          //没有输入的隐藏掉提示框
+          tip.style.display = "none";
+        }
+      },false);
+
+      //点击推荐的结果 进入。
+      tip.addEventListener('click',function(e){
+        var target = e.target;
+        if(target.tagName === 'LI') {
+          goods.value = target.innerHTML;
+          tip.style.display = 'none';
+        }
+      },false);
+
+      //查找数据
+      function update(val) {
+        var arr = [];
+        datalist.map(function(item){
+          if(item.indexOf(val) !== -1) {
+            arr.push(item);
+          }
+        });
+        if(arr.length !== 0) {
+          var len = arr.length;
+          var htmlStr = '';
+          for(var i = 0; i < len; i++) {
+            var temp = base;
+            //使用正则那是相当的方便啊
+            temp = temp.replace(/\*/,arr[i]);
+            htmlStr += temp;
+          }
+          tip.innerHTML = htmlStr;
+          tip.style.display = "block";
+        }
+        else {
+          tip.style.display = "none";
+        }
+      }
+    </script>
+</body>
+</html>
