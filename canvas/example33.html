@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>优化</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #061928;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    // 优化的手段
+    // 1、离屏canvas 绘制复杂的图像
+    // 2、避免坐标的浮点数 从而导致抗锯齿的问题
+    // 3、不要用drawImage缩放图像
+    // 4、多层canvas设计复杂的场景
+    // 5、必要时关闭透明度
+
+    // 动画步骤 绘制 -> 状态的更新 -> 绘制
+    window.onload = function () {
+      
+      const canvas = document.getElementById('canvas')
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+
+      const context = canvas.getContext('2d')
+      const w = canvas.width
+      const h = canvas.height
+      context.strokeStyle = 'rgba(174,194,224,0.5)'
+      context.lineWidth = 1
+      context.lineCap = 'round'
+
+      const init = []
+      const MAX_POINTS = 1000
+      for (let i = 0; i < MAX_POINTS; i++) {
+        // 构建雨点对象
+        init.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          l: Math.random(),
+          vx: -4 + Math.random() * 4 + 2,
+          vy: Math.random() * 10 + 10
+        })
+      }
+
+      const particles = []
+      for (let i = 0; i < MAX_POINTS; i++) {
+        particles[i] = init[i]
+      }
+
+      // 状态的改变
+      function move () {
+        for (let i = 0; i < particles.length; i++) {
+          const item = particles[i]
+          item.x += item.vx
+          item.y += item.vy
+          if (item.x > w || item.y > h) {
+            item.x = Math.random() * w
+            item.y = -20
+          }
+        }
+      }
+
+      function draw () {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        for (let i = 0; i < particles.length; i++) {
+          const item = particles[i]
+          context.beginPath()
+          context.moveTo(item.x, item.y)
+          context.lineTo(item.x + item.l * item.vx, item.y + item.l * item.vy)
+          context.stroke()
+        }
+        move()
+      }
+
+      setInterval(draw, 30)
+    }
+  </script>
+</body>
+</html>
