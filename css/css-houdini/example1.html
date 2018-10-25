@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CSS Properties and Values API</title>
+
+  <style>
+    :root {
+      --theme-color: red;
+    }
+
+    .demo1 {
+      width: 300px;
+      height: 300px;
+      margin: 50px auto;
+      background-color: var(--theme-color);
+    }
+
+    .btn-wrap {
+      display: flex;
+      width: 200px;
+      margin: 0 auto;
+      justify-content: space-around;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo1" id="demo"></div>
+  <div class="btn-wrap" id="js-btn">
+    <button data-color="red">红色</button>
+    <button data-color="yellow">黄色</button>
+    <button data-color="blue">蓝色</button>
+  </div>
+
+  <script>
+    window.onload = () => {
+      const btns = document.getElementById('js-btn')
+      const demo = document.getElementById('demo')
+      btns.addEventListener('click', (e) => {
+        const currentColor = getComputedStyle(demo).getPropertyValue('--theme-color')
+        console.log(`当前的颜色: ${currentColor}`)
+        const target = e.target
+        const color = target.getAttribute('data-color')
+        demo.style.setProperty('--theme-color', color)
+      })
+    }
+  </script>
+</body>
+</html>
