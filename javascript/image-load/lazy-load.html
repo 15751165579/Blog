@@ -76,6 +76,32 @@
     }
 
     const lazyload = new LazyLoad(document.querySelectorAll('.lazyload'))
+
+    // srcset 结合 sizes 满足高清图适配和响应式适配 https://www.zhangxinxu.com/wordpress/2014/10/responsive-images-srcset-size-w-descriptor/
+    // IntersectionObserver 监听元素是否在可视区域中
+    // 古老的方法是通过getBoundingClientRect在scroll事件中计算元素是否在可视区域中
+
+    // 为了避免图片渲染时的跳动情况，最好是为图片设置宽度和高度，但是有时间并不一定知道图片宽高的具体指，可以通过intrinsic placeholder技术占位
+    
+    // webp apng
+    // 虽然这样解决图片多的情况，但是对于图片本身就很大。medium图片加载方案
+    // Google主色块 预加载
+    function isElementInViewport (el) {
+      const rect = el.getBoundingClientRect()
+      const w = window.innerWidth || document.documentElement.clientWidth
+      const h = window.innerHeight || document.documentElement.clientHeight
+      return (
+        rect.top <= h &&
+        (rect.top + rect.height) >= 0 &&
+        rect.left <= w &&
+        (rect.left + rect.width) >= 0
+      )
+    }
+
+    const images = Array.from(document.querySelectorAll('.lazyload'))
+    images.forEach(item => {
+      console.log(isElementInViewport(item))
+    })
   </script>
 </body>
 </html>
