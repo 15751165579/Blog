@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Canvas实现方案</title>
+  <script src="./stackblur.js"></script>
+  <style>
+    .wrap {
+      position: relative;
+      width: 800px;
+      margin: auto;
+    }
+    .image-placeholder {
+      position: relative;
+      width: 100%;
+      background-color: #F5F5F5;
+      padding-bottom: 66.6%;
+    }
+
+    .image-placeholder > canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .image-placeholder img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      width: 100%;
+      transition: opacity 4s ease-in;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="image-placeholder" id="wrap">
+      <canvas id="canvas"></canvas>
+      <img class="detault" id="target" src="" data-src="https://cdn-images-1.medium.com/max/1800/1*sg-uLNm73whmdOgKlrQdZA.jpeg" alt="">
+    </div>
+  </div>
+
+  <script>
+    window.onload = () => {
+      const wrap = document.getElementById('wrap')
+      const canvas = document.getElementById('canvas')
+      canvas.width = wrap.clientWidth
+      canvas.height = wrap.clientHeight
+      const context = canvas.getContext('2d')
+      const image = new Image()
+      image.src = './samll.jpeg'
+      image.onload = () => {
+        context.drawImage(image, 0, 0, canvas.width, canvas.height)
+        /* eslint-disable */
+        StackBlur.canvasRGB(canvas, 0, 0, canvas.width, canvas.height, 100)
+      }
+
+      // 加载大图
+      const img = document.getElementById('target')
+      const largeImage = new Image()
+      largeImage.src = img.getAttribute('data-src')
+      largeImage.onload = () => {
+        img.src = largeImage.src
+        // 触发重绘
+        // img.offsetHeight
+        // img.style.opacity = 1
+        setTimeout(_ => {
+          img.style.opacity = 1
+        }, 0)
+      }
+    }
+  </script>
+</body>
+</html>

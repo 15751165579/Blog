@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>图片懒加载</title>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-beta.2/lazyload.js"></script> -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    img {
+      display: block;
+      margin: 200px auto;
+    }
+  </style>
+</head>
+<body>
+  <img class="lazyload" data-src="./1.jpeg" width="300" height="168" alt="">
+  <img class="lazyload" data-src="./2.jpeg" width="275" height="183" alt="">
+  <img class="lazyload" data-src="./3.jpeg" width="300" height="168" alt="">
+  <img class="lazyload" data-src="./4.jpeg" width="300" height="168" alt="">
+  <img class="lazyload" data-src="./5.jpeg" width="284" height="177" alt="">
+  <img class="lazyload" data-src="./6.jpeg" width="284" height="177" alt="">
+  <img class="lazyload" data-src="./7.jpeg" width="284" height="177" alt="">
+
+  <script>
+
+    /* eslint-disable */
+    const defaults = {
+      src: 'data-src',
+      srcset: 'data-srcset',
+      selector: '.lazyload'
+    }
+
+    function LazyLoad (images, options) {
+      this.setting = Object.assign({}, defaults, options || {})
+      this.images = images || document.querySelectorAll(this.setting.selector)
+      this.observer = null
+      this.init()
+    }
+
+    LazyLoad.prototype.init = function () {
+      let self = this
+        let observerConfig = {
+          root: null,
+          rootMargin: '0px',
+          threshold: [0, 0.25, 0.5, 0.75, 1] // 多设置几个阈值，以免图片加载失败
+        }
+        // 无法完成距离可视区域多远 加载图片
+        this.observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            const target = entry.target
+            // intersectionRect intersectionRatio
+            if (entry.intersectionRatio > 0) {
+              this.observer.unobserve(target)
+              const src = target.getAttribute(this.setting.src)
+              const srcset = target.getAttribute(this.setting.srcset)
+              if ('img' === target.tagName.toLowerCase()) {
+                if (src) {
+                  target.src = src
+                }
+                if (srcset) {
+                  target.srcset = srcset
+                }
+              } else {
+                target.style.backgroundImage = `url(${src})`
+              }
+            }
+          })
+        }, observerConfig)
+
+        this.images.forEach(image => this.observer.observe(image))
+    }
+
+    const lazyload = new LazyLoad(document.querySelectorAll('.lazyload'))
+
+    // srcset 结合 sizes 满足高清图适配和响应式适配 https://www.zhangxinxu.com/wordpress/2014/10/responsive-images-srcset-size-w-descriptor/
+    // IntersectionObserver 监听元素是否在可视区域中
+    // 古老的方法是通过getBoundingClientRect在scroll事件中计算元素是否在可视区域中
+
+    // 为了避免图片渲染时的跳动情况，最好是为图片设置宽度和高度，但是有时间并不一定知道图片宽高的具体指，可以通过intrinsic placeholder技术占位
+    
+    // webp apng
+    // 虽然这样解决图片多的情况，但是对于图片本身就很大。medium图片加载方案
+    // Google主色块 预加载
+    function isElementInViewport (el) {
+      const rect = el.getBoundingClientRect()
+      const w = window.innerWidth || document.documentElement.clientWidth
+      const h = window.innerHeight || document.documentElement.clientHeight
+      return (
+        rect.top <= h &&
+        (rect.top + rect.height) >= 0 &&
+        rect.left <= w &&
+        (rect.left + rect.width) >= 0
+      )
+    }
+
+    const images = Array.from(document.querySelectorAll('.lazyload'))
+    images.forEach(item => {
+      console.log(isElementInViewport(item))
+    })
+  </script>
+</body>
+</html>
