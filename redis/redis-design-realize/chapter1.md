@@ -117,3 +117,51 @@
   # ===> c
 ```
 
+##### 查询
+
+```s
+  # get key
+  get str
+  # ===> c
+```
+
+```s
+  # mget key key ....
+  mget demo1 demo2
+  # 1) a
+  # 2) b
+```
+
+```s
+  # strlen key
+  strlen str
+  # ===> 1
+```
+
+```s
+  # bitcount key (获取位上值为1的数量)
+  bitcount str
+  # ===> 4
+```
+
+  这里可以采用setbit与bitcount结合统计每个用户上线天数统计。
+
+##### 3、对于整数字符串
+
+  Redis中对于整数字符串还有其他的操作：
+
+```s
+  # 以下操作都具有原子性
+  # 自增1
+  incr number
+  # ===> 1
+  incrby number 2
+  # ===> 3
+  decr number
+  # ===> 2
+  decrby number 3
+  # ===> -1
+```
+
+  通过这些指令可以做很多的事情，例如：统计一天用户的点击量。。。
+
