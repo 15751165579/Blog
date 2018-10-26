@@ -59,3 +59,61 @@
 
   C语言中的字符串只能存储文本，而Redis中通过buf数组存储二进制数据，从而允许字符串可以存储二进制数据。
 
+### 基本API的调用
+
+##### 1、设置
+
+  Redis中字符串的设置的操作有八种：
+
+```s
+  # set key value （会覆盖之前的内容）
+  set str Redis
+  # ===> OK
+```
+
+```s
+  # getset key value (会覆盖之前的内容，但是会返回之前的内容)
+  getset str demo
+  # ===> Redis
+```
+
+```s
+  # mset key value key value ... (设置多个键值对)
+  mset demo1 a demo2 b
+  # ===> OK 
+```
+
+```s
+  # setex key seconds value (多少秒之后过期)
+  setex str 2 demo
+  # ===> OK
+```
+
+```s
+  # setnx key value (不存在便设置值)
+  setnx str demo
+  # ===> 1 (1表示设置成功)
+```
+
+```s
+  # append key value (字符串的添加操作，返回字符串当前的长度)
+  append str ' hello'
+  # ===> 10
+```
+
+```s
+  # setrange key offset value （替换offset位置开始的字符串，返回当前字符串的长度）
+  set str Hello
+  setrange str 5 ' World'
+  # ===> 11
+```
+
+```s
+  # setbit ket offset value (替换offset位置的位)
+  set str a
+  setbit str 6 1
+  # ===> 0 （返回之前的位的值）
+  get str
+  # ===> c
+```
+
