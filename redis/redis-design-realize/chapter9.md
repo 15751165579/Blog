@@ -37,4 +37,37 @@
 
   Redis中的serverCron默认100毫秒执行一次，这里就会结合saveparams和dirty来判断是否应该执行保存操作了。
 
+#### RDB文件结构
+
+  RDB文件保存的是二进制数据，RDB文件的结构：
+
+  - REDIS： 标识。
+  - db_version： 版本。
+  - datebases: 包含零个或者任意多个数据库，以及各个数据库对应的键值对。
+  - EOF： 结束标记。
+  - check_sum： 校验值。
+
+##### databases
+
+  databases的结构如下：
+
+  - SELECTDB: 表明接下来的是数据库的号码
+  - db_number: 数据库号码
+  - key_value_pairs: 键值对
+
+##### key_value_pairs
+
+  key_value_pairs又分为带有过期时间和不带过期时间，首先我们看一下不带过期时间的：
+
+  - TYPE: 记录value的类型
+  - key: 记录键对象
+  - value: 记录值对象
+
+  前面也了解了Redis中很多的数据结构和对象，所以这里的value也需要根据具体的类型采用不同的存储方式和压缩方式。
+
+  当存在过期时间时：
+
+  - EXPIRETIME: 表明接下来是过期时间
+  - ms: 过期时间 8字节带符号整数
+
   
