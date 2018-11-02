@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>鼠标悬停动画</title>
+  <style>
+    body {
+      font-family: inconsolata,sans-serif;
+      background: #2a364f
+    }
+    .button-container {
+      width: 176px;
+      margin: 0 auto;
+      margin-top: 30px;
+      padding-top: 40px
+    }
+
+    .button__wrap {
+      overflow: hidden;
+      position: relative;
+      display: inline-block;
+      border-radius: 3px;
+    }
+
+    .button-circle {
+      display: block;
+      border-radius: 1000px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      pointer-events: none;
+      transform-origin: center center;
+    }
+
+    .button-inner {
+      display: inline-block;
+      background: #f8b627;
+      color: #f4f4f4;
+      font-size: 16px;
+      font-weight: 400;
+      width: 132px;
+      text-align: center;
+      border-radius: 3px;
+      transition: 400ms;
+      text-decoration: none;
+      padding: 22px;
+      z-index: 100000
+    }
+
+    .button-text {
+      position: relative;
+    }
+
+    .explode-circle {
+        animation: explode .5s forwards
+    }
+
+    .desplode-circle {
+        animation: desplode .5s forwards
+    }
+
+    @keyframes explode {
+      0% {
+        background-color: rgba(42,53,80,.2)
+      }
+      100% {
+        width: 400px;
+        height: 400px;
+        margin-left: -200px;
+        margin-right: -200px;
+        background-color: rgba(20,180,87,.8);
+      }
+    }
+
+    @keyframes desplode {
+        0% {
+            width: 400px;
+            height: 400px;
+            margin-left: -200px;
+            margin-top: -200px;
+            background-color: rgba(20,180,87,.8)
+        }
+
+        100% {
+            width: 0;
+            height: 0;
+            margin-left: 0;
+            margin-top: 0;
+            background-color: rgba(129,80,108,.6)
+        }
+    }
+  </style>
+</head>
+<body>
+    <div class="button-container">
+      <!-- DOM结构 -->
+      <div class="button__wrap">
+        <span class="button-circle"></span>
+        <a href="" class="button-inner">
+          <span class="button-text"> Simple button</span>
+        </a>
+      </div>
+    </div>
+  <script>
+    // 一种方案 margin width top 实现
+    document.querySelector('.button-inner').addEventListener('mouseenter', function (e) {
+      const el = e.target
+      const parentOffset = el.getBoundingClientRect()
+      // 相对位置
+      var rX = e.pageX - parentOffset.left
+      var rY = e.pageY - parentOffset.top
+      
+      const preElement = el.previousElementSibling
+
+      preElement.style.left = `${rX}px`
+      preElement.style.top = `${rY}px`
+      // preElement.classList.remove('desplode-circle')
+      preElement.classList.add('explode-circle')
+    })
+  // $(".button_su_inner").mouseleave(function(e) {
+  //     var parentOffset = this.style.offset;
+  //     var relX = e.pageX - parentOffset.left;
+  //     var relY = e.pageY - parentOffset.top;
+  //     $(this).prev(".su_button_circle").css({
+  //         "left": relX,
+  //         "top": relY
+  //     });
+  //     $(this).prev(".su_button_circle").removeClass("explode-circle");
+  //     $(this).prev(".su_button_circle").addClass("desplode-circle");
+  // });
+  </script>
+</body>
+</html>
