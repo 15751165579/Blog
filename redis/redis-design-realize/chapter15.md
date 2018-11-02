@@ -34,3 +34,28 @@
   也正是由此可以获取从服务器的信息，更新Sentinel中的slaves字段。
 
   其中Sentinel中从服务器实例的name属性是由ip地址和端口设置的，而主服务器实例的名称则可以通过配置文件中设置。
+
+### 客观下线和主观下线
+
+  在默认的情况下。Sentinel会每秒钟向所有创建命令连接的实例（主服务器，从服务器和其它的Sentinel）发送PING命令，从而判断是否下线。
+
+```s
+  sentinel down-after-milliseconds master 50000
+```
+
+  这里的500000毫秒就是Sentinel判断master主观下线的标准。
+
+  前面说到多个Sentinel可以保护一个主服务器，那么它们对于该属性的设置不一致，那么到底采用谁的主观下线呢？
+
+  这里就要引出一个客观下线的概念，当一个Sentinel判断主观下线之后，需要不断询问其它的Sentinel的状态，如果有足够数量的Sentinel判断该主服务器主观下线，那么就进行故障转移操作。
+
+  通过这个quorum参数设置一个足够的数量：
+
+```s
+  sentinel monitor master 127.0.0.1 6379 2
+```
+
+  上述就设置了该Sentinel如果再发现了个Sentinel判断主观下线，那么客观下线的条件就满足了。
+
+  当然都个Sentinel对于该属性的设置也可能不一致，那么就需要选举一个领头Sentinel来执行故障转移操作。
+
