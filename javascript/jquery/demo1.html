@@ -63,33 +63,37 @@
 
     @keyframes explode {
       0% {
+        width: 0;
+        height: 0;
+        margin-left: 0;
+        margin-right: 0;
         background-color: rgba(42,53,80,.2)
       }
       100% {
         width: 400px;
         height: 400px;
         margin-left: -200px;
-        margin-right: -200px;
+        margin-top: -200px;
         background-color: rgba(20,180,87,.8);
       }
     }
 
     @keyframes desplode {
-        0% {
-            width: 400px;
-            height: 400px;
-            margin-left: -200px;
-            margin-top: -200px;
-            background-color: rgba(20,180,87,.8)
-        }
+      0% {
+        width: 400px;
+        height: 400px;
+        margin-left: -200px;
+        margin-top: -200px;
+        background-color: rgba(20,180,87,.8)
+      }
 
-        100% {
-            width: 0;
-            height: 0;
-            margin-left: 0;
-            margin-top: 0;
-            background-color: rgba(129,80,108,.6)
-        }
+      100% {
+        width: 0;
+        height: 0;
+        margin-left: 0;
+        margin-top: 0;
+        background-color: rgba(129,80,108,.6)
+      }
     }
   </style>
 </head>
@@ -104,6 +108,10 @@
       </div>
     </div>
   <script>
+    // 一、dom元素的结构
+    // 二、元素的位置计算
+    // 三、获取前一个相邻元素
+    // 四、添加class的处理方式
     // 一种方案 margin width top 实现
     document.querySelector('.button-inner').addEventListener('mouseenter', function (e) {
       const el = e.target
@@ -116,20 +124,23 @@
 
       preElement.style.left = `${rX}px`
       preElement.style.top = `${rY}px`
-      // preElement.classList.remove('desplode-circle')
+      preElement.classList.remove('desplode-circle')
       preElement.classList.add('explode-circle')
     })
-  // $(".button_su_inner").mouseleave(function(e) {
-  //     var parentOffset = this.style.offset;
-  //     var relX = e.pageX - parentOffset.left;
-  //     var relY = e.pageY - parentOffset.top;
-  //     $(this).prev(".su_button_circle").css({
-  //         "left": relX,
-  //         "top": relY
-  //     });
-  //     $(this).prev(".su_button_circle").removeClass("explode-circle");
-  //     $(this).prev(".su_button_circle").addClass("desplode-circle");
-  // });
+    document.querySelector('.button-inner').addEventListener('mouseleave', function (e) {
+      const el = e.target
+      const parentOffset = el.getBoundingClientRect()
+      // 相对位置
+      var rX = e.pageX - parentOffset.left
+      var rY = e.pageY - parentOffset.top
+      
+      const preElement = el.previousElementSibling
+
+      preElement.style.left = `${rX}px`
+      preElement.style.top = `${rY}px`
+      preElement.classList.remove('explode-circle')
+      preElement.classList.add('desplode-circle')
+    })
   </script>
 </body>
 </html>
