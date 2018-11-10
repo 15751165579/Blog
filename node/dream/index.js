@@ -19,23 +19,32 @@ const puppeteer = require('puppeteer')
       let tdList = Array.from(item.querySelectorAll('td'))
       const numList = []
       tdList.forEach(sub => {
-        const omit = sub.getAttribute('data-omit')
-        if (omit != null) {
-          numList.push({
-            vOffset: omit // 垂直偏移量
-          })
+        const isBall = sub.getAttribute('data-omit')
+        const isRed = sub.classList.contains('f_red')
+        const isBlue = sub.classList.contains('f_blue')
+        const value = parseInt(sub.innerText.replace(/\t/g, ''))
+        if (isBall) {
+          if (isRed || isBlue) {
+            numList.push({
+              vOffset: value // 垂直偏移量
+            })
+          } else {
+            numList.push({
+              vOffset: 0,
+              value
+            })
+          }
         }
       })
 
+      // 水平偏移量
       let start = 0
+      let blueStart = 0
       for (let i = 0; i < numList.length; i++) {
         const item = numList[i]
         if (item.vOffset == 0) {
-
-          // 1 ~ 35
+          const target = i + 1
           if (i < 35) {
-            const target = i + 1
-            item.value = target
             if (start == 0) {
               start = target
               item.x = 0
@@ -44,7 +53,13 @@ const puppeteer = require('puppeteer')
               start = target
             }
           } else {
-            item.vaue = i + 1 - 35
+            if (blueStart == 0) {
+              blueStart = target
+              item.x = 0
+            } else {
+              item.x = target - blueStart - 1
+              blueStart = target
+            }
           }
         }
       }
@@ -57,17 +72,15 @@ const puppeteer = require('puppeteer')
     return ret
   })
   await browser.close()
-
   // 计算垂直方向的偏移量
   for (let i = 1; i < result.length; i++) {
     const item = result[i]
     item.forEach((sub, index) => {
-      if (sub.value && index < 35) {
+      if (sub.value) {
         sub.y = parseInt(result[i - 1][index]['vOffset'])
       }
     })
   }
-
   handleAction(result)
 })()
 
@@ -76,13 +89,13 @@ function handleAction (list) {
     const item = list[i]
     let x = 0
     let y = 0
-    for (let j = 0; j < 35; j++) {
+    for (let j = 0; j < item.length; j++) {
       const sub = item[j]
       if (sub.value) {
         x += sub.x
         y += sub.y
       }
     }
-    console.log(y / x)
+    console.log((y / x * 10).toFixed(0))
   }
 }
