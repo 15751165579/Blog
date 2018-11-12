@@ -11,3 +11,10 @@ const sha256 = crypto.createHash('sha256')
 sha256.update('Hello World')
 
 console.log(sha256.digest('base64')) // 输出base64 
+
+
+const hmac = crypto.createHmac('sha256', 'secret')
+
+hmac.update('Hello World')
+
+console.log(hmac.digest('hex'))
