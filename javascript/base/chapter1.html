@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>元素的位置信息</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .demo {
+      position: relative;
+      margin: 50px;
+      padding: 100px;
+      height: 2400px;
+      width: 400px;
+      background: red;
+      border: 10px solid blue;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo" id="demo"></div>
+
+  <script>
+    const el = document.getElementById('demo')
+    console.log(el.getBoundingClientRect())
+    
+    // clientHeight clientWidth 不包含border
+    console.log(` **** clientHeight **** ${el.clientHeight}`)
+    console.log(` **** clientWidth **** ${el.clientWidth}`)
+
+    // offsetHeight offsetWidth
+    console.log(` **** offsetHeight **** ${el.offsetHeight}`)
+    console.log(` **** offsetWidth **** ${el.offsetWidth}`)
+    
+    // 元素边框的宽度或者长度
+    console.log(` **** clientTop **** ${el.clientTop}`)
+    console.log(` **** clientLeft **** ${el.clientLeft}`)
+    
+
+    console.log(` **** scrollWidth **** ${el.scrollWidth}`)
+    console.log(` **** scrollHeight **** ${el.scrollHeight}`)
+    console.log(` **** scrollTop **** ${document.documentElement.scrollTop}`)
+    console.log(` **** scrollLeft **** ${document.documentElement.scrollLeft}`)
+    console.log(` **** scrollHeight **** ${el.scrollHeight}`)
+    console.log(` **** scrollHeight **** ${el.scrollHeight}`)
+
+    // 鼠标点击
+    el.addEventListener('mousemove', e => {
+      console.log('****** 各类属性 ******')
+      console.log(` **** clientX **** ${e.clientX}`) // 可视区域里面的高度
+      console.log(` **** clientY **** ${e.clientY}`)
+      console.log(` **** offsetX **** ${e.offsetX}`)
+      console.log(` **** offsetY **** ${e.offsetY}`) // 不含边框的
+      console.log(` **** pageX **** ${e.pageX}`)
+      console.log(` **** pageY **** ${e.pageY}`) // 总的高度
+    })
+  </script>
+</body>
+</html>

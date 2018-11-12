@@ -115,10 +115,9 @@
     // 一种方案 margin width top 实现
     document.querySelector('.button-inner').addEventListener('mouseenter', function (e) {
       const el = e.target
-      const parentOffset = el.getBoundingClientRect()
-      // 相对位置
-      var rX = e.pageX - parentOffset.left
-      var rY = e.pageY - parentOffset.top
+
+      var rX = e.offsetX
+      var rY = e.offsetY
       
       const preElement = el.previousElementSibling
 
@@ -129,10 +128,8 @@
     })
     document.querySelector('.button-inner').addEventListener('mouseleave', function (e) {
       const el = e.target
-      const parentOffset = el.getBoundingClientRect()
-      // 相对位置
-      var rX = e.pageX - parentOffset.left
-      var rY = e.pageY - parentOffset.top
+      var rX = e.offsetX
+      var rY = e.offsetY
       
       const preElement = el.previousElementSibling
 
