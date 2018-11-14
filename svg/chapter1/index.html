@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.bootcss.com/gsap/latest/TweenMax.min.js"></script>
+  <title>点击波纹效果</title>
+  <style>
+    .button {
+      display: block;
+      -webkit-appearance: none;
+      border: none;
+      box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.3), 0 3px 3px rgba(0, 0, 0, 0.15), 0 3px 2px -2px rgba(0, 0, 0, 0.2);
+      font-weight: bold;
+      color: #fff;
+      font-size: 1.25em;
+      text-shadow: 0 -0.5px 1px rgba(0, 0, 0, 0.15);
+      padding: 1.5em 3em;
+      margin: 100px auto;
+      position: relative;
+      min-width: 250px;
+      /* transition: 200ms background cubic-bezier(0.4, 0, 0.2, 1); */
+      background: #E91E63;
+      outline: none;
+    }
+
+    .button > svg {
+      height: 100%;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      fill: #AD1457;
+    }
+    .button > svg > use {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div style="height: 0; width: 0; position: absolute; visibility: hidden;" aria-hidden="true">
+		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" focusable="false">
+			<symbol id="demo" viewBox="0 0 100 100">
+				<circle id="shape" cx="1" cy="1" r="1" />
+			</symbol>
+		</svg>
+	</div>
+  <button class="button" id="js-button">
+    点击特效
+    <svg class="inline-svg">
+      <use height="100" width="100" xlink:href="#demo" id="js-circle"></use>
+    </svg>
+  </button>
+
+  <script>
+    /* eslint-disable */
+    const circle = document.getElementById('js-circle')
+
+    document.getElementById('js-button').addEventListener('click', e => {
+      const tl = new TimelineMax()
+
+      // 鼠标在元素内部的距离
+      const { offsetX, offsetY } = e
+
+      // 获取按钮的尺寸
+      const { offsetWidth, offsetHeight } = e.target
+      
+      // 计算覆盖的最大距离
+      const disX = Math.max(offsetX, offsetWidth - offsetX)
+      const disY = Math.max(offsetY, offsetHeight - offsetY)
+      const maxR = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2))
+      tl.fromTo(circle, 0.75, {
+        x: offsetX,
+        y: offsetY,
+        transformOrigin: '50% 50%',
+        scale: 0,
+        opacity: 1,
+        ease: Linear.easeIn
+      },{
+        scale: maxR,
+        opacity: 0
+      });
+    })
+  </script>
+</body>
+</html>
