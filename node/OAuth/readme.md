@@ -21,3 +21,8 @@
   - 如果用户拒绝，那么授权到此结束。
   - 如果用户允许，那么 GitHub 将会在回调链接上附带上code。
   - 但是拿到code 并不能直接去获取GitHub的相关信息，因为任何人都可以使用该code，这时再还需要再结合 Client Secret 向GitHub获取到最后的 access_token
+
+### OAuth vs OpenID
+
+  - OpenID: 只用于用户身份认证（authentication），仅仅是个合法身份的背书。
+  - OAuth: 用于授权（Authorization）,允许被授权方访问授权方的用户数据。
