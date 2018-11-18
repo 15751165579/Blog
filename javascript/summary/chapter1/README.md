@@ -46,3 +46,31 @@
   Cookie的删除操作实际上是设置过期。
 
 ##### 5、子Cookie的概念
+
+### 二、Web Storage
+
+  Web Storage分为SessionStorage和localStorage。
+
+##### 1、基本方法
+
+  对于WebStorage对象都包含以下方法：
+
+  - clear
+  - getItem
+  - setItem
+  - key
+  - removeItem
+
+  并且通过storage事件可以监听值的变化，但是无法区分这两种类别。
+
+##### 2、SessionStorage
+
+  SessionStorage主要存储会话级别的数据，当退出浏览器时别会被清除。
+
+##### 3、LocalStorage
+
+  LocalStorage则是一种持久化的存储
+
+##### 4、限制
+
+  浏览器同样对于Web Storage也有大小的限制。
