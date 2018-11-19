@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+  <button id="demo">发送请求</button>
+  <script>
+    /* eslint-disable */
+    const CookieUtil = {
+      get (name) {
+        const cookieName = encodeURIComponent(name) + '='
+        const cookieStart = document.cookie.indexOf(cookieName)
+        let cookieValue = null
+        let cookieEnd
+        if (cookieStart > -1) {
+          cookieEnd = document.cookie.indexOf(';', cookieStart)
+          if (cookieEnd === -1) {
+            cookieEnd = document.cookie.length
+          }
+          cookieValue = decodeURIComponent(document.cookie.substring(cookieStart + cookieName.length, cookieEnd))
+        }
+        return cookieValue
+      },
+      set (name, value, expires, path, domain, secure) {
+        let cookieText = encodeURIComponent(name) + '=' + encodeURIComponent(value)
+
+        if (expires instanceof Date) {
+          cookieText += `; expires=${expires.toUTCString()}`
+        }
+
+        if (path) {
+          cookieText += `; path=${path}`
+        }
+
+        if (domain) {
+          domain += `; domain=${domain}`
+        }
+
+        if (secure) {
+          domain += '; secure'
+        }
+
+        document.cookie = cookieText
+      },
+      reset (name, path, domain, secure) {
+        this.set(name, '', new Date(0), path, domain, secure)
+      }
+    }
+
+    jQuery.ajax({
+      method: 'GET',
+      url: '/login'
+    }).then(res => {
+      console.log(CookieUtil.get('name'))
+
+      CookieUtil.set('foo', 123, new Date(2018, 10, 20), '/', 'localhost')
+
+      console.log(CookieUtil.get('foo'))
+
+      CookieUtil.reset('name')
+
+      console.log(CookieUtil.get('name'))
+    })
+
+    window.onload = () => {
+
+      const button = document.getElementById('demo')
+      button.addEventListener('click', () => {
+        jQuery.ajax({
+          method: 'GET',
+          url: '/some'
+        })
+      }, false)
+    }
+  </script>
+</body>
+</html>
