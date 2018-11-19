@@ -16,7 +16,7 @@ app.use(async ctx => {
       'name',
       'demo',
       {
-        domain: 'localhost',
+        domain: 'localhost', // 当domain不指定任何值时，Cookie仅限于当前的主机，如果设置domin=abc.com，那么子域sub.abc.com能够共享该Cookie。
         path: '/',
         maxAge: 10 * 60 * 1000,
         httpOnly: false
