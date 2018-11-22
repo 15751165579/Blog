@@ -112,6 +112,7 @@
     "redis-rebloom": "^1.0.0",
     "request": "^2.88.0",
     "stacktrace-js": "^2.0.0",
-    "utils-merge": "^1.0.1"
+    "utils-merge": "^1.0.1",
+    "uuid": "^3.3.2"
   }
 }
