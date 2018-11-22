@@ -1,3 +1,25 @@
 # Stream
 
-[参考资料](https://github.com/substack/stream-handbook)
+### 什么是Stream
+
+  Stream是操作系统最基本的操作方式。
+
+### 为什么需要Stream
+
+  之所以采用Stream，主要是因为一次性读取、操作大文件、内存和网络是‘吃不消的’，因此需要让数据动起来，一点一点去操作，这其实也是分而治之的思想。
+
+### Stream的来源
+
+- 控制台的输入 stdin
+- http请求 req
+- 读取文件
+
+### Stream的管道
+
+  source.pipe(dest)
+
+### Stream的输出点
+
+- 控制台的输出 stdout
+- http请求 res
+- 写入文件
