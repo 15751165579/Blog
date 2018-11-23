@@ -35,3 +35,27 @@ const selection = (arr) => {
   时间复杂度: O(n^2)
 
   空间复杂度: O(1)
+
+### 插入排序
+
+  插入排序: 将数组分成两部分，左边为有序序列，右边原始序列，遍历右边的序列不断的将元素插入在左边的合适位置中。
+
+```JavaScript
+const insertion = (arr) => {
+  const max = arr.length
+  for (let i = 1; i < max; i++) {
+    for (let j = i; j > 0; j--) {
+      if (arr[j] >= arr[j - 1]) {
+        break
+      }
+      const temp = arr[j]
+      arr[j] = arr[j - 1]
+      arr[j - 1] = temp
+    }
+  }
+}
+```
+
+  它的时间复杂度最坏的情况是O(n^2)，最好的情况是O(n)。这里实际上就摆脱了前面选择排序忽视输入的问题。
+
+  空间复杂度O(1)
