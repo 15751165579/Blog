@@ -59,3 +59,27 @@ const insertion = (arr) => {
   它的时间复杂度最坏的情况是O(n^2)，最好的情况是O(n)。这里实际上就摆脱了前面选择排序忽视输入的问题。
 
   空间复杂度O(1)
+
+### 冒泡排序
+
+  冒泡排序：从左向右不断将最大的元素沉淀到数组的尾部。
+
+```JavaScript
+const bubble = (arr) => {
+  const max = arr.length
+
+  for (let i = max; i > 0; i--) {
+    for (let j = 0; j < i; j++) {
+      if (arr[j] - arr[j + 1] > 0) {
+        const temp = arr[j + 1]
+        arr[j + 1] = arr[j]
+        arr[j] = temp
+      }
+    }
+  }
+}
+```
+
+  时间复杂度：O(n^2)
+
+  空间复杂度: O(1)
