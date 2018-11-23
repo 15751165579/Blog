@@ -83,3 +83,37 @@ const bubble = (arr) => {
   时间复杂度：O(n^2)
 
   空间复杂度: O(1)
+
+### 快速排序
+
+  快速排序是分治思想的典型实现。
+
+  实现的主要细节：
+
+  - 基准点
+  - 划分：将大于基准点的元素放在右边，否则放在左边。
+  - 递归的处理子串
+
+```JavaScript
+const quicksort = (arr) => {
+  const max = arr.length
+  if (max < 2) {
+    return arr
+  }
+  const pivot = arr[0]
+  const left = []
+  const right = []
+
+  for (let i = 1; i < max; i++) {
+    const v = arr[i]
+    v >= pivot && right.push(v)
+    v < pivot && left.push(v)
+  }
+
+  return quicksort(left).concat(pivot, quicksort(right))
+}
+```
+
+  最坏的时间复杂度:O(n^2)，平均时间复杂度和最优时间复杂度：O(nlogn)。
+
+  空间复杂度根据实现的方式不太一样。
