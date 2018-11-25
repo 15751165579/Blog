@@ -1,6 +1,12 @@
 /**
  * Convert Sorted Array To Search Binary Tree
+ * 递归的方式
  */
+
+function TreeNode(val) {
+  this.val = val;
+  this.left = this.right = null;
+}
 
 const sortedArrayToBST = function (nums) {
   const max = nums.length
