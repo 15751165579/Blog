@@ -23,8 +23,15 @@ const InsertionSort = (a, from, to) => {
   }
 }
 
-function comparefn (x, y) {
-  return x > y ? 1 : -1
+/**
+ * > 0 b排在a之前
+ * < 0 a排在b之前
+ * 
+ * a ===> next
+ * b ===> pre
+ */
+function comparefn (a, b) {
+  return a > b ? 1 : -1
 }
 console.log(' === 插入排序 === ')
 InsertionSort(a, 0, a.length)
