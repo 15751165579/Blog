@@ -108,6 +108,7 @@
     "pngjs": "^3.3.3",
     "puppeteer": "^1.4.0",
     "qiniu": "^7.2.1",
+    "qs": "^6.6.0",
     "redis": "^2.8.0",
     "redis-rebloom": "^1.0.0",
     "request": "^2.88.0",
