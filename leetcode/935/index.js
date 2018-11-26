@@ -1,74 +1,62 @@
 const knightDialer = (N) => {
   const max = Math.pow(10, 9) + 7
-  let init = [
-    [1, 1, 1],
-    [1, 1, 1],
-    [1, 1, 1],
-    [-1, 1, -1]
-  ]
+  // 将二维空间压缩成一维空间
+  let init = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0]
   if (N <= 0) {
     return 0
   }
   if (N === 1) {
     return sum(init)
   }
-  
-  // 初始化多维数组
-  const temp = []
-  for (let i = 0; i < 4; i++) {
-    temp[i] = []
-  }
 
-  for (let k = 0; k < N - 1; k++) {
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 3; j++) {
-        // 判断位置
-        if ((i === 3 && j === 0) || (i === 3 && j === 2)) {
-          continue
-        }
-        if (i === 0 && j === 0) {
-          temp[i][j] = (init[2][1] + init[1][2]) % max
-        } else if (i === 0 && j === 1) {
-          temp[i][j] = (init[2][0] + init[2][2]) % max
-        } else if (i === 0 && j === 2) {
-          temp[i][j] = (init[1][0] + init[2][1]) % max
-        } else if (i === 1 && j === 0) {
-          temp[i][j] = (init[0][2] + init[2][2] + init[3][1]) % max
-        } else if (i === 1 && j === 1) {
-          temp[i][j] = 0
-        } else if (i === 1 && j === 2) {
-          temp[i][j] = (init[0][0] + init[2][0] + init[3][1]) % max
-        } else if (i === 2 && j === 0) {
-          temp[i][j] = (init[0][1] + init[1][2]) % max
-        } else if (i === 2 && j === 1) {
-          temp[i][j] = (init[0][0] + init[0][2]) % max
-        } else if (i === 2 && j === 2) {
-          temp[i][j] = (init[0][1] + init[1][0]) % max
-        } else if (i === 3 && j === 1) {
-          temp[i][j] = (init[1][0] + init[1][2]) % max
-        }
+  let dp = []
+  for (let i = 0; i < N -1; i++) {
+    for (let j = 0; j < init.length; j++) {
+      switch (j) {
+        case 9:
+          break
+        case 11:
+          dp[j] = 0
+          break
+        case 0:
+          dp[j] = (init[7] + init[5]) % max
+          break
+        case 1:
+          dp[j] = (init[6] + init[8]) % max
+          break
+        case 2:
+          dp[j] = (init[3] + init[7]) % max
+          break
+        case 3:
+          dp[j] = (init[2] + init[8] + init[10]) % max
+          break;
+        case 4:
+          dp[j] = 0
+          break
+        case 5:
+          dp[j] = (init[0] + init[6] + init[10]) % max
+          break
+        case 6:
+          dp[j] = (init[1] + init[5]) % max
+          break
+        case 7:
+          dp[j] = (init[0] + init[2]) % max
+          break
+        case 8:
+          dp[j] = (init[1] + init[3]) % max
+          break
+        case 10:
+          dp[j] = (init[3] + init[5]) % max
       }
     }
     // 交换数组
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 3; j++) {
-        init[i][j] = temp[i][j]
-      }
-    }
+    init = dp
+    dp = []
   }
 
   return sum(init)
   function sum (data) {
-    let total = 0
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 3; j++) {
-        const item = data[i][j]
-        if (item > 0) {
-          total = (total + item) % max
-        }
-      }
-    }
-    return total
+    return (data.reduce((pre, cur) => cur += pre, 0)) % max
   }
 }
 
