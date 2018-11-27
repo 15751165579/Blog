@@ -1,29 +1,19 @@
 const validateStackSequences = (pushed, popped) => {
   let max = pushed.length
-
-  let pushIndex = 0
   let popIndex = 0
 
-  const result = []
-
-  while (pushIndex <= max && popIndex <= max) {
-    const p1 = pushed[pushIndex]
-    const p2 = popped[popIndex]
-    const item = result[result.length - 1]
-    if (item !== p2) {
-      result.push(p1)
-      pushIndex++
-      continue
-    } else if (item === p2) {
-      result.pop()
+  const temp = []
+  for (let i = 0; i < max; i++) {
+    const item = pushed[i]
+    temp.push(item)
+    let size = temp.length
+    while (size > 0 && temp[size - 1] === popped[popIndex]) {
+      temp.pop()
       popIndex++
-      continue
+      size--
     }
   }
-  if (result.length === 0 && pushIndex === max && popIndex === max + 1) {
-    return true
-  }
-  return false
+  return popIndex === popped.length
 }
 
 console.log(validateStackSequences([1, 2, 3, 4, 5], [4, 5, 3, 2, 1]), true)
