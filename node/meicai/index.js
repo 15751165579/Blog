@@ -1,6 +1,8 @@
 const crypto = require('crypto')
 const request = require('request')
 const qs = require('qs')
+const fs = require('fs')
+const path = require('path')
 
 /**
  * 美菜网获取JWT https://online.yunshanmeicai.com/entry/index#/index
@@ -13,6 +15,7 @@ const qs = require('qs')
 
 class LoginController {
   constructor ({ phone, password, type}) {
+    this.jwtPath = path.resolve(__dirname, 'jwt.txt')
     /**
     * 基本参数
     */
@@ -87,6 +90,16 @@ class LoginController {
       })
     })
   }
+  async getJWT () {
+    let result = null
+    if (fs.existsSync(this.jwtPath)) {
+      result = fs.readFileSync(this.jwtPath, 'utf-8')
+    } else {
+      result = await this.login()
+      fs.writeFileSync(this.jwtPath, result)
+    }
+    return result
+  }
 }
 
 const lc = new LoginController({
@@ -95,4 +108,4 @@ const lc = new LoginController({
   type: 'password'
 })
 
-lc.login().then(console.log)
+lc.getJWT().then(console.log)
