@@ -16,18 +16,30 @@ const saltList = {
 /**
  * 基本数据
  */
+const info = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'jwt.txt'), 'utf-8'))
+
+// 设备ID进行编码
+let t = []
+for (let i = 0; i < 36; i++) {
+  t[i] = '0123456789abcdef'.substr(Math.floor(16 * Math.random()), 1)
+}
+t[14] = '4'
+t[19] = '0123456789abcdef'.substr(3 & t[19] | 8, 1)
+t[8] = t[13] = t[18] = t[23] = '-'
+const device_id = t.join('')
+
 const globalData = {
-  tickets: fs.readFileSync(path.resolve(__dirname, 'jwt.txt'), 'utf-8'), // jwt令牌
+  tickets: info.jwt, // jwt令牌
   city_id: '1',
-  area_id: '3502',
-  company_id: '10438093',
+  area_id: '592',
+  company_id: '10333888',
   source: 'weixin',
   source_origin: 'pc',
   _ENV_: {
     source: 'weixin',
     distribute_channel: 'default',
     platform: '0',
-    device_id: '94d69555-b156-4722-9450-92f0ba32b705', // 设备ID
+    device_id, // 设备ID
     device_name: '',
     app_version: '2.6.0',
     os_version: '',
@@ -46,6 +58,8 @@ const globalData = {
     lng: 0,
   },
 };
+
+console.log(globalData)
 
 
 async function fetchGoodsInfo () {

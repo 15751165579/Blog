@@ -79,7 +79,12 @@ class LoginController {
     return new Promise((resolve, reject) => {
       request.post({
         url: 'https://passport.yunshanmeicai.com/pc/site/index',
-        formData: this.config
+        formData: this.config,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36',
+          'Referer': 'https://passport.yunshanmeicai.com/index.php/pc/site/index?app_key=mall',
+          'Origin': ''
+        }
       }, (err, res) => {
         if (err) {
           return reject(err)
