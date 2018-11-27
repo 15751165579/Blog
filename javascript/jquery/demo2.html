@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.bootcss.com/gsap/latest/TweenMax.min.js"></script>
+  <title>鼠标悬停动画</title>
+  <style>
+    body {
+      font-family: inconsolata,sans-serif;
+      background: #2a364f
+    }
+    .button-container {
+      width: 176px;
+      margin: 0 auto;
+      margin-top: 30px;
+      padding-top: 40px
+    }
+
+    .button__wrap {
+      overflow: hidden;
+      position: relative;
+      display: inline-block;
+      border-radius: 3px;
+    }
+
+    .button-circle {
+      display: block;
+      border-radius: 50%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2px;
+      height: 2px;
+      pointer-events: none;
+      transform-origin: center center;
+      background: rgba(20,180,87,.8);
+    }
+
+    .button-inner {
+      display: inline-block;
+      background: #f8b627;
+      color: #f4f4f4;
+      font-size: 16px;
+      font-weight: 400;
+      width: 132px;
+      text-align: center;
+      border-radius: 3px;
+      transition: 400ms;
+      text-decoration: none;
+      padding: 22px;
+      z-index: 100000
+    }
+
+    .button-text {
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+    <div class="button-container">
+      <!-- DOM结构 -->
+      <div class="button__wrap">
+        <span class="button-circle"></span>
+        <a href="" class="button-inner">
+          <span class="button-text"> Simple button</span>
+        </a>
+      </div>
+    </div>
+  <script>
+    // 一、dom元素的结构
+    // 二、元素的位置计算
+    // 三、获取前一个相邻元素
+    // 四、添加class的处理方式
+    // 一种方案 margin width top 实现
+    document.querySelector('.button-inner').addEventListener('mouseenter', function (e) {
+      animation(e, true)
+    })
+    document.querySelector('.button-inner').addEventListener('mouseleave', function (e) {
+      animation(e, false)
+    })
+
+    function animation (e, isIn) {
+      const el = e.target
+
+      const { offsetX, offsetY } = e
+      const { offsetWidth, offsetHeight } = el
+
+      const disX = Math.max(offsetX, offsetWidth - offsetX)
+      const disY = Math.max(offsetY, offsetHeight - offsetY)
+      const maxR = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2))
+      
+      const preElement = el.previousElementSibling
+      
+      /* eslint-disable */
+      const tl = new TimelineMax()
+
+      tl.fromTo(preElement, 0.5, {
+        x: offsetX,
+        y: offsetY,
+        transformOrigin: '50% 50%',
+        scale: isIn ? 0 : maxR,
+        ease: Linear.easeIn
+      },{
+        scale: isIn ? maxR : 0
+      });
+    }
+  </script>
+</body>
+</html>
