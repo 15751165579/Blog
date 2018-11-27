@@ -85,19 +85,18 @@ class LoginController {
           return reject(err)
         }
         const { location } = res.headers
+        const did = res.headers['set-cookie'][0].split(';')[0].split('=')[1]
         const jwt = qs.parse(location.split('?')[1]).MC_ST
-        resolve(jwt)
+        resolve({
+          jwt,
+          did
+        })
       })
     })
   }
   async getJWT () {
-    let result = null
-    if (fs.existsSync(this.jwtPath)) {
-      result = fs.readFileSync(this.jwtPath, 'utf-8')
-    } else {
-      result = await this.login()
-      fs.writeFileSync(this.jwtPath, result)
-    }
+    const result = await this.login()
+    fs.writeFileSync(this.jwtPath, JSON.stringify(result))
     return result
   }
 }
