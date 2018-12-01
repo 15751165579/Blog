@@ -14,6 +14,18 @@
 
 #### 三、解题思路
 
+  因为字符串中只含有0和1两种元素，所以构成字符串单调递增的情况为：左边为0右边为1。
+
+```s
+
+  l[i]: 表示 1 到 i 全部为0需要的操作数
+
+  r[i]: 表示 max - i 到 max 全部为1需要的操作数
+
+  那么形成一个单调递增所需要的操作数为： l[i] + r[max - i]
+  
+  只要比较所有的结果即可得到最小操作数。
+```
 
 #### 四、代码实现
 
@@ -27,28 +39,24 @@ const minFlipsMonoIncr = (S) => {
 
   // l[i] 表示 0 ~ i 为0的情况
   let l = []
-  l[0] = S[0] == '1' ? 1 : 0
-  for (let i = 1; i < max; i++) {
-    const item = S[i]
+  l[0] = 0 // 左边没有0
+  for (let i = 1; i <= max; i++) {
+    const item = S[i - 1] // 注意下标
     l[i] = l[i - 1] + (item === '1' ? 1 : 0)
   }
 
   // r[i] 表示后 max - 1 - i ~ max - 1 为1的情况
   let r = []
-  r[0] = S[max - 1] == '0' ? 1 : 0
-  for (let i = 1; i < max; i++) {
-    const item = S[max - i - 1]
+  r[0] = 0 // 右边没有1
+  for (let i = 1; i <= max; i++) {
+    const item = S[max - i] // 注意下标
     r[i] = r[i - 1] + (item === '1' ? 0 : 1)
   }
 
-  const rMax = r[max - 1] // 全部是1的情况
-  const lMax = l[max - 1] // 全部是0的情况
-  let min = Math.min(rMax, lMax)
-
-
-  for (let i = 1; i < max ; i++) {
-    const lItem = l[i - 1]
-    const rItem = r[max - 1 - i]
+  let min = Number.MAX_SAFE_INTEGER
+  for (let i = 0; i <= max ; i++) {
+    const lItem = l[i]
+    const rItem = r[max - i]
     min = Math.min(rItem + lItem, min)
   }
   return min
