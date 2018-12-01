@@ -2,30 +2,30 @@
 const minFlipsMonoIncr = (S) => {
   const max = S.length
 
-  // l[i] 表示前i + 1个元素是0的情况
+  if (max <= 1) {
+    return 0
+  }
+
+  // l[i] 表示 0 ~ i 为0的情况
   let l = []
-  l[0] = S[0] == '1' ? 1 : 0
-  for (let i = 1; i < max; i++) {
-    const item = S[i]
+  l[0] = 0 // 左边没有0
+  for (let i = 1; i <= max; i++) {
+    const item = S[i - 1] // 注意下标
     l[i] = l[i - 1] + (item === '1' ? 1 : 0)
   }
 
-  // r[i] 表示后i + 1 个元素是1的情况
+  // r[i] 表示后 max - 1 - i ~ max - 1 为1的情况
   let r = []
-  r[0] = S[max - 1] == '0' ? 1 : 0
-  for (let i = 1; i < max; i++) {
-    const item = S[max - i - 1]
+  r[0] = 0 // 右边没有1
+  for (let i = 1; i <= max; i++) {
+    const item = S[max - i] // 注意下标
     r[i] = r[i - 1] + (item === '1' ? 0 : 1)
   }
 
-  const rMax = r[max - 1] // 全部是1的情况
-  const lMax = l[max - 1] // 全部是0的情况
-  let min = Math.min(rMax, lMax)
-
-
-  for (let i = 1; i < max ; i++) {
-    const lItem = l[i - 1]
-    const rItem = r[max - 1 - i]
+  let min = Number.MAX_SAFE_INTEGER
+  for (let i = 0; i <= max ; i++) {
+    const lItem = l[i]
+    const rItem = r[max - i]
     min = Math.min(rItem + lItem, min)
   }
   return min
