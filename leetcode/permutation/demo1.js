@@ -17,4 +17,4 @@ const permutation = (A, index, max) => {
 
 const A = [1, 2, 3]
 
-permutation(A, 0, 3)
+permutation(A, 0, 2)
