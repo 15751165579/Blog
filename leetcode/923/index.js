@@ -5,13 +5,10 @@ const threeSumMulti = (A, target) => {
 
   const MAX = 10 ** 9 + 7
   const hash = {}
-
-  const nums = []
   // 统计数字出现的次数
   for (let i = 0; i < max; i++) {
     const item = A[i]
     if (hash[item] == null) {
-      nums.push(item)
       hash[item] = 0
     }
     hash[item]++
