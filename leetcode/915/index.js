@@ -9,7 +9,7 @@ const partitionDisjoint = A => {
   const min = []
   min[0] = Number.MAX_SAFE_INTEGER
 
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len - 1; i++) {
     max[i + 1] = Math.max(max[i], A[i])
     min[i + 1] = Math.min(min[i], A[len - 1 - i])
   }
