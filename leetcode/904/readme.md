@@ -66,3 +66,45 @@ const totalFruit = tree => {
   return ans
 }
 ```
+
+  对于向前循环寻找下一个子数组的起始点还可以优化一下，这样时间复杂度就可以达到O(n):
+
+```JavaScript
+const totalFruit1 = tree => {
+  const max = tree.length
+
+  const s = new Set()
+
+  let ans = Number.MIN_SAFE_INTEGER
+  let sum = 0
+  // 维护下一个子数组的起始节点
+  let start = 0
+
+  for (let i = 0; i < max; i++) {
+    const type = tree[i]
+    if (s.size < 2) {
+      s.add(type)
+      sum++
+      start = i
+      continue
+    }
+
+    if (s.has(type)) {
+      sum++
+      if (type !== tree[i - 1]) {
+        start = i
+      }
+    } else {
+      ans = Math.max(ans, sum)
+      sum = i - start + 1
+      s.clear()
+      s.add(type)
+      s.add(tree[i - 1])
+      start = i
+    }
+  }
+
+  ans = Math.max(ans, sum)
+  return ans
+}
+```
