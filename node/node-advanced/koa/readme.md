@@ -4,12 +4,12 @@
 
   本文从以下几个方面解读Koa源码：
 
-  - 如何创建应用程序？
+  - 如何封装创建应用程序函数？
   - 如何扩展res和req？
-  - 如何组织中间件？
+  - 如何设计中间件？
   - 如何进行异常处理？
 
-#### 一、如何创建应用程序？
+#### 一、如何封装创建应用程序函数？
 
   利用NodeJS可以很容易编写一个简单的应用程序：
 
@@ -173,13 +173,123 @@ function method (proto, target, name) {
 
   在上述过程的源码中涉及到很多JavaScript的基础知识，例如：原型继承、this的指向。对于基础薄弱的同学，还需要先弄懂这些基础知识。
 
-#### 三、如何组织中间件？
+#### 三、如何设计中间件？
 
-  首先需要通过下面的这张图了解中间件的执行流程：
+  首先需要明确是：中间件并不是NodeJS中的概念，它只是connect、express和koa框架衍生的概念。
 
-![中间件执行流程](https://github.com/koajs/koa/blob/master/docs/middleware.gif)
+##### 1、connect中间件的设计
 
-  其中的app.use()方法主要用于注册需要用到的中间件：
+  在connect中，开发者可以通过use方法注册中间件：
+
+```JavaScript
+ function use(route, fn) {
+  var handle = fn;
+  var path = route;
+
+  // 不传入route则默认为'/'，这种基本是框架处理参数的一种套路
+  if (typeof route !== 'string') {
+    handle = route;
+    path = '/';
+  }
+
+  ...
+  // 存储中间件
+  this.stack.push({ route: path, handle: handle });
+  
+  // 以便链式调用
+  return this;
+}
+```
+
+  use方法内部获取到中间件的路由信息（默认为'/'）和中间件的处理函数之后，构建成layer对象，然后将其存储在一个队列当中，也就是上述代码中的stack。
+
+  connect中间件的执行流程主要由handle与call函数决定：
+
+```JavaScript
+function handle(req, res, out) {
+  var index = 0;
+  var stack = this.stack;
+  ...
+  function next(err) {
+    ...
+    // 依次取出中间件
+    var layer = stack[index++]
+
+    // 终止条件
+    if (!layer) {
+      defer(done, err);
+      return;
+    }
+
+    var path = parseUrl(req).pathname || '/';
+    var route = layer.route;
+
+    // 路由匹配规则
+    if (path.toLowerCase().substr(0, route.length) !== route.toLowerCase()) {
+      return next(err);
+    }
+    ...
+    call(layer.handle, route, err, req, res, next);
+  }
+
+  next();
+}
+```
+
+  handle函数中使用闭包函数next来检测layer是否与当前路由相匹配，匹配则执行该layer上的中间件函数，否则继续检查下一个layer。
+
+  这里需要注意next中检查路由的方式可能与想象中的不太一样，所以默认路由为'/'的中间件会在每一次请求处理中都执行。
+
+```JavaScript
+function call(handle, route, err, req, res, next) {
+  var arity = handle.length;
+  var error = err;
+  var hasError = Boolean(err);
+
+  try {
+    if (hasError && arity === 4) {
+      // 错误处理中间件
+      handle(err, req, res, next);
+      return;
+    } else if (!hasError && arity < 4) {
+      // 请求处理中间件
+      handle(req, res, next);
+      return;
+    }
+  } catch (e) {
+    // 记录错误
+    error = e;
+  }
+
+  // 将错误传递下去
+  next(error);
+}
+```
+
+  在通过call方法执行中间件方法的时候，采用try/catch捕获错误，这里有一个特别需要注意的地方是，call内部会根据是否存在错误以及中间件函数的参数决定是否执行错误处理中间件。并且一旦捕获到错误，next方法会将错误传递下去，所以接下来普通的请求处理中间件即使通过了next中的路由匹配，仍然会被call方法给过滤掉。
+
+  下面是layer的处理流程图:
+
+  ![](https://user-gold-cdn.xitu.io/2018/7/19/164ae4b9519e43f4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+
+  上述就是connect中间件设计的核心要点，总结起来有如下几点：
+
+  - 通过use方法注册中间件；
+  - 中间件的顺序执行是通过next方法衔接的并且需要手动调用，在next中会进行路由匹配，从而过滤掉部分中间件；
+  - 当中间件的执行过程中发生异常，则next会携带异常过滤掉非错误处理中间件，也是为什么错误中间件会比其他中间件多一个error参数；
+  - 在请求处理的周期中，需要手动调用res.end()来结束响应；
+
+##### 2、Koa中间件的设计
+
+  Koa中间件与connect中间件的设计有很大的差异：
+
+  - Koa中间件的执行并不需要匹配路由，所以注册的中间件每一次请求都会执行。（当然还是需要手动调用next）；
+  - Koa中通过继承event，暴露error事件让开发者自定义处理异常；
+  - Koa中res.end由中间件执行完成之后自动调用，这样避免在connect忘记调用res.end导致用户得不到任何反馈。
+  - Koa中采用了async/await语法让开发者利用同步的方式编写异步代码。
+
+  当然，Koa中也是采用use方法注册中间件，相比较connect省去路由匹配的处理，就显得很简洁：
 
 ```JavaScript
 use(fn) {
@@ -188,9 +298,9 @@ use(fn) {
 }
 ```
 
-  这里可以发现use方法是可以链式调用的。
+  并且use支持链式调用。
 
-  那么中间件执行的流程是什么呢？这时就需要查看koa-compose源码：
+  Koa中间件的执行流程主要通过koa-compose中的compose函数完成：
 
 ```JavaScript
 function compose (middleware) {
@@ -215,7 +325,7 @@ function compose (middleware) {
       if (i === middleware.length) fn = next
       if (!fn) return Promise.resolve()
       try {
-        // 这里可以发现next实际上就是下一个中间件
+        // 同样通过
         return Promise.resolve(fn(context, dispatch.bind(null, i + 1))); 
       } catch (err) {
         return Promise.reject(err)
@@ -225,15 +335,31 @@ function compose (middleware) {
 }
 ```
 
-  从上述的源码中可以发现当注册中间件时，已经决定了中间件的执行顺序，并且调用next实际上就是调用下一个中间件方法，从而递归调用所有的中间件形成洋葱模型。
+  ？？？？？？？不太明白
 
 #### 四、如何进行异常处理？
 
-  try catch 只能处理同步异常
+  对于同步代码，通过try/catch可以轻松的捕获异常，在connect中间件的异常捕获则是通过try/catch完成。
 
-  Koa框架中的异常处理
+  对于异步代码，try/catch则无法捕获，这时候一般可以构造Promise链，在最后的catch方法中捕获错误，Koa就是这样处理，并且在catch方法中发送error事件，以便开发者自定义异常处理逻辑。
 
-  对于同步方式编写异步代码的另一个好处 处理异常的自然
+```JavaScript
+  this.app.emit('error', err, this);
+```
+
+  前面也谈到Koa利用async/await语法带来同步方式书写异步代码的酸爽，另外也让错误处理更加自然：
+
+```JavaScript
+// 也可以这样自定义错误处理
+app.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    ctx.status = err.status || 500
+    ctx.body = err
+  }
+})
+```
 
 #### 五、总结
 
