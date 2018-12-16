@@ -4,12 +4,12 @@
 
   本文从以下几个方面解读Koa源码：
 
-  - 如何封装创建应用程序函数？
-  - 如何扩展res和req？
-  - 如何设计中间件？
-  - 如何进行异常处理？
+  - 封装创建应用程序函数
+  - 扩展res和req
+  - 中间件实现原理
+  - 异常处理
 
-#### 一、如何封装创建应用程序函数？
+#### 一、封装创建应用程序函数
 
   利用NodeJS可以很容易编写一个简单的应用程序：
 
@@ -70,7 +70,7 @@ handleRequest(ctx, fnMiddleware) {
 }
 ```
 
-#### 二、如何扩展res和req？
+#### 二、扩展res和req
 
   首先我们要知道NodeJS中的res和req是http.IncomingMessage和http.ServerResponse的实例，那么就可以在NodeJS中这样扩展req和res:
 
@@ -173,7 +173,7 @@ function method (proto, target, name) {
 
   在上述过程的源码中涉及到很多JavaScript的基础知识，例如：原型继承、this的指向。对于基础薄弱的同学，还需要先弄懂这些基础知识。
 
-#### 三、如何设计中间件？
+#### 三、中间件实现原理
 
   首先需要明确是：中间件并不是NodeJS中的概念，它只是connect、express和koa框架衍生的概念。
 
@@ -285,7 +285,7 @@ function call(handle, route, err, req, res, next) {
   Koa中间件与connect中间件的设计有很大的差异：
 
   - Koa中间件的执行并不需要匹配路由，所以注册的中间件每一次请求都会执行。（当然还是需要手动调用next）；
-  - Koa中通过继承event，暴露error事件让开发者自定义处理异常；
+  - Koa中通过继承event，暴露error事件让开发者自定义异常处理；
   - Koa中res.end由中间件执行完成之后自动调用，这样避免在connect忘记调用res.end导致用户得不到任何反馈。
   - Koa中采用了async/await语法让开发者利用同步的方式编写异步代码。
 
@@ -325,7 +325,7 @@ function compose (middleware) {
       if (i === middleware.length) fn = next
       if (!fn) return Promise.resolve()
       try {
-        // 同样通过
+        // 递归调用下一个中间件
         return Promise.resolve(fn(context, dispatch.bind(null, i + 1))); 
       } catch (err) {
         return Promise.reject(err)
@@ -335,9 +335,16 @@ function compose (middleware) {
 }
 ```
 
-  ？？？？？？？不太明白
+  看到这里本质上connect与koa实现中间件的思想都是递归，不难看出koa相比较connect实现得更加简洁，主要原因在于：
 
-#### 四、如何进行异常处理？
+  - connect中提供路由匹配的功能，而Koa中则是相当于connect中默认的'/'路径。
+  - connect在捕获中间件的异常时，通过next携带error一个个中间件验证，直到错误处理中间件，而Koa中则是用Promise包装中间件，一旦中间件发生异常，那么会直接触发reject状态，直接在Promise的catch中处理就行。
+
+  上述就是connect中间件与Koa中间件的实现原理，现在在再看Koa中间件的这张执行流程图，应该没有什么疑问了吧？!
+
+  ![](https://github.com/koajs/koa/blob/master/docs/middleware.gif)
+
+#### 四、异常处理
 
   对于同步代码，通过try/catch可以轻松的捕获异常，在connect中间件的异常捕获则是通过try/catch完成。
 
@@ -363,6 +370,7 @@ app.use(async (ctx, next) => {
 
 #### 五、总结
 
+  相信看到这里，再回忆一下之前遇到的那些问题，你应该会有新的理解，并且再次使用Koa时会更加得心应手，这也是分析Koa源码的目的之一。
    
 
 
