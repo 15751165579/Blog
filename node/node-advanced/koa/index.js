@@ -28,26 +28,32 @@
 
 // server.listen(8080)
 
-const Koa = require('koa')
+const app = require('connect')()
 
-const app = new Koa()
-
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (err) {
-    ctx.status = err.status || 500
-    ctx.body = err
-  }
+app.use(async (req, res, next) => {
+  console.log('111')
+  const s = await sleep(2000)
+  console.log(s)
+  await next()
 })
 
-app.use(async () => {
-  throw new Error('123')
+app.use(async (req, res, next) => {
+  console.log('222')
+  await sleep(3000)
+  await next()
+  console.log('3333')
 })
 
-app.on('error', err => {
-  console.log('error事件： ' + err)
+app.use((req, res) => {
+  res.end('1111')
 })
 
-app.listen(3000)
+app.listen(8080)
 
+function sleep (ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(ms)
+    }, ms)
+  })
+}
