@@ -8,7 +8,7 @@
  * 
  */
 const debug = require('debug')('igo')
-debug.enabled = true
+debug.enabled = false
 
 // 最差的情况
 function computeOperation (N, M) {
@@ -22,8 +22,10 @@ function computeOperation (N, M) {
   let freeStorage = M * 3
   let goodsCount = N * 3
 
+  
   while (goodsCount > 0) {
     sortForBest(storage)
+    debug(storage)
     const item = storage[0]
     let empty = 0
     item.forEach(sub => {
@@ -35,12 +37,14 @@ function computeOperation (N, M) {
       // 直接放在空货道上 需要考虑是否可以释放为
       goodsCount--
       total++
+      debug('执行操作数： 1')
       storage[0].shift() // 取出货物
     } else if (empty === 1) {
       // 当前货道前面有1个空盒子
       storage[0].shift()
       storage[0].shift()
       total += 2
+      debug('执行操作数： 2')
       goodsCount--
     } else if (empty === 2) {
       // 1件货物 2个空盒子
@@ -48,17 +52,20 @@ function computeOperation (N, M) {
       storage[0].shift()
       storage[0].shift()
       total += 3
+      debug('执行操作数： 3')
       goodsCount--
     }
-    // 该货道是否可以释放为空货道 
+
+    empty += 1 // 取出的货物也变成了空盒子
+
+    // 该货道是否可以释放为空货道
     let isFree = false
     if (storage[0].length === 0) {
-      freeStorage += 3
-      storage.unshift() // 释放
+      storage.shift() // 释放
       isFree = true
+      empty -= 1
     }
     // 这时需要处理一下空盒子如何放在正在使用的货道上
-    empty += 1 // 取出的货物也变成了空盒子
     if (empty <= freeStorage) {
       freeStorage -= empty
     } else {
@@ -89,6 +96,10 @@ function computeOperation (N, M) {
         }
       }
     }
+
+    if (isFree) {
+      freeStorage += 2
+    }
   }
   return total
 }
@@ -104,8 +115,22 @@ function sortForBest (arr) {
   })
 }
 
-// for (let i = 1; i < 200; i++) {
-//   debug(computeBestOperation(i), computeOperation(i, ))
-// }
-
-debug(computeBestOperation(500), computeOperation(500, 1))
+const arr = [420]
+for (let j = 0; j < arr.length; j++) {
+  const max = arr[j]
+  const best = computeBestOperation(max)
+  let ceil = false
+  let floor = false
+  for (let i = 2; i < max / 2; i++) {
+    const count = computeOperation(max, i)
+    const ratio = count / best
+    if (ratio < 1.2 && !floor) {
+      floor = true
+      console.log(`空闲货道: ${i} ** 执行的操作 ${count}`)
+    }
+    if (count === best && !ceil) {
+      ceil = true
+      console.log(`空闲货道: ${i} ** 执行的操作 ${count}`)
+    }
+  }
+}
