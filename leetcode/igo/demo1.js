@@ -1,13 +1,67 @@
 /**
- * 无冲突的情况下，
+ * 最理想的状态
  * 
- * 预留空货道 free = Math.ceil(total / 3) 执行的操作数是 (total - free) * 3
+ * 只预留一个空闲货道，要求每次要取的货物必须是在货道的第一个位置并且该货道中货物为所有货道中最少的，
  * 
- * 每一次需要取的货都是在最少货的道上
+ * 以至于没三次取货能够预留出一个空闲的货道。
  * 
+ * 那么这样的操作数(取放算作一次操作)为：
+ * 
+ * (total - 1) * 3
+ * 
+ */
+
+/**
+ * 第一阶段：
+ * 
+ * 默认的条件仍然是要取的货物在该货道的其它商品的前面（这种情况就可能有空盒子占用在使用中的货道上）
+ * 
+ * 以 3个使用中的货道 1个预留货道为例：o表示含有含有的盒子 x表示空盒子
+ * 
+ * 第一步：1次操作
+ * o o o
+ * o o o
+ * o   o
+ * 
+ * 第二步：1次操作
+ * o o o
+ * o o o
+ * o
+ * 
+ * 第三步：1次操作（这时空闲货道已经占满）
+ * o o o
+ * o o o
+ * 
+ * 第四步：1次操作
+ * o o o
+ *   o o
+ *   x
+ * 
+ * 第五步：2次操作
+ * o o o
+ * x   o
+ * x
+ * 
+ * 第六步：3次操作，并且第一个货道变成了空闲货道
+ *   o o
+ *   x o
+ *   x
+ * 
+ * 第七步：3次操作，并且第二个货道变成了空闲货道
+ *     o
+ *     o
+ * 
+ * 第八步：1次操作
+ *     o
+ * 
+ * 第九步：1次操作 所有货物取完
+ * 
+ * 总共花费的操作数为: 1 + 1 + 1 + 1 + 2 + 3 + 3 + 1 + 1 = 14
  * 
  */
 const debug = require('debug')('igo')
+const fs = require('fs')
+const path = require('path')
 debug.enabled = false
 
 // 最差的情况
@@ -115,6 +169,10 @@ function sortForBest (arr) {
   })
 }
 
+const chartData = {
+  x: [],
+  y: []
+}
 const arr = [420]
 for (let j = 0; j < arr.length; j++) {
   const max = arr[j]
@@ -123,7 +181,10 @@ for (let j = 0; j < arr.length; j++) {
   let floor = false
   for (let i = 2; i < max / 2; i++) {
     const count = computeOperation(max, i)
+    console.log(`空闲货道: ${i} ** 执行的操作 ${count}`)
     const ratio = count / best
+    chartData.x.push(i)
+    chartData.y.push(count)
     if (ratio < 1.2 && !floor) {
       floor = true
       console.log(`空闲货道: ${i} ** 执行的操作 ${count}`)
@@ -134,3 +195,10 @@ for (let j = 0; j < arr.length; j++) {
     }
   }
 }
+
+
+fs.writeFile(path.join(__dirname, './data.json'), JSON.stringify(chartData), (err) => {
+  if (!err) {
+    console.log('写入完成')
+  }
+})
