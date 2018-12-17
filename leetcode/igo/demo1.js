@@ -169,36 +169,41 @@ function sortForBest (arr) {
   })
 }
 
-const chartData = {
-  x: [],
-  y: []
-}
-const arr = [420]
-for (let j = 0; j < arr.length; j++) {
-  const max = arr[j]
-  const best = computeBestOperation(max)
-  let ceil = false
-  let floor = false
-  for (let i = 2; i < max / 2; i++) {
-    const count = computeOperation(max, i)
-    console.log(`空闲货道: ${i} ** 执行的操作 ${count}`)
-    const ratio = count / best
-    chartData.x.push(i)
-    chartData.y.push(count)
-    if (ratio < 1.2 && !floor) {
-      floor = true
-      console.log(`空闲货道: ${i} ** 执行的操作 ${count}`)
-    }
-    if (count === best && !ceil) {
-      ceil = true
-      console.log(`空闲货道: ${i} ** 执行的操作 ${count}`)
+// 以420为例
+function start () {
+  const chartData = {
+    x: [],
+    y: []
+  }
+  const arr = [420]
+  for (let j = 0; j < arr.length; j++) {
+    const max = arr[j]
+    let ceil = false
+    let floor = false
+    for (let i = 2; i < max / 2; i++) {
+      const currentUse = max - i
+      const best = computeBestOperation(currentUse)
+      const count = computeOperation(currentUse, i)
+      const ratio = count / best
+      chartData.x.push(i)
+      chartData.y.push(count)
+      if (ratio < 1.2 && !floor) {
+        floor = true
+        console.log(`空闲货道: ${i} ** 执行的操作 ${count} 货道利用率${(currentUse / max).toFixed(2)}`)
+      }
+      if (count === best && !ceil) {
+        ceil = true
+        console.log(`空闲货道: ${i} ** 执行的操作 ${count} 货道利用率${(currentUse / max).toFixed(2)}`)
+      }
     }
   }
+  
+  
+  fs.writeFile(path.join(__dirname, './data.json'), JSON.stringify(chartData), (err) => {
+    if (!err) {
+      console.log('写入完成')
+    }
+  })
 }
 
-
-fs.writeFile(path.join(__dirname, './data.json'), JSON.stringify(chartData), (err) => {
-  if (!err) {
-    console.log('写入完成')
-  }
-})
+start()
