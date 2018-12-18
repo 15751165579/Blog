@@ -10,59 +10,10 @@
  * (total - 1) * 3
  * 
  */
-
-/**
- * 第一阶段：
- * 
- * 默认的条件仍然是要取的货物在该货道的其它商品的前面（这种情况就可能有空盒子占用在使用中的货道上）
- * 
- * 以 3个使用中的货道 1个预留货道为例：o表示含有含有的盒子 x表示空盒子
- * 
- * 第一步：1次操作
- * o o o
- * o o o
- * o   o
- * 
- * 第二步：1次操作
- * o o o
- * o o o
- * o
- * 
- * 第三步：1次操作（这时空闲货道已经占满）
- * o o o
- * o o o
- * 
- * 第四步：1次操作
- * o o o
- *   o o
- *   x
- * 
- * 第五步：2次操作
- * o o o
- * x   o
- * x
- * 
- * 第六步：3次操作，并且第一个货道变成了空闲货道
- *   o o
- *   x o
- *   x
- * 
- * 第七步：3次操作，并且第二个货道变成了空闲货道
- *     o
- *     o
- * 
- * 第八步：1次操作
- *     o
- * 
- * 第九步：1次操作 所有货物取完
- * 
- * 总共花费的操作数为: 1 + 1 + 1 + 1 + 2 + 3 + 3 + 1 + 1 = 14
- * 
- */
 const debug = require('debug')('igo')
-// const fs = require('fs')
-// const path = require('path')
-debug.enabled = true
+const fs = require('fs')
+const path = require('path')
+debug.enabled = false
 
 // 最差的情况
 function computeOperation (N, M) {
@@ -142,7 +93,7 @@ function computeOperation (N, M) {
           restStorage[minIndex].unshift(-1)
           const subMinIndex = findMinSizeStorage(restStorage)
           debug(` ****** 第二次最小的货道 ${subMinIndex} ****** `)
-          if (subMinIndex.length < 3) {
+          if (restStorage[subMinIndex].length < 3) {
             restStorage[subMinIndex].unshift(-1)
           } else {
             throw new Error('空盒数量出现问题')
@@ -164,17 +115,76 @@ function computeOperation (N, M) {
 
 // 找出货道中盒子最少的道
 function findMinSizeStorage  (storage) {
-  let count = 3, minIndex = -1
+  let count = 4, minIndex = -1
   for (let i = 0; i < storage.length; i++) {
     const size = storage[i].length
+    // 放在最小的货道上
     if (size < count) {
       count = size
       minIndex = i
     }
+    // 放在最大的上面
+    // if (size >= count && size < 3) {
+    //   count = size
+    //   minIndex = i
+    // }
   }
   if (minIndex < 0) {
     throw new Error('系统当前没有可收纳的空余位置')
   }
   return minIndex
 }
-console.log(computeOperation(3, 1))
+
+const data = {
+  x: [],
+  y: []
+}
+
+function start () {
+  const total = 420
+
+  for (let i = 1; i < 210; i++) {
+    let temp = 0
+    // 执行1000次 取平均值
+    for (let j = 0; j < 10; j++) {
+      const count = computeOperation(total - i, i)
+      temp += count
+    }
+    data.x.push(i)
+    data.y.push(temp / 10)
+    const best = (total - i) * 3
+    const ratio = (temp/ 10 / best).toFixed(1)
+    if (ratio == 1.2) {
+      console.log(`操作数为1.2时需要的空货道: ${i}`)
+    }
+    if (ratio == 1.0) {
+      console.log(`操作数为1.0时需要的空货道: ${i}`)
+    }
+  }
+
+  fs.writeFile(path.join(__dirname, './data.json'), JSON.stringify(data), err => {
+    if (!err) {
+      console.log('数据记录完成')
+    }
+  })
+}
+
+start()
+
+// fs.readFile(path.join(__dirname, './data.json'), { encoding: 'utf8'}, (err, response) => {
+//   const data = JSON.parse(response)
+//   const { x, y } = data
+//   const z = []
+//   for (let i = 0; i < x.length; i++) {
+//     const item = x[i]
+//     const best = (420 - item) * 3
+//     const ratio = (y[i] / best).toFixed(2)
+//     z.push(ratio)
+//   }
+
+//   fs.writeFile(path.join(__dirname, './some.json'), JSON.stringify({ x, z }), err => {
+//     if (!err) {
+//       console.log('数据记录完成')
+//     }
+//   })
+// })
