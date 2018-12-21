@@ -4,10 +4,11 @@ debug.enabled = false
  * @param storage 整个货道的盒子分布
  * @param usedStorageCount 存在商品的货道数量
  * @param freeStorageCount 不存在商品的货道数量
+ * @param storagePositionCount 每个货道的商品数量
  */
-function computeOperation (storage, usedStorageCount, freeStorageCount) {
+function computeOperation (storage, usedStorageCount, freeStorageCount, storagePositionCount) {
   let total = 0
-  let freeStoragePositionCount = freeStorageCount * 3
+  let freeStoragePositionCount = freeStorageCount * storagePositionCount
 
   while (storage.length > 0) {
     /* 随机取出一件货物 但是默认是在最前面 */
@@ -25,26 +26,13 @@ function computeOperation (storage, usedStorageCount, freeStorageCount) {
       }
     })
 
-    if (empty === 0) {
-      // 直接放在空货道上 需要考虑是否可以释放为
+    let start = empty
+    do {
       total++
-      storage[index].shift() // 取出货物
-      debug(' --------- 操作数 1 ')
-    } else if (empty === 1) {
-      // 当前货道前面有1个空盒子
-      storage[index].shift()
-      storage[index].shift()
-      total += 2
-      debug(' --------- 操作数 2 ')
-    } else if (empty === 2) {
-      // 1件货物 2个空盒子
-      storage[index].shift()
-      storage[index].shift()
-      storage[index].shift()
-      total += 3
-      debug(' --------- 操作数 3 ')
-    }
-
+      storage[index].pop()
+      start--
+    } while ( start >= 0)
+    debug(`操作数 ${empty + 1}`)
     empty += 1 // 取出的货物也变成了空盒子
 
     // 该货道是否可以释放为空货道
@@ -73,12 +61,12 @@ function computeOperation (storage, usedStorageCount, freeStorageCount) {
         const nextStorage = storage[next]
         
         while (preStorage && preStorage.length < 3 && empty > 0) {
-          preStorage.unshift(-1)
+          preStorage.push(-1)
           empty--
         }
 
         while (nextStorage && nextStorage.length < 3 && empty > 0) {
-          nextStorage.unshift(-1)
+          nextStorage.push(-1)
           empty--
         }
 
@@ -90,7 +78,7 @@ function computeOperation (storage, usedStorageCount, freeStorageCount) {
 
     if (isFree) {
       storage.splice(index, 1) // 释放
-      freeStoragePositionCount += 2
+      freeStoragePositionCount += (storagePositionCount - 1)
     }
   }
   return total
