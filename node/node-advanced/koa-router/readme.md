@@ -19,9 +19,9 @@
   &emsp;&emsp;接下来从以下几个方面全面解析koa-router的实现原理：
 
   - Layer对象的实现
-  - 路由的注册
-  - 路由的验证
-  - 路由的执行流程
+  - 路由注册
+  - 路由验证
+  - 路由执行流程
   - 其他注意事项
 
 #### 三、Layer
@@ -153,4 +153,148 @@ Layer.prototype.setPrefix = function (prefix) {
 
   &emsp;&emsp;最后，Layer还提供了根据路由生成url的方法，主要采用[path-to-regexp](https://github.com/pillarjs/path-to-regexp)的compile和parse对路径中的param进行替换，而在拼接query的环节，正如前面所说需要对键值对进行繁琐的encodeURIComponent操作，作者采用了[urijs](https://github.com/medialize/URI.js)提供的简洁api进行处理。
 
+#### 四、路由注册
 
+##### 1、Router构造函数
+
+  &emsp;&emsp;首先看了解一下Router构造函数：
+
+```JavaScript
+function Router(opts) {
+  if (!(this instanceof Router)) {
+    // 限制必须采用new关键字
+    return new Router(opts);
+  }
+
+  this.opts = opts || {};
+  this.methods = this.opts.methods || [
+    'HEAD',
+    'OPTIONS',
+    'GET',
+    'PUT',
+    'PATCH',
+    'POST',
+    'DELETE'
+  ];
+
+  this.params = {}; // 保存param前置处理函数
+  this.stack = []; // 存储layer
+};
+```
+
+  &emsp;&emsp;在构造函数中初始化的params和stack属性最为重要，前者用来保存param前置处理函数，后者用来保存实例化的Layer对象。
+
+  &emsp;&emsp;而上述这两个属性与接下来要讲的路由注册也是息息相关。
+
+  &emsp;&emsp;koa-router中提供两种方式注册路由：
+
+  - 具体的HTTP动词，例如：router.get('/users', ctx => {})
+  - 支持所有的HTTP动词，例如：router.all('/users', ctx => {})
+
+##### 2、http METHODS
+
+  &emsp;&emsp;源码中采用[methods](https://github.com/jshttp/methods/blob/master/index.js)模块获取HTTP标准方法名，该模块内部实现主要依赖于http模块：
+
+```JavaScript
+http.METHODS && http.METHODS.map(function lowerCaseMethod (method) {
+  return method.toLowerCase()
+})
+```
+
+##### 3、router.verb() and router.all()
+
+  &emsp;&emsp;这两种注册路由的方式的内部实现基本类似，下面以router.verb()的源码为例：
+
+```JavaScript
+methods.forEach(function (method) {
+  Router.prototype[method] = function (name, path, middleware) {
+    var middleware;
+
+    // 1、处理是否传入name参数
+    // 2、middleware参数支持middleware1, middleware2...的形式
+    if (typeof path === 'string' || path instanceof RegExp) {
+      middleware = Array.prototype.slice.call(arguments, 2);
+    } else {
+      middleware = Array.prototype.slice.call(arguments, 1);
+      path = name;
+      name = null;
+    }
+    
+    // 路由注册的核心处理逻辑
+    this.register(path, [method], middleware, {
+      name: name
+    });
+
+    return this;
+  };
+});
+```
+
+  &emsp;&emsp;该方法第一部分是对传入参数的处理，可能对于middleware参数的处理会让大家联想到ES6中的rest参数，但是rest参数与arguments其中一个致命的区别：
+
+```s
+  rest参数只包含那些没有对应形参的实参，而arguments则包含传给函数的所有实参。
+```
+
+  &emsp;&emsp;如果采用rest参数的方式，上述函数则必须要求开发者传入name参数。但是也可以将name和path参数整合成对象，再结合rest参数：
+
+```JavaScript
+Router.prototype[method] = function (options, ...middleware) {
+  let { name, path } = options
+  if (typeof options === 'string' || options instanceof RegExp) {
+    path = options
+    name = null
+  }
+  // ...
+  return this;
+};
+```
+
+  &emsp;&emsp;采用ES6的新特性，代码变得简洁多了。
+
+  &emsp;&emsp;第二部分是register方法，传入的method形参就是router.verb()与router.all()的最大区别，在router.verb()中可以发现传入的method是单个方法，后者则是传入HTTP所有方法的数组，所以对于这两种注册方法的实现，本质上是没有区别的。
+
+##### 4、register
+
+```JavaScript
+Router.prototype.register = function (path, methods, middleware, opts) {
+  opts = opts || {};
+
+  var router = this;
+  var stack = this.stack;
+
+  // 注册路由中间件时，允许path为数组
+  if (Array.isArray(path)) {
+    path.forEach(function (p) {
+      router.register.call(router, p, methods, middleware, opts);
+    });
+    return this;
+  }
+
+  // 实例化Layer
+  var route = new Layer(path, methods, middleware, {
+    end: opts.end === false ? opts.end : true,
+    name: opts.name,
+    sensitive: opts.sensitive || this.opts.sensitive || false,
+    strict: opts.strict || this.opts.strict || false,
+    prefix: opts.prefix || this.opts.prefix || "",
+    ignoreCaptures: opts.ignoreCaptures
+  });
+
+  // 设置前缀
+  if (this.opts.prefix) {
+    route.setPrefix(this.opts.prefix);
+  }
+
+  // 设置param前置处理函数
+  Object.keys(this.params).forEach(function (param) {
+    route.param(param, this.params[param]);
+  }, this);
+
+  stack.push(route);
+
+  return route;
+};
+```
+
+  &emsp;&emsp;register方法主要负责实例化Layer、更新路由前缀和前置param处理函数，这些操作在Layer中已经提及过，相信大家应该轻车熟路了。
