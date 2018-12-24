@@ -26,6 +26,8 @@
 
 #### 三、Layer
 
+  &emsp;&emsp;Layer对象主要是对单个路由的管理，是整个koa-router中最小的处理单元，后续模块的处理中都离不开Layer中的方法，这正是首先介绍Layer的重要原因。
+
 ```JavaScript
 function Layer(path, methods, middleware, opts) {
   this.opts = opts || {};
