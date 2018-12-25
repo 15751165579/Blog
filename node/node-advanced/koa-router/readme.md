@@ -12,7 +12,7 @@
 
   &emsp;&emsp;koa-router的源码只有两个文件：router.js和layer.js，分别对应Router对象和Layer对象。
 
-  &emsp;&emsp;Layer对象是对单个路由的管理，其中包含的信息有路由的路径(path)、HTTP请求方法(method)和执行函数(middleware)，并且提供路由的验证以及params参数解析的方法。
+  &emsp;&emsp;Layer对象是对单个路由的管理，其中包含的信息有路由路径(path)、路由请求方法(method)和执行函数(middleware)，并且提供路由的验证以及params参数解析的方法。
 
   &emsp;&emsp;相比较Layer对象，Router对象则是对所有注册路由的统一处理，并且它的API是面向开发者的。
 
@@ -20,7 +20,7 @@
 
   - Layer对象的实现
   - 路由注册
-  - 路由验证
+  - 路由匹配
   - 路由执行流程
   - 其他注意事项
 
@@ -57,12 +57,12 @@ function Layer(path, methods, middleware, opts) {
   }, this);
 
   this.path = path;
-  // 将路径字符串转化为路由正则表达式，并且将params参数信息保存在paramNames数组中
+  // 将路由路径转化为路由正则表达式，并且将params参数信息保存在paramNames数组中
   this.regexp = pathToRegExp(path, this.paramNames, this.opts);
 };
 ```
 
-  &emsp;&emsp;Layer构造函数主要用来初始化路由的路径、HTTP请求方法数组、执行方法数组、路由的正则表达式以及params参数信息数组，其中主要采用[path-to-regexp](https://github.com/pillarjs/path-to-regexp)方法根据路径字符串生成正则表达式，通过该正则表达式，可以实现路由的匹配以及params参数的捕获：
+  &emsp;&emsp;Layer构造函数主要用来初始化路由路径、路由请求方法数组、路由处理函数数组、路由路径的正则表达式以及params参数信息数组，其中主要采用[path-to-regexp](https://github.com/pillarjs/path-to-regexp)方法根据路径字符串生成正则表达式，通过该正则表达式，可以实现路由的匹配以及params参数的捕获：
 
 ```JavaScript
 // 验证路由
@@ -141,17 +141,17 @@ Layer.prototype.param = function (param, fn) {
 ```JavaScript
 Layer.prototype.setPrefix = function (prefix) {
   if (this.path) {
-    this.path = prefix + this.path; // 拼接新的路径
+    this.path = prefix + this.path; // 拼接新的路由路径
     this.paramNames = [];
-    // 根据新的路径字符串生成正则表达式
+    // 根据新的路由路径字符串生成正则表达式
     this.regexp = pathToRegExp(this.path, this.paramNames, this.opts);
   }
   return this;
 };
 ```
-  &emsp;&emsp;Layer中的setPrefix方法用于设置路径的前缀，这对于路由模块化的管理非常的有用。
+  &emsp;&emsp;Layer中的setPrefix方法用于设置路由路径的前缀，这对于路由模块化的管理非常的有用。
 
-  &emsp;&emsp;最后，Layer还提供了根据路由生成url的方法，主要采用[path-to-regexp](https://github.com/pillarjs/path-to-regexp)的compile和parse对路径中的param进行替换，而在拼接query的环节，正如前面所说需要对键值对进行繁琐的encodeURIComponent操作，作者采用了[urijs](https://github.com/medialize/URI.js)提供的简洁api进行处理。
+  &emsp;&emsp;最后，Layer还提供了根据路由生成url的方法，主要采用[path-to-regexp](https://github.com/pillarjs/path-to-regexp)的compile和parse对路由路径中的param进行替换，而在拼接query的环节，正如前面所说需要对键值对进行繁琐的encodeURIComponent操作，作者采用了[urijs](https://github.com/medialize/URI.js)提供的简洁api进行处理。
 
 #### 四、路由注册
 
@@ -295,6 +295,121 @@ Router.prototype.register = function (path, methods, middleware, opts) {
 
   return route;
 };
+
 ```
 
   &emsp;&emsp;register方法主要负责实例化Layer、更新路由前缀和前置param处理函数，这些操作在Layer中已经提及过，相信大家应该轻车熟路了。
+
+##### 5、use
+
+  &emsp;&emsp;熟悉Koa的同学都知道use是用来注册中间件的方法，相比较Koa中的全局中间件，koa-router的中间件则是路由级别的。
+
+```JavaScript
+Router.prototype.use = function () {
+  var router = this;
+  var middleware = Array.prototype.slice.call(arguments);
+  var path;
+
+  // 支持多路径在于中间件可能作用于多条路由路径
+  if (Array.isArray(middleware[0]) && typeof middleware[0][0] === 'string') {
+    middleware[0].forEach(function (p) {
+      router.use.apply(router, [p].concat(middleware.slice(1)));
+    });
+
+    return this;
+  }
+  // 处理路由路径参数
+  var hasPath = typeof middleware[0] === 'string';
+  if (hasPath) {
+    path = middleware.shift();
+  }
+
+  middleware.forEach(function (m) {
+    // 嵌套路由
+    if (m.router) {
+      // 嵌套路由扁平化处理
+      m.router.stack.forEach(function (nestedLayer) {
+        // 更新嵌套之后的路由路径
+        if (path) nestedLayer.setPrefix(path);
+        // 更新挂载到父路由上的路由路径
+        if (router.opts.prefix) nestedLayer.setPrefix(router.opts.prefix);
+
+        router.stack.push(nestedLayer);
+      }); 
+
+      // 不要忘记将父路由上的param前置处理操作 更新到新路由上。
+      if (router.params) {
+        Object.keys(router.params).forEach(function (key) {
+          m.router.param(key, router.params[key]);
+        });
+      }
+    } else {
+      // 路由级别中间件 创建一个没有method的Layer实例
+      router.register(path || '(.*)', [], m, { end: false, ignoreCaptures: !hasPath });
+    }
+  });
+
+  return this;
+};
+```
+
+  &emsp;&emsp;koa-router中间件注册方法主要完成两种功能：
+
+  - 将路由嵌套结构扁平化，其中涉及到路由路径的更新和param前置处理函数的插入；
+  - 路由级别中间件通过注册一个没有method的Layer实例进行管理。
+
+#### 五、路由匹配
+
+```JavaScript
+Router.prototype.match = function (path, method) {
+  var layers = this.stack;
+  var layer;
+  var matched = {
+    path: [],
+    pathAndMethod: [],
+    route: false
+  };
+
+  for (var len = layers.length, i = 0; i < len; i++) {
+    layer = layers[i];
+    if (layer.match(path)) {
+      // 路由路径满足要求
+      matched.path.push(layer);
+
+      if (layer.methods.length === 0 || ~layer.methods.indexOf(method)) {
+        // layer.methods.length === 0 该layer为路由级别中间件
+        // ~layer.methods.indexOf(method) 路由请求方法也被匹配
+        matched.pathAndMethod.push(layer);
+        // 仅当路由路径和路由请求方法都被满足才算是路由被匹配
+        if (layer.methods.length) matched.route = true;
+      }
+    }
+  }
+  return matched;
+};
+```
+
+  &emsp;&emsp;match方法主要通过layer.match方法以及methods属性对layer进行筛选，返回的matched对象包含以下几个部分：
+
+  - path: 保存所有路由路径被匹配的layer；
+  - pathAndMethod: 在路由路径被匹配的前提下，保存路由级别中间件和路由请求方法被匹配的layer；
+  - route: 仅当存在路由路径和路由请求方法都被匹配的layer，才能算是本次路由被匹配上。
+
+  &emsp;&emsp;另外，在ES7之前，对于判断数组是否包含一个元素，都需要通过indexOf方法来实现， 而该方法返回元素的下标，这样就不得不通过与-1的比较得到布尔值：
+
+```JavaScript
+  if (layer.methods.indexOf(method) > -1) {
+    ...
+  }
+```
+
+  &emsp;&emsp;而作者巧妙地利用位运算省去了“讨厌的-1”，当然在ES7中可以愉快地使用includes方法：
+
+```JavaScript
+  if (layer.methods.includes(method)) {
+    ...
+  }
+```
+
+#### 六、路由执行流程
+
