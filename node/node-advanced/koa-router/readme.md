@@ -1,10 +1,8 @@
-# 玩转Koa -- 路由中间件原理解析
+# 玩转Koa -- koa-router原理解析
 
 #### 一、前言
 
-  &emsp;&emsp;Koa为了保持自身的简洁，并没有捆绑中间件。
-
-  &emsp;&emsp;但在实际的开发中，我们需要和形形色色的中间件打交道，本文将要分析的便是经常用到的路由中间件 -- koa-router。
+  &emsp;&emsp;Koa为了保持自身的简洁，并没有捆绑中间件。但是在实际的开发中，我们需要和形形色色的中间件打交道，本文将要分析的是经常用到的路由中间件 -- koa-router。
 
   &emsp;&emsp;如果你对Koa的原理还不了解的话，可以先查看[Koa原理解析](https://juejin.im/post/5c1631eff265da615f772b59)。
 
@@ -12,7 +10,7 @@
 
   &emsp;&emsp;koa-router的源码只有两个文件：router.js和layer.js，分别对应Router对象和Layer对象。
 
-  &emsp;&emsp;Layer对象是对单个路由的管理，其中包含的信息有路由路径(path)、路由请求方法(method)和执行函数(middleware)，并且提供路由的验证以及params参数解析的方法。
+  &emsp;&emsp;Layer对象是对单个路由的管理，其中包含的信息有路由路径(path)、路由请求方法(method)和路由执行函数(middleware)，并且提供路由的验证以及params参数解析的方法。
 
   &emsp;&emsp;相比较Layer对象，Router对象则是对所有注册路由的统一处理，并且它的API是面向开发者的。
 
@@ -22,11 +20,10 @@
   - 路由注册
   - 路由匹配
   - 路由执行流程
-  - 其他
 
 #### 三、Layer
 
-  &emsp;&emsp;Layer对象主要是对单个路由的管理，是整个koa-router中最小的处理单元，后续模块的处理中都离不开Layer中的方法，这正是首先介绍Layer的重要原因。
+  &emsp;&emsp;Layer对象主要是对单个路由的管理，是整个koa-router中最小的处理单元，后续模块的处理都离不开Layer中的方法，这正是首先介绍Layer的重要原因。
 
 ```JavaScript
 function Layer(path, methods, middleware, opts) {
@@ -57,12 +54,13 @@ function Layer(path, methods, middleware, opts) {
   }, this);
 
   this.path = path;
-  // 将路由路径转化为路由正则表达式，并且将params参数信息保存在paramNames数组中
+  // 1、根据路由路径生成路由正则表达式
+  // 2、将params参数信息保存在paramNames数组中
   this.regexp = pathToRegExp(path, this.paramNames, this.opts);
 };
 ```
 
-  &emsp;&emsp;Layer构造函数主要用来初始化路由路径、路由请求方法数组、路由处理函数数组、路由路径的正则表达式以及params参数信息数组，其中主要采用[path-to-regexp](https://github.com/pillarjs/path-to-regexp)方法根据路径字符串生成正则表达式，通过该正则表达式，可以实现路由的匹配以及params参数的捕获：
+  &emsp;&emsp;Layer构造函数主要用来初始化路由路径、路由请求方法数组、路由处理函数数组、路由正则表达式以及params参数信息数组，其中主要采用[path-to-regexp](https://github.com/pillarjs/path-to-regexp)方法根据路径字符串生成正则表达式，通过该正则表达式，可以实现路由的匹配以及params参数的捕获：
 
 ```JavaScript
 // 验证路由
@@ -72,6 +70,7 @@ Layer.prototype.match = function (path) {
 
 // 捕获params参数
 Layer.prototype.captures = function (path) {
+  // 后续会提到 对于路由级别中间件 无需捕获params
   if (this.opts.ignoreCaptures) return [];
   return path.match(this.regexp).slice(1);
 }
@@ -92,7 +91,7 @@ Layer.prototype.params = function (path, captures, existingParams) {
 };
 ```
 
-  &emsp;&emsp;需要注意上述代码中的safeDecodeURIComponent，为了避免服务器收到不可预知的请求，对于任何用户输入的作为URI部分的内容都需要采用encodeURIComponent进行转义，否则当用户输入的内容中含有'&'、'='、'?'等字符时，会出现预料之外的情况。而当我们获取URL上的参数时，则需要通过decodeURIComponent进行解码，而decodeURIComponent只能解码由encodeURIComponent方法或者类似方法编码，如果编码方法不符合要求，decodeURIComponent则会抛出URIError，所以作者在这里对该方法进行了安全化的处理：
+  &emsp;&emsp;需要注意上述代码中的safeDecodeURIComponent方法，为了避免服务器收到不可预知的请求，对于任何用户输入的作为URI部分的内容都需要采用encodeURIComponent进行转义，否则当用户输入的内容中含有'&'、'='、'?'等字符时，会出现预料之外的情况。而当我们获取URL上的参数时，则需要通过decodeURIComponent进行解码，而decodeURIComponent只能解码由encodeURIComponent方法或者类似方法编码，如果编码方法不符合要求，decodeURIComponent则会抛出URIError，所以作者在这里对该方法进行了安全化的处理：
 
 ```JavaScript
 function safeDecodeURIComponent(text) {
@@ -149,7 +148,7 @@ Layer.prototype.setPrefix = function (prefix) {
   return this;
 };
 ```
-  &emsp;&emsp;Layer中的setPrefix方法用于设置路由路径的前缀，这对于路由模块化的管理非常的有用。
+  &emsp;&emsp;Layer中的setPrefix方法用于设置路由路径的前缀，这在嵌套路由的实现中尤其重要。
 
   &emsp;&emsp;最后，Layer还提供了根据路由生成url的方法，主要采用[path-to-regexp](https://github.com/pillarjs/path-to-regexp)的compile和parse对路由路径中的param进行替换，而在拼接query的环节，正如前面所说需要对键值对进行繁琐的encodeURIComponent操作，作者采用了[urijs](https://github.com/medialize/URI.js)提供的简洁api进行处理。
 
@@ -167,6 +166,7 @@ function Router(opts) {
   }
 
   this.opts = opts || {};
+  // 服务器支持的请求方法， 后续allowedMethods方法会用到
   this.methods = this.opts.methods || [
     'HEAD',
     'OPTIONS',
@@ -182,18 +182,16 @@ function Router(opts) {
 };
 ```
 
-  &emsp;&emsp;在构造函数中初始化的params和stack属性最为重要，前者用来保存param前置处理函数，后者用来保存实例化的Layer对象。
-
-  &emsp;&emsp;而上述这两个属性与接下来要讲的路由注册也是息息相关。
+  &emsp;&emsp;在构造函数中初始化的params和stack属性最为重要，前者用来保存param前置处理函数，后者用来保存实例化的Layer对象。并且这两个属性与接下来要讲的路由注册息息相关。
 
   &emsp;&emsp;koa-router中提供两种方式注册路由：
 
-  - 具体的HTTP动词，例如：router.get('/users', ctx => {})
-  - 支持所有的HTTP动词，例如：router.all('/users', ctx => {})
+  - 具体的HTTP动词注册方式，例如：router.get('/users', ctx => {})
+  - 支持所有的HTTP动词注册方式，例如：router.all('/users', ctx => {})
 
 ##### 2、http METHODS
 
-  &emsp;&emsp;源码中采用[methods](https://github.com/jshttp/methods/blob/master/index.js)模块获取HTTP标准方法名，该模块内部实现主要依赖于http模块：
+  &emsp;&emsp;源码中采用[methods](https://github.com/jshttp/methods/blob/master/index.js)模块获取HTTP请求方法名，该模块内部实现主要依赖于http模块：
 
 ```JavaScript
 http.METHODS && http.METHODS.map(function lowerCaseMethod (method) {
@@ -230,7 +228,7 @@ methods.forEach(function (method) {
 });
 ```
 
-  &emsp;&emsp;该方法第一部分是对传入参数的处理，可能对于middleware参数的处理会让大家联想到ES6中的rest参数，但是rest参数与arguments其中一个致命的区别：
+  &emsp;&emsp;该方法第一部分是对传入参数的处理，对于middleware参数的处理会让大家联想到ES6中的rest参数，但是rest参数与arguments其中一个致命的区别：
 
 ```s
   rest参数只包含那些没有对应形参的实参，而arguments则包含传给函数的所有实参。
@@ -252,7 +250,7 @@ Router.prototype[method] = function (options, ...middleware) {
 
   &emsp;&emsp;采用ES6的新特性，代码变得简洁多了。
 
-  &emsp;&emsp;第二部分是register方法，传入的method形参就是router.verb()与router.all()的最大区别，在router.verb()中可以发现传入的method是单个方法，后者则是传入HTTP所有方法的数组，所以对于这两种注册方法的实现，本质上是没有区别的。
+  &emsp;&emsp;第二部分是register方法，传入的method参数的形式就是router.verb()与router.all()的最大区别，在router.verb()中传入的method是单个方法，后者则是以数组的形式传入HTTP所有的请求方法，所以对于这两种注册方法的实现，本质上是没有区别的。
 
 ##### 4、register
 
@@ -298,7 +296,7 @@ Router.prototype.register = function (path, methods, middleware, opts) {
 
 ```
 
-  &emsp;&emsp;register方法主要负责实例化Layer、更新路由前缀和前置param处理函数，这些操作在Layer中已经提及过，相信大家应该轻车熟路了。
+  &emsp;&emsp;register方法主要负责实例化Layer对象、更新路由前缀和前置param处理函数，这些操作在Layer中已经提及过，相信大家应该轻车熟路了。
 
 ##### 5、use
 
@@ -353,7 +351,7 @@ Router.prototype.use = function () {
 };
 ```
 
-  &emsp;&emsp;koa-router中间件注册方法主要完成两种功能：
+  &emsp;&emsp;koa-router中间件注册方法主要完成两项功能：
 
   - 将路由嵌套结构扁平化，其中涉及到路由路径的更新和param前置处理函数的插入；
   - 路由级别中间件通过注册一个没有method的Layer实例进行管理。
@@ -415,7 +413,7 @@ Router.prototype.match = function (path, method) {
 
   &emsp;&emsp;理解koa-router中路由的概念以及路由注册的方式，接下来就是如何作为一个中间件在koa中执行。
 
-  &emsp;&emsp;koa中注册koa-router中间件的方式：
+  &emsp;&emsp;koa中注册koa-router中间件的方式如下：
 
 ```JavaScript
 const Koa = require('koa');
@@ -460,7 +458,7 @@ Router.prototype.allowedMethods = function (options) {
           if (options.throw) {
             var notImplementedThrowable;
             if (typeof options.notImplemented === 'function') {
-              notImplementedThrowable = options.notImplemented(); // set whatever the user returns from their function
+              notImplementedThrowable = options.notImplemented();
             } else {
               notImplementedThrowable = new HttpError.NotImplemented();
             }
@@ -472,7 +470,7 @@ Router.prototype.allowedMethods = function (options) {
           }
         } else if (allowedArr.length) {
           if (ctx.method === 'OPTIONS') {
-            // 获取服务器对改路由路径的方法支持
+            // 获取服务器对该路由路径支持的方法集合
             ctx.status = 200;
             ctx.body = '';
             ctx.set('Allow', allowedArr.join(', '));
@@ -480,7 +478,7 @@ Router.prototype.allowedMethods = function (options) {
             if (options.throw) {
               var notAllowedThrowable;
               if (typeof options.methodNotAllowed === 'function') {
-                notAllowedThrowable = options.methodNotAllowed(); // set whatever the user returns from their function
+                notAllowedThrowable = options.methodNotAllowed();
               } else {
                 notAllowedThrowable = new HttpError.MethodNotAllowed();
               }
@@ -498,7 +496,7 @@ Router.prototype.allowedMethods = function (options) {
 };
 ```
 
-  &emsp;&emsp;allowedMethods()中间件主要用于处理options请求，响应405和501状态。上述代码中的ctx.matched中保存的正是前面matched对象中的path（在routes方法中设置，后面会提到。），当matched对象中的path不为空时：
+  &emsp;&emsp;allowedMethods()中间件主要用于处理options请求，响应405和501状态。上述代码中的ctx.matched中保存的正是前面matched对象中的path（在routes方法中设置，后面会提到。），在matched对象中的path数组不为空的前提条件下：
 
   - 服务器不支持当前请求方法，返回501状态码；
   - 当前请求方法为OPTIONS，返回200状态码；
@@ -554,17 +552,17 @@ Router.prototype.routes = Router.prototype.middleware = function () {
 };
 ```
 
-  &emsp;&emsp;routes中间件主要实现了四大功能。
+  &emsp;&emsp;routes()中间件主要实现了四大功能。
 
   * 将matched对象的path属性挂载在ctx.matched上，提供给后续的allowedMethods中间件使用。（见代码中的【1】）
 
   * 将返回的dispatch函数设置router属性，以便在前面提到的Router.prototype.use方法中区别路由级别中间件和嵌套路由。（见代码中的【2】）
 
-  * 插入一个新的路由前置处理中间件，将layer解析出来的params对象、路由别名已经捕获数组挂载在ctx上下文中，这种操作同理Koa在处理请求之前先构建context对象。（见代码中的【3】）
+  * 插入一个新的路由前置处理中间件，将layer解析出来的params对象、路由别名以及捕获数组挂载在ctx上下文中，这种操作同理Koa在处理请求之前先构建context对象。（见代码中的【3】）
 
   * 而对于路由匹配到众多layer，koa-router通过koa-compose进行处理，这和[koa对于中间件处理的方式](https://juejin.im/post/5c1631eff265da615f772b59)一样的，所以koa-router完全就是一个小型洋葱模型。
 
 
-#### 七、其他
+#### 七、总结
 
   &emsp;&emsp;
