@@ -22,7 +22,7 @@
   - 路由注册
   - 路由匹配
   - 路由执行流程
-  - 其他注意事项
+  - 其他
 
 #### 三、Layer
 
@@ -413,3 +413,158 @@ Router.prototype.match = function (path, method) {
 
 #### 六、路由执行流程
 
+  &emsp;&emsp;理解koa-router中路由的概念以及路由注册的方式，接下来就是如何作为一个中间件在koa中执行。
+
+  &emsp;&emsp;koa中注册koa-router中间件的方式：
+
+```JavaScript
+const Koa = require('koa');
+const Router = require('koa-router');
+
+const app = new Koa();
+const router = new Router();
+
+router.get('/', (ctx, next) => {
+  // ctx.router available
+});
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods());
+```
+
+  &emsp;&emsp;从代码中可以看出koa-router提供了两个中间件方法：routes和allowedMethods。
+
+##### 1、allowedMethods()
+
+```JavaScript
+Router.prototype.allowedMethods = function (options) {
+  options = options || {};
+  var implemented = this.methods;
+
+  return function allowedMethods(ctx, next) {
+    return next().then(function() {
+      var allowed = {};
+
+      if (!ctx.status || ctx.status === 404) {
+        ctx.matched.forEach(function (route) {
+          route.methods.forEach(function (method) {
+            allowed[method] = method;
+          });
+        });
+
+        var allowedArr = Object.keys(allowed);
+
+        if (!~implemented.indexOf(ctx.method)) {
+          // 服务器不支持该方法的情况
+          if (options.throw) {
+            var notImplementedThrowable;
+            if (typeof options.notImplemented === 'function') {
+              notImplementedThrowable = options.notImplemented(); // set whatever the user returns from their function
+            } else {
+              notImplementedThrowable = new HttpError.NotImplemented();
+            }
+            throw notImplementedThrowable;
+          } else {
+            // 响应 501 Not Implemented
+            ctx.status = 501;
+            ctx.set('Allow', allowedArr.join(', '));
+          }
+        } else if (allowedArr.length) {
+          if (ctx.method === 'OPTIONS') {
+            // 获取服务器对改路由路径的方法支持
+            ctx.status = 200;
+            ctx.body = '';
+            ctx.set('Allow', allowedArr.join(', '));
+          } else if (!allowed[ctx.method]) {
+            if (options.throw) {
+              var notAllowedThrowable;
+              if (typeof options.methodNotAllowed === 'function') {
+                notAllowedThrowable = options.methodNotAllowed(); // set whatever the user returns from their function
+              } else {
+                notAllowedThrowable = new HttpError.MethodNotAllowed();
+              }
+              throw notAllowedThrowable;
+            } else {
+              // 响应 405 Method Not Allowed
+              ctx.status = 405;
+              ctx.set('Allow', allowedArr.join(', '));
+            }
+          }
+        }
+      }
+    });
+  };
+};
+```
+
+  &emsp;&emsp;allowedMethods()中间件主要用于处理options请求，响应405和501状态。上述代码中的ctx.matched中保存的正是前面matched对象中的path（在routes方法中设置，后面会提到。），当matched对象中的path不为空时：
+
+  - 服务器不支持当前请求方法，返回501状态码；
+  - 当前请求方法为OPTIONS，返回200状态码；
+  - path中的layer不支持该方法，返回405状态；
+  - 对于上述三种情况，服务器都会设置Allow响应头，返回该路由路径上支持的请求方法。
+
+##### 2、routes()
+
+```JavaScript
+Router.prototype.routes = Router.prototype.middleware = function () {
+  var router = this;
+  // 返回中间件处理函数
+  var dispatch = function dispatch(ctx, next) {
+    var path = router.opts.routerPath || ctx.routerPath || ctx.path;
+    var matched = router.match(path, ctx.method);
+    var layerChain, layer, i;
+
+    // 【1】为后续的allowedMethods中间件准备
+    if (ctx.matched) {
+      ctx.matched.push.apply(ctx.matched, matched.path);
+    } else {
+      ctx.matched = matched.path;
+    }
+
+    ctx.router = router;
+
+    // 未匹配路由 直接跳过
+    if (!matched.route) return next();
+
+    var matchedLayers = matched.pathAndMethod
+    var mostSpecificLayer = matchedLayers[matchedLayers.length - 1]
+    ctx._matchedRoute = mostSpecificLayer.path;
+    if (mostSpecificLayer.name) {
+      ctx._matchedRouteName = mostSpecificLayer.name;
+    }
+    layerChain = matchedLayers.reduce(function(memo, layer) {
+      // 【3】路由的前置处理中间件 主要负责将params、路由别名以及捕获数组属性挂载在ctx上下文对象中。
+      memo.push(function(ctx, next) {
+        ctx.captures = layer.captures(path, ctx.captures);
+        ctx.params = layer.params(path, ctx.captures, ctx.params);
+        ctx.routerName = layer.name;
+        return next();
+      });
+      return memo.concat(layer.stack);
+    }, []);
+    // 【4】利用koa中间件组织的方式，形成一个‘小洋葱’模型
+    return compose(layerChain)(ctx, next);
+  };
+
+  // 【2】router属性用来use方法中区别路由级别中间件
+  dispatch.router = this;
+  return dispatch;
+};
+```
+
+  &emsp;&emsp;routes中间件主要实现了四大功能。
+
+  * 将matched对象的path属性挂载在ctx.matched上，提供给后续的allowedMethods中间件使用。（见代码中的【1】）
+
+  * 将返回的dispatch函数设置router属性，以便在前面提到的Router.prototype.use方法中区别路由级别中间件和嵌套路由。（见代码中的【2】）
+
+  * 插入一个新的路由前置处理中间件，将layer解析出来的params对象、路由别名已经捕获数组挂载在ctx上下文中，这种操作同理Koa在处理请求之前先构建context对象。（见代码中的【3】）
+
+  * 而对于路由匹配到众多layer，koa-router通过koa-compose进行处理，这和[koa对于中间件处理的方式](https://juejin.im/post/5c1631eff265da615f772b59)一样的，所以koa-router完全就是一个小型洋葱模型。
+
+
+#### 七、其他
+
+  &emsp;&emsp;

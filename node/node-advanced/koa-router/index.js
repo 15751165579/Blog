@@ -1,11 +1,13 @@
 const Koa = require('koa')
-
+const KoaRouter = require('koa-router')
 const app = new Koa()
 
-app.use(async ctx => {
-  if (ctx.path === '/hello' && ctx.method === 'GET') {
-    ctx.body = 'Hello Koa'
-  }
+const router = new KoaRouter()
+
+router.post('/user', ctx => {
+  ctx.body = '123'
 })
 
-app.listen(1234)
+app.use(router.routes()).use(router.allowedMethods())
+
+app.listen(4444)
