@@ -37,6 +37,7 @@ function Layer(path, methods, middleware, opts) {
 
   methods.forEach(function(method) {
     var l = this.methods.push(method.toUpperCase());
+    // HEAD请求头部信息与GET一致，这里就一起处理了。
     if (this.methods[l-1] === 'GET') {
       this.methods.unshift('HEAD');
     }
@@ -565,4 +566,6 @@ Router.prototype.routes = Router.prototype.middleware = function () {
 
 #### 七、总结
 
-  &emsp;&emsp;
+  &emsp;&emsp;koa-router虽然是koa的一个中间件，但是其内部也包含众多的中间件，这些中间件通过Layer对象根据路由路径的不同进行划分，使得它们不再像koa的中间件那样每次请求都执行，而是针对每次请求采用match方法匹配出相应的中间件，再利用koa-compose形成一个中间件执行链。
+
+  &emsp;&emsp;以上便是koa-router实现原理的全部内容，希望可以帮助你更好的理解koa-router。
