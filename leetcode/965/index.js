@@ -17,6 +17,7 @@ const isUnivalTree = root => {
       pre = root.val
     } else if (pre && pre !== root.val) {
       ans = false
+      return
     }
 
     help(root.left)
