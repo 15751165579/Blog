@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>输入框高度自适应</title>
+</head>
+<body>
+  <textarea name="some" value="123132132131" cols="30" rows="1" id="js-textarea" placeholder="哈哈哈" style="height: auto;"></textarea>
+
+  <input type="text" placeholder="请输入姓名" id="js-input">
+
+  <script>
+    /**
+     * 
+     * 对于Vue中都是采用 textarea 动态根据scrollHeight更改textarea高度 这个与值变化的时机有很大的关系
+     * 
+     * textarea 与 input 的巨大差别
+     * 
+     * input 事件 与 change 的巨大差别
+     * 
+     * 原生的实现则是采用autosize实现
+     * 
+     */
+    document.querySelector('#js-textarea').addEventListener('change', e => {
+      // const target = e.target
+      // console.log(target.scrollHeight)
+      console.log('触发textarea change事件')
+      // target.style.height = target.scrollHeight + 'px'
+    }, false)
+
+    var height = null
+    var rows = 1
+    document.querySelector('#js-textarea').addEventListener('input', e => {
+      const target = e.target
+      const sh = target.scrollHeight
+      console.log(target.scrollHeight)
+      console.log('触发textarea input事件')
+      if (!height) {
+        height = sh
+      }
+      if (height !== sh) {
+        height = sh
+        target.setAttribute('rows', ++rows)
+      }
+    }, false)
+
+
+    document.querySelector('#js-input').addEventListener('input', e => {
+      console.log('触发input change事件')
+    }, false)
+  </script>
+</body>
+</html>
