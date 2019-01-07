@@ -104,7 +104,7 @@ http.createServer((req, res) => {
   &emsp;&emsp;表现形式为普通字符串：
 
 ```s
-  123
+  "123"
 ```
 
   &emsp;&emsp;这种形式虽然简单，不需要服务端特别处理，但是服务端能够提取的信息太少。
@@ -114,7 +114,7 @@ http.createServer((req, res) => {
   &emsp;&emsp;表现形式为键值对字符串：
 
 ```s
-  a=1&b=2&c=3
+  "a=1&b=2&c=3"
 ```
 
   &emsp;&emsp;相比较第一种方式，这里可以通过服务端对该字符串进行解码，获取更多的信息：
@@ -148,6 +148,18 @@ function decode (qs, sep = '&', eq = '=') {
   return obj
 }
 ```
+
+  &emsp;&emsp;但是它并不能处理复杂的对象。
+
+##### 3、application/json
+
+  &emsp;&emsp;
+
+```s
+  "{"a":1,"b":2}"
+```
+
+  &emsp;&emsp;
 
 
 
