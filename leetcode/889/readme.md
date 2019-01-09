@@ -1,4 +1,4 @@
-# JavaScript刷LeetCode -- 889. Construct Binary Tree from Preorder and Postorder Traversal
+# JavaScript刷LeetCode -- 889. Construct Binary Tree from Preorder and Postorder Traversal [Medium]
 
 #### 一、题目
 
