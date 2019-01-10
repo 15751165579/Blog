@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-const kthSmallest = (root, k) => {
+const kthSmallest1 = (root, k) => {
   const ans = []
 
   help(root)
