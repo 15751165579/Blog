@@ -1,26 +1,29 @@
-/**
- * Binary Tree Level Order Travarsal Medium
- */
-
-const levelOrder = function (root) {
-  const result = []
-  _levelOrder(root, result, 0)
-  return result
-  function _levelOrder (root, result, dep) {
-    if (!root) {
-      return
-    }
-
-    let curLevel = []
-    if (result[dep]) {
-      curLevel = result[dep]
-    } else {
-      result[dep] = curLevel
-    }
-
-    curLevel.push(root.val)
-
-    _levelOrder(root.left, result, ++dep)
-    _levelOrder(root.right, result, dep)
+/* eslint-disable */
+const levelOrder = root => {
+  const ans = []
+  if (!root) {
+    return ans
   }
+
+  const q = [root]
+  let deep = 0
+
+  while (q.length) {
+    const max = q.length
+
+    for (let i = 0; i < max; i++) {
+      const item = q.pop()
+      if (item) {
+        if (!ans[deep]) {
+          ans[deep] = []
+        }
+        ans[deep].push(item.val)
+        item.left && q.unshift(item.left)
+        item.right && q.unshift(item.right)
+      }
+    }
+    deep++
+  }
+
+  return ans
 }
