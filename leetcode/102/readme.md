@@ -1,4 +1,20 @@
-/* eslint-disable */
+# JavaScript刷LeetCode -- 102. Binary Tree Level Order Traversal [Medium]
+
+#### 一、题目
+
+  &emsp;&emsp;Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+
+#### 二、题目大意
+
+  &emsp;&emsp;层级遍历二叉树。
+
+#### 三、解题思路
+
+  &emsp;&emsp;这里采用队列的方式解决，同样也可以采用递归的方式。
+
+#### 代码实现
+
+```JavaScript
 const levelOrder = root => {
   const ans = []
   if (!root) {
@@ -27,3 +43,4 @@ const levelOrder = root => {
 
   return ans
 }
+```
