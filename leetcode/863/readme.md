@@ -1,5 +1,22 @@
-/* eslint-disable */
-// 二叉树 转化为 图
+# JavaScript刷LeetCode -- 863. All Nodes Distance K in Binary Tree [Medium]
+
+#### 一、题目
+
+  &emsp;&emsp;We are given a binary tree (with root node root), a target node, and an integer value K.
+
+  &emsp;&emsp;Return a list of the values of all nodes that have a distance K from the target node.  The answer can be returned in any order.
+
+#### 二、题目大意
+
+  &emsp;&emsp;返回距离目标节点K的所有节点的值列表。
+
+#### 三、解题思路
+
+  &emsp;&emsp;将二叉树转化为无向图，然后采用BFS即可。在处理无向图时，记得标记访问过的节点。
+
+#### 四、解题思路
+
+```JavaScript
 const distanceK = (root, target, K) => {
   
   const graph = {}
@@ -69,3 +86,4 @@ const distanceK = (root, target, K) => {
     }
   }
 }
+```
