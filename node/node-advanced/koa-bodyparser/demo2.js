@@ -26,4 +26,4 @@ function decode (qs, sep = '&', eq = '=') {
   return obj
 }
 
-console.log(decode('a=1&b=2'))
+console.log(decode('a=1&b=2&c=3'))

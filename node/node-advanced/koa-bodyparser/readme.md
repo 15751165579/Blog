@@ -37,7 +37,6 @@
 
   - URL编码方式: a=1&b=2
   - JSON编码方式: {a:1,b:2}
-  - 不采用编码方式: 1234
 
   &emsp;&emsp;客户端会将采用的字符串编码方式设置在请求报文头部信息的Content-Type属性中，这样服务器端根据相应的字符串编码规则进行解码，就能够明白客户端所传递信息的意思了。
 
@@ -77,81 +76,53 @@ http.createServer((req, res) => {
 
 ### 四、字符解码
 
-  &emsp;&emsp;一般而言，UTF-8是互联网中主流的字符编码方式，前面也提到了还有GBK编码方式，相比较UTF-8，它编码中文只需要2个字节，那么在字符解码时误用UTF-8解码GBK编码的字符，就会出现中文乱码的问题。上述【示例一】中的代码就存在这样的问题，如果发送GBK字符编码
-
+  &emsp;&emsp;一般而言，UTF-8是互联网中主流的字符编码方式，前面也提到了还有GBK编码方式，相比较UTF-8，它编码中文只需要2个字节，那么在字符解码时误用UTF-8解码GBK编码的字符，就会出现中文乱码的问题。
+  
   &emsp;&emsp;NodeJS主要通过Buffer处理二进制数据流，但是它并不支持GBK字符编码方式，需要通过[iconv-lite](https://github.com/ashtuchkin/iconv-lite)模块进行处理。
 
-### 四、字符解码
-
-  &emsp;&emsp;除了上述的内容编码，对于字符也有编码，而字符编码的方式也声明在Content-Type中，常见的字符编码有：UTF-8、GBK等。
-
-  &emsp;&emsp;不同字符编码之间的差异在于编码相同类型字符所采用的字节数可能不同。例如UTF-8编码汉字需要三个字节，而GBK只需要两个字节。
-
-  &emsp;&emsp;对于前面的示例，现在发送一段GBK编码的内容：
+  &emsp;&emsp;【示例一】中的代码就存在没有正确处理字符编码问题，而导致中文乱码的问题：
 
 ```JavaScript
 const request = require('request')
 const iconv = require('iconv-lite')
 
 request.post({
-  url: 'http://10.1.1.248:1234/',
-  body: iconv.encode('文字', 'gbk'),
+  url: 'http://localhost:1234/',
+  body: iconv.encode('中文', 'gbk'),
   headers: {
     'Content-Type': 'text/plain;charset=GBK'
   }
 }, (error, response, body) => {
-  console.log(body)
+  console.log(body) // 发生中文乱码情况
 })
 ```
 
-  &emsp;&emsp;终端会打印出乱码，主要原因在于NodeJS中的Buffer默认UTF8的字符编码方式，并且不支持GBK字符编码方式，这里可以采用[iconv-lite](https://github.com/ashtuchkin/iconv-lite)进行转换。
+  &emsp;&emsp;NodeJS中的Buffer默认是采用UTF-8字符编码处理，这里需要借助【iconv-lite】模块处理不同的字符编码方式：
 
 ```JavaScript
-const http = require('http')
-const iconv = require('iconv-lite')
-
-http.createServer((req, res) => {
-  const contentType = req.headers['content-type']
-  const charsetStr = contentType.split(';')[1]
-  const charset = charsetStr && charsetStr.split('=')[1]
-  const body = []
-
-  req.on('data', chunk => {
-    body.push(chunk)
-  })
-  
-  req.on('end', () => {
     const chunks = Buffer.concat(body)
     res.end(iconv.decode(chunks, charset))
-  })
-}).listen(1234)
 ```
 
-### 五、根据Content-Type输出相应的数据结构
+### 五、字符串解码
 
-  &emsp;&emsp;得到客户端请求主体内容之后，就需要根据Content-Type来判断请求主体采用的何种数据结构。
+  &emsp;&emsp;前面已经提到了字符串的二种编码方式，它们对应的Content-Type分别为：
 
-##### 1、text/plain
+  - URL编码 application/x-www-form-urlencoded
+  - JSON编码 application/json
 
-  &emsp;&emsp;表现形式为普通字符串：
+  &emsp;&emsp;对于前端来说，URL编码并不陌生，经常会用于Cookie和URL拼接操作，唯一需要注意的就是对键值对进行decodeURIComponent()处理。
 
-```s
-  "123"
-```
-
-  &emsp;&emsp;这种形式虽然简单，不需要服务端特别处理，但是服务端能够提取的信息太少。
-
-##### 2、application/x-www-form-urlencoded
-
-  &emsp;&emsp;表现形式为键值对字符串：
-
-```s
-  "a=1&b=2&c=3"
-```
-
-  &emsp;&emsp;相比较第一种方式，这里可以通过服务端对该字符串进行解码，获取更多的信息：
+  &emsp;&emsp;当客户端发送请求主体时，需要进行编码操作：
 
 ```JavaScript
+  'a=1&b=2&c=3'
+```
+
+  &emsp;&emsp;服务器端再根据URL编码规则解码，得到相应的对象。
+
+```JavaScript
+  // URL编码方式 简单的解码方法实现
 function decode (qs, sep = '&', eq = '=') {
   const obj = {}
   qs = qs.split(sep)
@@ -179,53 +150,87 @@ function decode (qs, sep = '&', eq = '=') {
   }
   return obj
 }
+
+console.log(decode('a=1&b=2&c=3')) // { a: '1', b: '2', c: '3' }
 ```
 
-  &emsp;&emsp;但是它并不能处理复杂的对象。
+  &emsp;&emsp;URL编码方式适合处理简单的键值对数据，并且很多框架的Ajax中的Content-Type默认值都是它，而对于复杂的嵌套对象就不太好处理了，这时就需要JSON编码方式大显身手了。
 
-##### 3、application/json
+  &emsp;&emsp;客户端发送请求主体时，只需要采用JSON.stringify进行编码。服务器端只需要采用JSON.parse进行解码即可：
 
-  &emsp;&emsp;
-
-```s
-  "{"a":1,"b":2}"
+```JavaScript
+const strictJSONReg = /^[\x20\x09\x0a\x0d]*(\[|\{)/;
+function parse(str) {
+  if (!strict) return str ? JSON.parse(str) : str;
+  // 严格模式下，总是返回一个对象
+  if (!str) return {};
+  // 是否为合法的JSON字符串
+  if (!strictJSONReg.test(str)) {
+    throw new Error('invalid JSON, only supports object and array');
+  }
+  return JSON.parse(str);
+}
 ```
 
-  &emsp;&emsp;
+  &emsp;&emsp;除了上述两种字符串编码方式，koa-bodyparser还支持不采用任何字符串编码方式的普通字符串。
+
+  &emsp;&emsp;三种字符串编码的处理方式由【co-body】模块提供，koa-bodyparser中通过判断当前Content-Type类型，调用不同的处理方式，将获取到的结果挂载在ctx.request.body：
+
+```JavaScript
+
+  return async function bodyParser(ctx, next) {
+    if (ctx.request.body !== undefined) return await next();
+    if (ctx.disableBodyParser) return await next();
+    try {
+      // 最重要的一步
+      const res = await parseBody(ctx);
+      ctx.request.body = 'parsed' in res ? res.parsed : {};
+      if (ctx.request.rawBody === undefined) ctx.request.rawBody = res.raw; // 保存原始字符串
+    } catch (err) {
+      if (onerror) {
+        onerror(err, ctx);
+      } else {
+        throw err;
+      }
+    }
+    await next();
+  };
+
+  async function parseBody(ctx) {
+    if (enableJson && ((detectJSON && detectJSON(ctx)) || ctx.request.is(jsonTypes))) {
+      return await parse.json(ctx, jsonOpts); // application/json等json type
+    }
+    if (enableForm && ctx.request.is(formTypes)) {
+      return await parse.form(ctx, formOpts); // application/x-www-form-urlencoded
+    }
+    if (enableText && ctx.request.is(textTypes)) {
+      return await parse.text(ctx, textOpts) || ''; // text/plain
+    }
+    return {};
+  }
+};
+```
+
+  &emsp;&emsp;其实还有一种比较常见的Content-type，当采用表单上传文件时：
+
+```JavaScript
+------WebKitFormBoundaryqsAGMB6Us6F7s3SF
+Content-Disposition: form-data; name="image"; filename="image.png"
+Content-Type: image/png
 
 
+------WebKitFormBoundaryqsAGMB6Us6F7s3SF
+Content-Disposition: form-data; name="text"
 
+------WebKitFormBoundaryqsAGMB6Us6F7s3SF--
+```
+
+  &emsp;&emsp;这种方式处理相对比较复杂，koa-bodyparser中并没有提供该Content-Type的解析。（下一篇中会介绍^_^）
 
 
 ### 五、总结
 
-
- 前提
-
- 客户端 --> 二进制 ---> 服务端 ---> 根据编码方式解码为相应的字符串 ---> 根据Content-Type 返回相应的结构
-
- Content-Type text/plain application/json application/x-www-form-urlencoded
-
- Charset utf8 gbk ....
-
- 在网络传输的过程中，传输的是二进制的比特位。
-
- UTF-8编码汉字通常需要三个字节，而GBK只需要两个字节
-
-
- 1、text/plain 处理较为简单只要将buffer拼接即可 设计到编码方式的处理 iconv-lite 处理编码方式
-
- 2、application/json 验证json的正则表达式 JSON.parse
-
- 3、application/x-www-form-urlencoded qs处理
-
-
- 总结起来：
-
- 1、通过req的data和end事件收集完整的Buffer流
- 2、根据Content-Encoding进行解压
- 3、根据Charset进行解码
- 4、根据Content-Type解析相应的数据类型
+  
 
 
  [koa-bodyparser](https://github.com/koajs/bodyparser/blob/master/index.js)
@@ -233,17 +238,3 @@ function decode (qs, sep = '&', eq = '=') {
  [raw-body](https://github.com/stream-utils/raw-body)接收客户端请求主体
  [iconv-lite](https://github.com/ashtuchkin/iconv-lite) 解码
  [inflation](https://github.com/stream-utils/inflation) 解压
-
-   &emsp;&emsp;而客户端在发送请求体时，会通过携带Content-Type请求头告诉服务端发送的是哪一种数据类型，常见的Content-Type有：
-
-  - text/plain
-  - application/json
-  - application/x-www-form-urlencoded
-  - multipart/form-data
-
-  &emsp;&emsp;koa-bodyparser主要针对前面三种Content-Type的请求体解析，处理的步骤如下：
-
-  1. 接收客户端发送的数据
-  2. 内容解码
-  3. 字符解码
-  4. 根据Content-Type输出相应的数据结构
