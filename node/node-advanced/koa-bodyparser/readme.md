@@ -43,33 +43,12 @@
 
   &emsp;&emsp;下面一步步分析koa-bodyparser如何处理这一系列操作得到报文主体内容的。
 
-### 一、前言
+### 二、获取二进制数据流
 
-  &emsp;&emsp;在Koa中，通常可以采用以下三种方式获取请求的参数：
-
-  - ctx.query: 获取URL上拼接的参数。
-  - ctx.params: 获取URL路径参数，具体实现可阅读[玩转Koa -- koa-router原理解析](https://juejin.im/post/5c24c3b9e51d45538150f3ab)
-  - ctx.request.body: 获取（request body）的内容。
-
-  &emsp;&emsp;而客户端在发送请求体时，会通过携带Content-Type请求头告诉服务端发送的是哪一种数据类型，常见的Content-Type有：
-
-  - text/plain
-  - application/json
-  - application/x-www-form-urlencoded
-  - multipart/form-data
-
-  &emsp;&emsp;koa-bodyparser主要针对前面三种Content-Type的请求体解析，处理的步骤如下：
-
-  1. 接收客户端发送的数据
-  2. 内容解码
-  3. 字符解码
-  4. 根据Content-Type输出相应的数据结构
-
-### 二、接收客户端发送的数据
-
-  &emsp;&emsp;在NodeJS中可以通过监听request对象上的data和end事件完成客户端的数据接收，代码如下：
+  &emsp;&emsp;NodeJS中获取请求报文主体二进制数据流主要通过监听request对象的data事件完成：
 
 ```JavaScript
+// 示例一
 const http = require('http')
 
 http.createServer((req, res) => {
@@ -80,17 +59,27 @@ http.createServer((req, res) => {
   })
   
   req.on('end', () => {
-    const chunks = Buffer.concat(body) // 完整的二进制数据流
-    res.end(chunks.toString()) // 响应该请求
+    const chunks = Buffer.concat(body) // 接收到的二进制数据流
+
+    // 利用res.end进行响应处理
+    res.end(chunks.toString())
   })
 }).listen(1234)
 ```
 
+  &emsp;&emsp;而koa-bodyparser主要是对[co-body](https://github.com/cojs/co-body)的封装，而【co-body】中主要是采用[raw-body](https://github.com/stream-utils/raw-body)模块获取请求报文主体的二进制数据流，【row-body】主要是对上述示例代码的封装和健壮性处理。
+
 ### 三、内容解码
 
-  &emsp;&emsp;为了减少请求体在网络传输过程中的体积，还可以对其进行压缩处理，当请求头中声明Content-Encoding属性，则是告诉服务器该请求体采用了那种压缩编码方式，比如现在重用的gzip压缩。当然服务器和客户端也可以通过在头部信息中添加Accept-Encoding属性告知对方支持哪些压缩编码方式。
+  &emsp;&emsp;客户端会将内容编码的方式放入请求报文头部信息Content-Encoding属性中，服务器端接收报文主体的二进制数据了时，会根据该头部信息进行解压操作，当然服务器端可以在响应报文头部信息Accept-Encoding属性中添加支持的解压方式。
 
-  &emsp;&emsp;在NodeJS中，获取到Content-Encoding信息之后，可以采用[inflation](https://github.com/stream-utils/inflation)对请求信息进行解压。
+  &emsp;&emsp;而【row-body】主要采用[inflation](https://github.com/stream-utils/inflation)模块进行解压处理。
+
+### 四、字符解码
+
+  &emsp;&emsp;一般而言，UTF-8是互联网中主流的字符编码方式，前面也提到了还有GBK编码方式，相比较UTF-8，它编码中文只需要2个字节，那么在字符解码时误用UTF-8解码GBK编码的字符，就会出现中文乱码的问题。上述【示例一】中的代码就存在这样的问题，如果发送GBK字符编码
+
+  &emsp;&emsp;NodeJS主要通过Buffer处理二进制数据流，但是它并不支持GBK字符编码方式，需要通过[iconv-lite](https://github.com/ashtuchkin/iconv-lite)模块进行处理。
 
 ### 四、字符解码
 
@@ -244,3 +233,17 @@ function decode (qs, sep = '&', eq = '=') {
  [raw-body](https://github.com/stream-utils/raw-body)接收客户端请求主体
  [iconv-lite](https://github.com/ashtuchkin/iconv-lite) 解码
  [inflation](https://github.com/stream-utils/inflation) 解压
+
+   &emsp;&emsp;而客户端在发送请求体时，会通过携带Content-Type请求头告诉服务端发送的是哪一种数据类型，常见的Content-Type有：
+
+  - text/plain
+  - application/json
+  - application/x-www-form-urlencoded
+  - multipart/form-data
+
+  &emsp;&emsp;koa-bodyparser主要针对前面三种Content-Type的请求体解析，处理的步骤如下：
+
+  1. 接收客户端发送的数据
+  2. 内容解码
+  3. 字符解码
+  4. 根据Content-Type输出相应的数据结构
