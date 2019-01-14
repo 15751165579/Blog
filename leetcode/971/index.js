@@ -2,9 +2,7 @@
 const flipMatchVoyage = (root, voyage) => {
   let ans = []
   // 记录访问到第几个节点
-  let position = {
-    index: 0
-  }
+  let position = 0
 
   help(root, voyage, position)
 
@@ -14,20 +12,19 @@ const flipMatchVoyage = (root, voyage) => {
     if (!root) {
       return
     }
-    if (root.val !== voyage[position.index]) {
+    if (root.val !== voyage[position++]) {
       ans = [-1]
       return
     }
 
-    if (root.left && root.left.val !== voyage[position.index + 1]) {
+    if (root.left && root.left.val !== voyage[position]) {
       // 交换左右子树
-      const temp = root.left
-      root.left = root.right
-      root.right = temp
       ans.push(root.val)
+      help(root.right, voyage)
+      help(root.left, voyage)
+    } else {
+      help(root.left, voyage)
+      help(root.right, voyage)
     }
-    position.index++
-    help(root.left, voyage)
-    help(root.right, voyage)
   }
 }
