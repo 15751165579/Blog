@@ -1,5 +1,3 @@
-# 玩转Koa -- koa-bodyparser原理解析
-
 ### 一、前置知识
 
   &emsp;&emsp;在理解koa-bodyparser原理之前，首先需要了解部分HTTP相关的知识。
@@ -33,7 +31,7 @@
 
   &emsp;&emsp;拿到字符串之后，服务器端又要问了：客户端，你这一段字符串是啥意思啊？
 
-  &emsp;&emsp;根据不同的应用场景，客户端会对字符串采用不同的编码方式，常见的编码方式有，
+  &emsp;&emsp;根据不同的应用场景，客户端会对字符串采用不同的编码方式，常见的编码方式有：
 
   - URL编码方式: a=1&b=2
   - JSON编码方式: {a:1,b:2}
@@ -230,11 +228,18 @@ Content-Disposition: form-data; name="text"
 
 ### 五、总结
 
+  &emsp;&emsp;以上便是koa-bodyparser的核心实现原理，其中涉及到很多关于HTTP的基础知识，对于HTTP不太熟悉的同学，可以推荐看一波入门级宝典【图解HTTP】。
+
+  &emsp;&emsp;最后留图一张：
+
   
+![](https://user-gold-cdn.xitu.io/2019/1/15/16851d10d3942128?w=1265&h=878&f=png&s=62013)
 
 
- [koa-bodyparser](https://github.com/koajs/bodyparser/blob/master/index.js)
- [co-body](https://github.com/cojs/co-body) 解析请求体
- [raw-body](https://github.com/stream-utils/raw-body)接收客户端请求主体
- [iconv-lite](https://github.com/ashtuchkin/iconv-lite) 解码
- [inflation](https://github.com/stream-utils/inflation) 解压
+
+##### 往期精彩回顾
+
+
+[玩转Koa -- koa-router原理解析](https://juejin.im/post/5c24c3b9e51d45538150f3ab)
+
+[玩转Koa -- 核心原理分析](https://juejin.im/post/5c1631eff265da615f772b59)
