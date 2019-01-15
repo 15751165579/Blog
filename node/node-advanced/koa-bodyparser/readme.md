@@ -16,7 +16,7 @@
 
   &emsp;&emsp;而koa-bodyparser中的body指的就是请求报文中的报文主体部分。
 
-#### 2、服务器端获取报文主体
+#### 2、服务器端获取报文主体流程
 
   &emsp;&emsp;HTTP底层采用TCP提供可靠的字节流服务，简单而言就是报文主体部分会被转化为二进制数据在网络中传输，所以服务器端首先需要拿到二进制流数据。
   
@@ -27,9 +27,9 @@
   - deflate
   - identity（不执行压缩或不会变化的默认编码格式）
 
-  &emsp;&emsp;服务器端会根据报文头部信息中的Content-Type确认采用了何种压缩方式，从而得得到完整的二进制数据流。
+  &emsp;&emsp;服务器端会根据报文头部信息中的Content-Encoding确认采用何种解压编码。
 
-  &emsp;&emsp;接下来就需要将二进制数据转换为相应的字符，而字符也有不同的字符编码，例如对于中文字符处理差异巨大的UTF-8和GBK，UTF-8编码汉字通常需要三个字节，而GBK只需要两个字节。所以还需要在请求报文的头部信息中设置Content-type使用的字符编码信息，默认情况下采用的是UTF-8，这样服务器端就可以利用相应的字符规则进行解码，得到正确的字符串。
+  &emsp;&emsp;接下来就需要将二进制数据转换为相应的字符，而字符也有不同的字符编码方式，例如对于中文字符处理差异巨大的UTF-8和GBK，UTF-8编码汉字通常需要三个字节，而GBK只需要两个字节。所以还需要在请求报文的头部信息中设置Content-Type使用的字符编码信息（默认情况下采用的是UTF-8），这样服务器端就可以利用相应的字符规则进行解码，得到正确的字符串。
 
   &emsp;&emsp;拿到字符串之后，服务器端又要问了：客户端，你这一段字符串是啥意思啊？
 
@@ -38,9 +38,9 @@
   - URL编码方式: a=1&b=2
   - JSON编码方式: {a:1,b:2}
 
-  &emsp;&emsp;客户端会将采用的字符串编码方式设置在请求报文头部信息的Content-Type属性中，这样服务器端根据相应的字符串编码规则进行解码，就能够明白客户端所传递信息的意思了。
+  &emsp;&emsp;客户端会将采用的字符串编码方式设置在请求报文头部信息的Content-Type属性中，这样服务器端根据相应的字符串编码规则进行解码，就能够明白客户端所传递的信息了。
 
-  &emsp;&emsp;下面一步步分析koa-bodyparser如何处理这一系列操作得到报文主体内容的。
+  &emsp;&emsp;下面一步步分析koa-bodyparser是如何处理这一系列操作，从而得到报文主体内容。
 
 ### 二、获取二进制数据流
 
@@ -80,7 +80,7 @@ http.createServer((req, res) => {
   
   &emsp;&emsp;NodeJS主要通过Buffer处理二进制数据流，但是它并不支持GBK字符编码方式，需要通过[iconv-lite](https://github.com/ashtuchkin/iconv-lite)模块进行处理。
 
-  &emsp;&emsp;【示例一】中的代码就存在没有正确处理字符编码问题，而导致中文乱码的问题：
+  &emsp;&emsp;【示例一】中的代码就存在没有正确处理字符编码的问题，那么报文主体中的字符采用GBK编码方式，必然会出现中文乱码：
 
 ```JavaScript
 const request = require('request')
@@ -97,11 +97,11 @@ request.post({
 })
 ```
 
-  &emsp;&emsp;NodeJS中的Buffer默认是采用UTF-8字符编码处理，这里需要借助【iconv-lite】模块处理不同的字符编码方式：
+  &emsp;&emsp;NodeJS中的Buffer默认是采用UTF-8字符编码处理，这里借助【iconv-lite】模块处理不同的字符编码方式：
 
 ```JavaScript
     const chunks = Buffer.concat(body)
-    res.end(iconv.decode(chunks, charset))
+    res.end(iconv.decode(chunks, charset)) // charset通过Content-Type得到
 ```
 
 ### 五、字符串解码
@@ -111,7 +111,7 @@ request.post({
   - URL编码 application/x-www-form-urlencoded
   - JSON编码 application/json
 
-  &emsp;&emsp;对于前端来说，URL编码并不陌生，经常会用于Cookie和URL拼接操作，唯一需要注意的就是对键值对进行decodeURIComponent()处理。
+  &emsp;&emsp;对于前端来说，URL编码并不陌生，经常会用于URL拼接操作，唯一需要注意的是不要忘记对键值对进行decodeURIComponent()处理。
 
   &emsp;&emsp;当客户端发送请求主体时，需要进行编码操作：
 
@@ -154,7 +154,7 @@ function decode (qs, sep = '&', eq = '=') {
 console.log(decode('a=1&b=2&c=3')) // { a: '1', b: '2', c: '3' }
 ```
 
-  &emsp;&emsp;URL编码方式适合处理简单的键值对数据，并且很多框架的Ajax中的Content-Type默认值都是它，而对于复杂的嵌套对象就不太好处理了，这时就需要JSON编码方式大显身手了。
+  &emsp;&emsp;URL编码方式适合处理简单的键值对数据，并且很多框架的Ajax中的Content-Type默认值都是它，但是对于复杂的嵌套对象就不太好处理了，这时就需要JSON编码方式大显身手了。
 
   &emsp;&emsp;客户端发送请求主体时，只需要采用JSON.stringify进行编码。服务器端只需要采用JSON.parse进行解码即可：
 
@@ -182,7 +182,7 @@ function parse(str) {
     if (ctx.request.body !== undefined) return await next();
     if (ctx.disableBodyParser) return await next();
     try {
-      // 最重要的一步
+      // 最重要的一步 将解析的内容挂载到koa的上下文中
       const res = await parseBody(ctx);
       ctx.request.body = 'parsed' in res ? res.parsed : {};
       if (ctx.request.rawBody === undefined) ctx.request.rawBody = res.raw; // 保存原始字符串
@@ -211,7 +211,7 @@ function parse(str) {
 };
 ```
 
-  &emsp;&emsp;其实还有一种比较常见的Content-type，当采用表单上传文件时：
+  &emsp;&emsp;其实还有一种比较常见的Content-type，当采用表单上传时，报文主体中会包含多个实体主体：
 
 ```JavaScript
 ------WebKitFormBoundaryqsAGMB6Us6F7s3SF
@@ -225,7 +225,7 @@ Content-Disposition: form-data; name="text"
 ------WebKitFormBoundaryqsAGMB6Us6F7s3SF--
 ```
 
-  &emsp;&emsp;这种方式处理相对比较复杂，koa-bodyparser中并没有提供该Content-Type的解析。（下一篇中会介绍^_^）
+  &emsp;&emsp;这种方式处理相对比较复杂，koa-bodyparser中并没有提供该Content-Type的解析。（下一篇中应该会介绍^_^）
 
 
 ### 五、总结
