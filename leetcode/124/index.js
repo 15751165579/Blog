@@ -1,6 +1,5 @@
 /* eslint-disable */
 const maxPathSum = root => {
-
   let ans = Number.MIN_SAFE_INTEGER
   maxTreeSum(root)
 
@@ -12,7 +11,8 @@ const maxPathSum = root => {
     const rootValue = root.val
     const left = maxTreeSum(root.left)
     const right = maxTreeSum(root.right)
-    ans = Math.max.call(this, ans, rootValue, left, right, rootValue + left, rootValue + right, rootValue + left + right)
-    return Math.max.call(this, rootValue, rootValue + left, rootValue + right)
+    const currentTreeSum = Math.max.call(this, rootValue, rootValue + left, rootValue + right)
+    ans = Math.max.call(this, ans, currentTreeSum, left, right, rootValue + left + right)
+    return currentTreeSum
   }
 }
