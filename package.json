@@ -70,6 +70,7 @@
     "bloom-redis": "^0.0.1",
     "bloomfilter": "^0.0.18",
     "body-parser": "^1.18.2",
+    "busboy": "^0.3.0",
     "chai": "^4.1.2",
     "chalk": "^2.4.1",
     "charm": "^1.0.2",
