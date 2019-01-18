@@ -1,12 +1,18 @@
-/**
- * Best Time To Buy And Sell Stock II
- */
+/* eslint-disable */
 const maxProfit = function (prices) {
-  let result = 0
-  for (let i = 0, max = prices.length; i < max - 1; i++) {
-    result += Math.max(prices[i + 1] - prices[i], 0)
+  const max = prices.length
+  if (max < 2) {
+    return 0
   }
-  return result
-}
 
-console.log(maxProfit([1, 2, 3, 4, 5]))
+  // 第i天出售股票的最大利润
+  const sell = [0]
+  // 第i天持有股票的最大利润
+  const hold = [-prices[0]]
+
+  for (let i = 1; i < max; i++) {
+    sell[i] = Math.max(sell[i - 1], hold[i - 1] + prices[i])
+    hold[i] = Math.max(hold[i - 1], sell[i - 1] - prices[i])
+  }
+  return sell[max - 1]
+}
