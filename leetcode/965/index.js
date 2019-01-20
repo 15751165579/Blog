@@ -1,14 +1,14 @@
 /* eslint-disable */
 const isUnivalTree = root => {
+  let ans = true
   if (!root) {
-    return true
+    return ans
   }
 
   let pre = null
-  let ans = true
-  help(root)
+  preOrder(root)
   return ans
-  function help (root) {
+  function preOrder (root) {
     if (!root) {
       return
     }
@@ -20,8 +20,8 @@ const isUnivalTree = root => {
       return
     }
 
-    help(root.left)
-    help(root.right)
+    preOrder(root.left)
+    preOrder(root.right)
   }
 }
 
