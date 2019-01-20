@@ -1,14 +1,14 @@
 /* eslint-disable */
 const diameterOfBinaryTree = root => {
   let sum = 0
-  help(root)
+  postOrder(root)
   return sum
-  function help (root) {
+  function postOrder (root) {
     if (!root) {
       return 0
     }
-    const left = help(root.left)
-    const right = help(root.right)
+    const left = postOrder(root.left)
+    const right = postOrder(root.right)
     sum = Math.max(sum, left + right)
     return Math.max(right, left) + 1
   }

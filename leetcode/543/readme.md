@@ -21,21 +21,21 @@
 
 #### 三、解题思路
 
-  &emsp;&emsp;这道题目实际上就是求一个节点的左右子树高度之和的最大值。
+  &emsp;&emsp;这道题本质是求解二叉树高度，唯一的区别在于：二叉树的最长路径由左子树最大高度加上右子树最大高度组成。
 
 #### 四、代码实现
 
 ```JavaScript
 const diameterOfBinaryTree = root => {
   let sum = 0
-  help(root)
+  postOrder(root)
   return sum
-  function help (root) {
+  function postOrder (root) {
     if (!root) {
       return 0
     }
-    const left = help(root.left)
-    const right = help(root.right)
+    const left = postOrder(root.left)
+    const right = postOrder(root.right)
     sum = Math.max(sum, left + right)
     return Math.max(right, left) + 1
   }

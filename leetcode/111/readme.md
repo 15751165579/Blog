@@ -12,12 +12,9 @@
 
 #### 三、解题思路
 
-  &emsp;&emsp;求跟节点到叶子节点的最小长度，总结起来共有4中情况：
+  &emsp;&emsp;这道题类似【104. Maximum Depth of Binary Tree】。
 
-  - 根节点为null，最小长度：0
-  - 根节点无左右子树，最小长度：1
-  - 只有左子树，最小长度：左子树的最小长度 + 1
-  - 只有右子树，最小长度：右子树的最小长度 + 1
+  &emsp;&emsp;但是需要注意边界情况（单个左右子树）的处理。
 
 #### 四、解题思路
 
@@ -25,10 +22,6 @@
 const minDepth = function (root) {
   if (!root) {
     return 0
-  }
-
-  if (!root.left && !root.right) {
-    return 1
   }
 
   if (!root.left) {
