@@ -1,6 +1,7 @@
 /**
  * Path Sum
  */
+/* eslint-disable */
 const hasPathSum = function (root, sum) {
   if (!root) {
     return false

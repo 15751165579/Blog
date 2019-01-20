@@ -1,13 +1,10 @@
 /**
  * Minimum Depth Of Binary Tree
  */
+/* eslint-disable */
 const minDepth = function (root) {
   if (!root) {
     return 0
-  }
-
-  if (!root.left && !root.right) {
-    return 1
   }
 
   if (!root.left) {

@@ -1,16 +1,16 @@
 /* eslint-disable */
 const findTilt = root => {
-  function helper (root) {
+  function postOrder (root) {
     if (!root) {
       return 0
     }
-    const left = helper(root.left)
-    const right = helper(root.right)
+    const left = postOrder(root.left)
+    const right = postOrder(root.right)
 
     sum += Math.abs(left - right)
     return root.val + left + right
   }
   let sum = 0
-  helper(root)
+  postOrder(root)
   return sum
 }

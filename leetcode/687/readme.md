@@ -1,25 +1,27 @@
 # JavaScript刷LeetCode -- 687. Longest Univalue Path
 
-#### 一、题目
+#### 一、解题思路
 
-  &emsp;&emsp;Given a binary tree, find the length of the longest path where each node in the path has the same value. This path may or may not pass through the root.
+  &emsp;&emsp;采用递归求解，并且结合二叉树是由左右子树递归形成的特性。
 
-#### 二、题目大意
+```s
+      root
+      /  \
+    left right
+```
 
-  &emsp;&emsp;从二叉树中找出一条节点值相同的最长路径。
+  &emsp;&emsp;那么对于一棵二叉树中相同值路径的长度为：左子树中相同值路径的长度 + 右子树中相同值路径的长度。
 
-#### 三、解题思路
+  &emsp;&emsp;而当二叉树作为另一棵二叉树的子树时，该二叉树中相同值路径是不不能够经过根节点的，所以它此时相同路径的长度应该为：max(左子树中相同值路径的长度, 右子树中相同值路径的长度)。
 
-  &emsp;&emsp;这道题目实际转化为递归计算子树中相同节点的最长路径。
-
-#### 四、代码实现
+#### 二、代码实现
 
 ```JavaScript
 const longestUnivaluePath = root => {
-  if (!root) {
-    return 0
-  }
   let ans = 0
+  if (!root) {
+    return ans
+  }
 
   help(root)
   return ans

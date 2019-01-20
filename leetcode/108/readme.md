@@ -1,13 +1,12 @@
-/**
- * Convert Sorted Array To Search Binary Tree
- * 递归的方式
- */
-/* eslint-disable */
-function TreeNode(val) {
-  this.val = val;
-  this.left = this.right = null;
-}
+# JavaScript刷LeetCode -- 108. Convert Sorted Array to Binary Search Tree
 
+#### 一、解题思路
+
+  &emsp;&emsp;根据BST的特性，利用二分法递归构建。
+
+#### 二、代码实现
+
+```JavaScript
 const sortedArrayToBST = function (nums) {
   const max = nums.length
   if (max === 0) {
@@ -19,3 +18,4 @@ const sortedArrayToBST = function (nums) {
   root.right = sortedArrayToBST(nums.slice(mid + 1, max))
   return root
 }
+```

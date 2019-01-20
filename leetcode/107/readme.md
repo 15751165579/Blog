@@ -10,43 +10,58 @@
 
 #### 三、解题思路
 
-  &emsp;&emsp;使用队列的思想。
+  &emsp;&emsp;此道题属于分层遍历二叉树，可以采用递归和队列的方式处理。
 
 #### 四、代码实现
 
 ```JavaScript
+// 队列
 const levelOrderBottom = root => {
+  const ans = []
   if (!root) {
-    return []
+    return ans
   }
   const queue = [root]
-
-  const ans = []
-
   while (queue.length) {
-
     const temp = []
-    const size = queue.length
-
-    for (let i = 0; i < size; i++) {
+    const max = queue.length
+    for (let i = 0; i < max; i++) {
       const item = queue.pop()
-
       if (item) {
         temp.push(item.val)
-
-        if (item.left) {
-          queue.unshift(item.left)
-        }
-  
-        if (item.right) {
-          queue.unshift(item.right)
-        }
+        item.left && queue.unshift(item.left)
+        item.right && queue.unshift(item.right)
       }
     }
-
     ans.unshift(temp)
   }
-
   return ans
+}
+```
+
+```JavaScript
+// 递归
+const levelOrderBottom = root => {
+  const ans = []
+  if (!root) {
+    return ans
+  }
+
+  levelOrder(root, 0)
+
+  return ans.reverse()
+
+  function levelOrder (root, level) {
+    if (!root) {
+      return
+    }
+
+    ans[level] || (ans[level] = [])
+
+    ans[level].push(root.val)
+    levelOrder(root.left, level + 1)
+    levelOrder(root.right, level + 1)
+
+  }
 }
 ```

@@ -1,6 +1,7 @@
 /**
  * Balanced Binary Tree
  */
+/* eslint-disable */
 const isBalanced = function (root) {
 
   if (!root) {

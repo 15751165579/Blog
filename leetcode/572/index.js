@@ -1,3 +1,4 @@
+/* eslint-disable */
 const isSubtree = (s, t) => {
 
   if (!s) {
