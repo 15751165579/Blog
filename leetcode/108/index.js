@@ -2,7 +2,7 @@
  * Convert Sorted Array To Search Binary Tree
  * 递归的方式
  */
-
+/* eslint-disable */
 function TreeNode(val) {
   this.val = val;
   this.left = this.right = null;
