@@ -5,9 +5,9 @@
  * dp[i] 表示从0 - i 最多的pairs对
  * 
  * dp[0] = 0
- * dp[1] = 0
+ * dp[1] = 1
  * 
- * dp[i] = pairs[j][0] > pair[m][1] ? dp[i] + 1 : dp[i]
+ * dp[i] = pairs[j][0] > pair[m][1] ? dp[i - 1] + 1 : dp[i - 1]
  * 
  */
 const findLongestChain = pairs => {
@@ -21,14 +21,14 @@ const findLongestChain = pairs => {
 
   let tar = 0
   // 一维空间转换为常量
-  let dp = 0
+  let dp = 1
   for (let i = 1; i < max; i++) {
     if (pairs[i][0] > pairs[tar][1]) {
       dp++
       tar = i
     }
   }
-  return dp + 1
+  return dp
 }
 
 console.log(findLongestChain([[1,2], [2,3], [3,4]]))
