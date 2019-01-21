@@ -10,36 +10,38 @@
 
 #### 三、解题思路
 
-  &emsp;&emsp;递归遍历二叉树。
+  &emsp;&emsp;把这道题目理解为：
+
+```s
+  对于 a + b = k
+  
+  当找到a或者b时，另一个数是否存在。
+```
+
+  &emsp;&emsp;那么通过遍历二叉树来记录节点的值，就可以很轻松的解决。
 
 #### 四、代码实现
 
 ```JavaScript
 const findTarget = (root, k) => {
-  const ans = []
+  let ans = false
+  const s = new Set()
 
-  help(root)
-
-  const max = ans.length
-  for (let i = 0; i < max; i++) {
-    for (let j = i + 1; j < max; j++) {
-      const pre = ans[i]
-      const next = ans[j]
-      if (pre + next === k) {
-        return true
-      }
-    }
-  }
-
-  return false
-
-  function help (root) {
+  inOrder(root)
+  return ans
+  function inOrder (root) {
     if (!root) {
       return
     }
-    help(root.left)
-    ans.push(root.val)
-    help(root.right)
+
+    inOrder(root.left)
+    const rest = k - root.val
+    if (s.has(rest)) {
+      ans = true
+      return
+    }
+    s.add(root.val)
+    inOrder(root.right)
   }
 }
 ```
