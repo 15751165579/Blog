@@ -1,8 +1,49 @@
-# 算法练习
+# LeetCode
 
 ### 栈
 
 - 844 [Easy]
+
+### 二叉树
+
+##### BST
+
+- 108 [Easy]
+- 235 [Easy]
+- 538 [Easy]
+- 669 [Easy]
+- 897 [Easy]
+
+##### 二叉树高度相关
+
+- 104 [Easy]
+- 110 [Easy]
+- 111 [Easy]
+- 543 [Easy]
+- 563 [Easy]
+
+##### 简单的遍历应用
+
+- 107 [Easy]
+- 637 [Easy]
+- 653 [Easy]
+- 872 [Easy]
+- 965 [Easy]
+
+##### 其他
+
+- 226 [Easy]
+- 606 [Easy]
+- 100 [Easy]
+- 671 [Easy]
+- 101 [Easy]
+- 437 [Easy]
+- 572 [Easy]
+- 112 [Easy]
+- 257 [Easy]
+- 687 [Easy]
+- 617 [Easy]
+- 700 [Easy]
 
 ### 动态规划
 
