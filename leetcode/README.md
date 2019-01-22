@@ -65,4 +65,5 @@
 
 ##### 抢劫问题
 
-- 198 [Easy]
+- 198 [Easy] X O X O X O X O
+- 213 [Medium] 首尾相邻
