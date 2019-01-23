@@ -10,7 +10,7 @@
 
 #### 三、解题思路
 
-  &emsp;&emsp;递归处理，不断计算当前节点对应的sum值，当递归到叶子节点时，如果当前节点值与sum相等，则找到了这条路径，否则返回false。
+  &emsp;&emsp;在递归的过程中保存当前当前节点”剩余的和值“，以便于在叶子节点判断是否满足要求。
 
 #### 四、代码实现
 
@@ -19,11 +19,12 @@ const hasPathSum = function (root, sum) {
   if (!root) {
     return false
   }
-
   if (!root.left && !root.right) {
-    return root.val == sum
+    return root.val === sum
   }
-
-  return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val)
+  const rest = sum - root.val
+  const x = hasPathSum(root.left, rest)
+  const y = hasPathSum(root.right, rest)
+  return x || y
 }
 ```
