@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    window.onload = () => {
+      console.log(navigator.onLine)
+      window.addEventListener('online', () => {
+        console.log('在线')
+      })
+      window.addEventListener('offline', () => {
+        console.log('离线')
+      })
+    }
+  </script>
+</body>
+</html>
