@@ -14,3 +14,4 @@
   - 永远不要缓存我 
   - 与服务器验证，到底缓存不缓存我 (If-Modified-Since last-modified) (if-match etag)
   - 缓存到什么时间
+  
