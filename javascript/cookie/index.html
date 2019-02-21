@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cookie</title>
+  <script src="./cookie.js"></script>
+</head>
+<body>
+  
+  <script>
+    /* eslint-disable */
+    class Cookie {
+      constructor () {}
+      set (key, value, attributes) {
+        if (typeof document === 'undefined') {
+          return
+        }
+        attributes = Object.assign({}, {
+          path: '/'
+        }, attributes)
+
+        if (typeof attributes.expires === 'number') {
+          // IE不支持max-age
+          attributes.expires = new Date(Date.now + attributes.expires * 864e+5)
+        }
+
+        attributes.expires = attributes.expires ? attributes.expires.toUTCString() : ''
+
+        // value可能是对象
+        try {
+          const result = JSON.stringify(value)
+          if (/^[\{\[]/.test(result)) {
+            value = result
+          }
+        } catch (e) {}
+
+        // URL编码
+        key = encodeURIComponent(key)
+        value = encodeURIComponent(value)
+
+        // 拼接属性
+        let stringifyAttributes = ''
+        for (attributeKey in attributes) {
+          const attribute = attributes[attributeKey]
+          if (!attribute) {
+            continue
+          }
+          stringifyAttributes += `; ${attributeKey}`
+          if (attribute === true) {
+            continue
+          }
+          // 避免值中的;
+          stringifyAttributes += `=${attribute.split(';')[0]}`
+        }
+
+        return (document.cookie = `${key}=${value}${stringifyAttributes}`)
+      }
+      get (key) {
+        if (typeof document === 'undefined') {
+          return
+        }
+        let jar = {}
+        let cookies = []
+        document.cookie && (cookies = document.cookie.split('; '))
+      
+        for (let i = 0; i < cookies.length; i++) {
+          const parts = cookies[i].split('=')
+          let cookie = parts.slice(1).join('=') // 值中可能含有=符号 有必要吗？
+
+          if (cookie.charAt(0) === '"') {
+            cookie = cookie.slice(1, -1)
+          }
+
+          try {
+            const name = decodeURIComponent(parts[0])
+            cookie = decodeURIComponent(cookie)
+            jar[name] = cookie
+            if (key === name) {
+              break
+            }
+          } catch (e) {}
+        }
+        return key ? jar[key] : jar
+      }
+      remove (key) {
+        this.set(key, '', { expires: -1 })
+      }
+    }
+  </script>
+</body>
+</html>
