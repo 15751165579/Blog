@@ -23,26 +23,21 @@
 
         if (typeof attributes.expires === 'number') {
           // IE不支持max-age
-          attributes.expires = new Date(Date.now + attributes.expires * 864e+5)
+          attributes.expires = new Date(Date.now() + attributes.expires * 1000)
         }
 
-        attributes.expires = attributes.expires ? attributes.expires.toUTCString() : ''
-
-        // value可能是对象
-        try {
-          const result = JSON.stringify(value)
-          if (/^[\{\[]/.test(result)) {
-            value = result
-          }
-        } catch (e) {}
-
+        if (attributes.expires instanceof Date) {
+          attributes.expires = attributes.expires.toUTCString()
+        } else {
+          attributes.expires = ''
+        }
         // URL编码
         key = encodeURIComponent(key)
         value = encodeURIComponent(value)
 
         // 拼接属性
         let stringifyAttributes = ''
-        for (attributeKey in attributes) {
+        for (let attributeKey in attributes) {
           const attribute = attributes[attributeKey]
           if (!attribute) {
             continue
@@ -51,8 +46,7 @@
           if (attribute === true) {
             continue
           }
-          // 避免值中的;
-          stringifyAttributes += `=${attribute.split(';')[0]}`
+          stringifyAttributes += `=${attribute}`
         }
 
         return (document.cookie = `${key}=${value}${stringifyAttributes}`)
@@ -66,21 +60,14 @@
         document.cookie && (cookies = document.cookie.split('; '))
       
         for (let i = 0; i < cookies.length; i++) {
-          const parts = cookies[i].split('=')
-          let cookie = parts.slice(1).join('=') // 值中可能含有=符号 有必要吗？
+          let [name, value] = cookies[i].split('=')
 
-          if (cookie.charAt(0) === '"') {
-            cookie = cookie.slice(1, -1)
+          name = decodeURIComponent(name)
+          value = decodeURIComponent(value)
+          jar[name] = value
+          if (name === key) {
+            break
           }
-
-          try {
-            const name = decodeURIComponent(parts[0])
-            cookie = decodeURIComponent(cookie)
-            jar[name] = cookie
-            if (key === name) {
-              break
-            }
-          } catch (e) {}
         }
         return key ? jar[key] : jar
       }
@@ -88,6 +75,11 @@
         this.set(key, '', { expires: -1 })
       }
     }
+
+    const cookie = new Cookie()
+    cookie.set('name', '123', { expires: 20 })
+    cookie.set('age', 20, { expires: 20 })
+    console.log(cookie.get('name'))
   </script>
 </body>
 </html>
