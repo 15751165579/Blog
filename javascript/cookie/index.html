@@ -11,75 +11,74 @@
   
   <script>
     /* eslint-disable */
-    class Cookie {
-      constructor () {}
-      set (key, value, attributes) {
-        if (typeof document === 'undefined') {
-          return
-        }
-        attributes = Object.assign({}, {
-          path: '/'
-        }, attributes)
 
-        if (typeof attributes.expires === 'number') {
-          // IE不支持max-age
-          attributes.expires = new Date(Date.now() + attributes.expires * 1000)
-        }
-
-        if (attributes.expires instanceof Date) {
-          attributes.expires = attributes.expires.toUTCString()
-        } else {
-          attributes.expires = ''
-        }
-        // URL编码
-        key = encodeURIComponent(key)
-        value = encodeURIComponent(value)
-
-        // 拼接属性
-        let stringifyAttributes = ''
-        for (let attributeKey in attributes) {
-          const attribute = attributes[attributeKey]
-          if (!attribute) {
-            continue
-          }
-          stringifyAttributes += `; ${attributeKey}`
-          if (attribute === true) {
-            continue
-          }
-          stringifyAttributes += `=${attribute}`
-        }
-
-        return (document.cookie = `${key}=${value}${stringifyAttributes}`)
+    function getCookie (name) {
+      if (typeof document === 'undefined') {
+        return
       }
-      get (key) {
-        if (typeof document === 'undefined') {
-          return
-        }
-        let jar = {}
-        let cookies = []
-        document.cookie && (cookies = document.cookie.split('; '))
-      
-        for (let i = 0; i < cookies.length; i++) {
-          let [name, value] = cookies[i].split('=')
+      let cookies = []
+      let jar = {}
+      document.cookie && (cookies = document.cookie.split('; '))
 
-          name = decodeURIComponent(name)
-          value = decodeURIComponent(value)
-          jar[name] = value
-          if (name === key) {
-            break
-          }
+      for (let i = 0, max = cookies.length; i < max; i++) {
+        let [key, value] = cookies[i].split('=')
+        key = decodeURIComponent(key)
+        value = decodeURIComponent(value)
+        jar[key] = value
+        if (key === name) {
+          break
         }
-        return key ? jar[key] : jar
       }
-      remove (key) {
-        this.set(key, '', { expires: -1 })
-      }
+
+      return name ? jar[name] : jar
     }
 
-    const cookie = new Cookie()
-    cookie.set('name', '123', { expires: 20 })
-    cookie.set('age', 20, { expires: 20 })
-    console.log(cookie.get('name'))
+    function setCookie (key, value, attributes) {
+      if (typeof document === 'undefined') {
+        return
+      }
+      attributes = Object.assign({}, {
+        path: '/'
+      }, attributes)
+      
+      let { domain, path, expires, secure } = attributes
+  
+      if (typeof expires === 'number') {
+        expires = new Date(Date.now() + expires * 1000)
+      }
+      if (expires instanceof Date) {
+        expires = expires.toUTCString()
+      } else {
+        expires = ''
+      }
+      
+      key = encodeURIComponent(key)
+      value = encodeURIComponent(value)
+
+      let cookieStr = `${key}=${value}`
+
+      if (domain) {
+        cookieStr += `; domain=${domain}`
+      }
+
+      if (path) {
+        cookieStr += `; path=${path}`
+      }
+
+      if (expires) {
+        cookieStr += `; expires=${expires}`
+      }
+      
+      if (secure) {
+        cookieStr += `; secure`
+      }
+
+      return (document.cookie = cookieStr)
+    }
+
+    function removeCookie (key) {
+      setCookie(key, '', { expires: -1 })
+    }
   </script>
 </body>
 </html>

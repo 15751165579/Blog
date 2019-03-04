@@ -43,7 +43,7 @@
   document.cookie
 ```
 
-  &emsp;&emsp;通过上述方法可以对该Cookie进行写操作，每一次只能写入一条Cookie字符串，需要注意Cookie的每一段信息需要通过**分号加空格**分割：
+  &emsp;&emsp;通过上述方法可以对该Cookie进行写操作，每一次只能写入一条Cookie字符串：
 
 ```JavaScript
   document.cookie = 'a=1; secure; path=/'
@@ -58,34 +58,100 @@
 
   &emsp;&emsp;由于上述方法操作Cookie非常的不直观，一般都会写一些函数来简化Cookie读取、设置和删除操作。
 
+  &emsp;&emsp;对于Cookie的设置操作中，需要以下几点：
 
+  - 对于名称和值进行URL编码处理，也就是采用JavaScript中的encodeURIComponent()方法；
+  - expires要求传入GMT格式的日期，需要处理为更易书写的方式，比如：设置秒数的方式；
+  - 注意只有的属性名的secure；
+  - 每一段信息需要采用**分号加空格**。
 
-### 限制
+```JavaScript
+function setCookie (key, value, attributes) {
+  if (typeof document === 'undefined') {
+    return
+  }
+  attributes = Object.assign({}, {
+    path: '/'
+  }, attributes)
+  
+  let { domain, path, expires, secure } = attributes
 
-  - 不能够跨域
-  - 大小
-  - 个数
+  if (typeof expires === 'number') {
+    expires = new Date(Date.now() + expires * 1000)
+  }
+  if (expires instanceof Date) {
+    expires = expires.toUTCString()
+  } else {
+    expires = ''
+  }
+  
+  key = encodeURIComponent(key)
+  value = encodeURIComponent(value)
 
-### 组成
+  let cookieStr = `${key}=${value}`
 
-  - 名称
-  - 值
-  - 域
-  - 路径
-  - 失效时间
-  - 安全标志
+  if (domain) {
+    cookieStr += `; domain=${domain}`
+  }
 
-  &esmp;&emsp;它们以分号加空格分隔。这些在客户端发送时，只会发送键值对。
+  if (path) {
+    cookieStr += `; path=${path}`
+  }
 
-### JavaScript操作Cookie
+  if (expires) {
+    cookieStr += `; expires=${expires}`
+  }
+  
+  if (secure) {
+    cookieStr += `; secure`
+  }
 
-  &emsp;&emsp;document.cookie并不会覆盖之前的cookie,除非名称已经存在，否则必须设置过期时间。
+  return (document.cookie = cookieStr)
+}
+```
 
-  cookie的基本操作
+  &emsp;&emsp;Cookie的读操作需要注意的是将名称与值进行URL解码处理，也就是调用JavaScript中的decodeURIComponent()方法：
 
-  cookie的骚操作 （子cookie）(数量的限制)
+```JavaScript
+function getCookie (name) {
+  if (typeof document === 'undefined') {
+    return
+  }
+  let cookies = []
+  let jar = {}
+  document.cookie && (cookies = document.cookie.split('; '))
 
-  HTTP专有cookie, (httpOnly) 客户端无法操作该Cookie。
+  for (let i = 0, max = cookies.length; i < max; i++) {
+    let [key, value] = cookies[i].split('=')
+    key = decodeURIComponent(key)
+    value = decodeURIComponent(value)
+    jar[key] = value
+    if (key === name) {
+      break
+    }
+  }
 
-### Cookie网站性能的影响
+  return name ? jar[name] : jar
+}
+```
+
+  &emsp;&emsp;最后一个清除的方法就更加简单了，只要将失效日期（expires）设置为过去的日期即可：
+
+```JavaScript
+function removeCookie (key) {
+  setCookie(key, '', { expires: -1 })
+}
+```
+
+  &emsp;&emsp;介绍Cookie基本操作的封装之后，还需要了解浏览器为了限制Cookie不会被恶意使用，规定了Cookie所占磁盘空间的大小以及每个域名下Cookie的个数。
+
+  &emsp;&emsp;为了绕开单域名下Cookie个数的限制，开发人员还创造了一种称为subcookie的概念，这里就不在赘述了，可以参考【JavaScript高级程序设计第23章 p633】。
+
+### 四、服务端的Cookie
+
+  &emsp;&emsp;相比较浏览器端，服务端执行Cookie的写操作时，是将拼接好的Cookie字符串放入响应头的Set-Cookie字段中；执行Cookie的读操作时，则是解析HTTP请求头字段Cookie中的键值对。
+
+  &emsp;&emsp;与浏览器最大的不同，在于服务端对于Cookie的安全性操碎了心。
+
+  &emsp;&emsp;首先是signed属性，当设置signed=true时，服务端对于对该Cookie发送两条Set-Cookie字段：
 
