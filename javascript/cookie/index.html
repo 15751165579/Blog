@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cookie</title>
+  <script src="./cookie.js"></script>
+</head>
+<body>
+  
+  <script>
+    /* eslint-disable */
+    class Cookie {
+      constructor () {}
+      set (key, value, attributes) {
+        if (typeof document === 'undefined') {
+          return
+        }
+        attributes = Object.assign({}, {
+          path: '/'
+        }, attributes)
+
+        if (typeof attributes.expires === 'number') {
+          // IE不支持max-age
+          attributes.expires = new Date(Date.now() + attributes.expires * 1000)
+        }
+
+        if (attributes.expires instanceof Date) {
+          attributes.expires = attributes.expires.toUTCString()
+        } else {
+          attributes.expires = ''
+        }
+        // URL编码
+        key = encodeURIComponent(key)
+        value = encodeURIComponent(value)
+
+        // 拼接属性
+        let stringifyAttributes = ''
+        for (let attributeKey in attributes) {
+          const attribute = attributes[attributeKey]
+          if (!attribute) {
+            continue
+          }
+          stringifyAttributes += `; ${attributeKey}`
+          if (attribute === true) {
+            continue
+          }
+          stringifyAttributes += `=${attribute}`
+        }
+
+        return (document.cookie = `${key}=${value}${stringifyAttributes}`)
+      }
+      get (key) {
+        if (typeof document === 'undefined') {
+          return
+        }
+        let jar = {}
+        let cookies = []
+        document.cookie && (cookies = document.cookie.split('; '))
+      
+        for (let i = 0; i < cookies.length; i++) {
+          let [name, value] = cookies[i].split('=')
+
+          name = decodeURIComponent(name)
+          value = decodeURIComponent(value)
+          jar[name] = value
+          if (name === key) {
+            break
+          }
+        }
+        return key ? jar[key] : jar
+      }
+      remove (key) {
+        this.set(key, '', { expires: -1 })
+      }
+    }
+
+    const cookie = new Cookie()
+    cookie.set('name', '123', { expires: 20 })
+    cookie.set('age', 20, { expires: 20 })
+    console.log(cookie.get('name'))
+  </script>
+</body>
+</html>
