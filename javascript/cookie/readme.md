@@ -153,5 +153,65 @@ function removeCookie (key) {
 
   &emsp;&emsp;与浏览器最大的不同，在于服务端对于Cookie的安全性操碎了心。
 
-  &emsp;&emsp;首先是signed属性，当设置signed=true时，服务端对于对该Cookie发送两条Set-Cookie字段：
+##### signed
+
+  &emsp;&emsp;当设置signed=true时，服务端会对该条Cookie字符串生成两个Set-Cookie响应头字段：
+
+```s
+  Set-Cookie: lastTime=2019-03-05T14:31:05.543Z; path=/; httponly
+  Set-Cookie: lastTime.sig=URXREOYTtMnGm0b7qCYFJ2Db400; path=/; httponly
+```
+
+  &emsp;&emsp;这里通过再发送一条以.sig为后缀的名称以及对值进行加密的Cookie，来验证该条Cookie是否在传输的过程中被篡改。
+
+##### httpOnly
+
+  &emsp;&emsp;服务端Set-Cookie字段中新增httpOnly属性，当服务端在返回的Cookie信息中含有httpOnly字段时，开发者是不能通过JavaScript来操纵该条Cookie字符串的。
+
+  &emsp;&emsp;这样做的好处主要在于面对XSS（Cross-site scripting）攻击时，黑客无法拿到设置httpOnly字段的Cookie信息。
+
+  &emsp;&emsp;此时，你会发现localStorage相比较Cookie，在XSS攻击的防御上就略逊一筹了。
+
+##### sameSite
+
+  &emsp;&emsp;在介绍这个新属性之前，首先你需要明白：当用户从a.com发起b.com的请求也会携带上Cookie，而从a.com携带过来的Cookie称为第三方Cookie。
+
+  &emsp;&emsp;虽然第三方Cookie有一些好处，但是给CSRF（Cross-site request forgrey）攻击的机会。
+
+  &emsp;&emsp;为了从根源上解决CSRF攻击，sameSite属性便闪亮登场了，它的取值有以下几种：
+
+  - strict：浏览器在任何跨域请求中都不会携带Cookie，这样可以有效的防御CSRF攻击，但是对于有多个子域名的网站采用主域名存储用户登录信息的场景，每个子域名都需要用户重新登录，造成用户体验非常的差。
+  - lax：相比较strict，它允许从三方网站跳转过来的时候使用Cookie。
+
+  &emsp;&emsp;为了方便大家理解sameSite的实际效果，可以看这个例子：
+
+```s
+  // a.com 服务端会在访问页面时返回如下Cookie
+
+  cookies.set('foo', 'aaaaa')
+  cookies.set('bar', 'bbbbb')
+  cookies.set('name', 'cccccc')
+
+  // b.com 服务端会在访问页面时返回如下Cookie
+  cookies.set('foo', 'a', { sameSite: 'strict' })
+  cookies.set('bar', 'b', { sameSite: 'lax' })
+  cookies.set('baz', 'c')
+```
+
+  &emsp;&emsp;如何现在用户在a.com中点击链接跳转到b.com，它的请求头是这样的：
+
+```s
+  Request Headers
+  Cookie: bar=b; baz=c
+```
+
+### 五、其它
+
+  
+
+
+
+
+
+
 
