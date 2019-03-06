@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>类数组</title>
+</head>
+<body>
+  <ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+  </ul>
+
+  <script>
+    // 常见的类数组有 NodeList 和 arguments
+    const s = document.querySelectorAll('li')
+    console.log(s)
+    console.log(Array.isArray(s) === false)
+
+
+    function demo () {
+      console.log(Array.isArray(arguments) === false)
+    }
+    demo(1, 2, 3)
+
+    // 类数组的特征
+    // 含有length属性，并且它的值为正整数
+
+    // 判断类数组
+    function isArrayLike (o) {
+      if (o && typeof o === 'object' && isFinite(o.length) && o.length >= 0 && o.length < Math.pow(2, 32) && o.length === Math.floor(o.length)) {
+        return true
+      }
+      return false
+    }
+
+    console.log(isArrayLike(s))
+
+    // 如何将类数组转化为 数组
+
+    // es6之前
+
+    const a1 = Array.prototype.slice.call(s)
+    console.log(a1)
+    console.log(Array.isArray(a1))
+
+    // es6
+    const a2 = Array.from(s)
+    console.log(Array.isArray(a2))
+
+    const a3 = [...s]
+    console.log(Array.isArray(a3))
+
+  </script>
+</body>
+</html>

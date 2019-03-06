@@ -57,11 +57,15 @@
 
 ### LeetCode
 
-  [【传送门】](https://github.com/15751165579/LeetCode)
+  [【一个前端开发者的LeetCode之旅】](https://github.com/15751165579/LeetCode)
 
-### 开源项目
+### 常用三方库（持续更新）
+
+  [【node-archiver】多文件解压缩处理](https://github.com/archiverjs/node-archiver)
+
+<!-- ### 开源项目
 
 | 项目名称 | 项目描述 | 版本 |
 | :--- | :--------------------------------------------------------------------------- | :---: |
 | [express-joi-verification](https://github.com/15751165579/express-joi-verification) | Express Middleware for verification querystring params and body by Joi | <a href="https://www.npmjs.com/package/express-joi-verification"><img src="https://img.shields.io/npm/v/express-joi-verification.svg" alt="Version"></a> |
-| [vue-notice-bar](https://github.com/15751165579/vue-notice-bar) | a notice-bar component for Vue2.0 | <a href="https://www.npmjs.com/package/vue-notice-bar"><img src="https://img.shields.io/npm/v/vue-notice-bar.svg" alt="Version"></a> |
+| [vue-notice-bar](https://github.com/15751165579/vue-notice-bar) | a notice-bar component for Vue2.0 | <a href="https://www.npmjs.com/package/vue-notice-bar"><img src="https://img.shields.io/npm/v/vue-notice-bar.svg" alt="Version"></a> | -->
