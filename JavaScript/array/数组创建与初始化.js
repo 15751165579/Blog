@@ -36,6 +36,27 @@ console.log(a7)
 const a5 = [...new Array(10)].map(() => 1)
 console.log(a5)
 
+// map会忽略 empty
+
+// v8源码 转化为对象 
+// function ArrayMap(f, receiver) {
+//   CHECK_OBJECT_COERCIBLE(this, "Array.prototype.map");
+
+//   // Pull out the length so that modifications to the length in the
+//   // loop will not affect the looping and side effects are visible.
+//   var array = TO_OBJECT(this);（1）转化为对象
+//   var length = TO_LENGTH(array.length);
+//   if (!IS_CALLABLE(f)) throw %make_type_error(kCalledNonCallable, f);
+//   var result = ArraySpeciesCreate(array, length);
+//   for (var i = 0; i < length; i++) {
+//     if (i in array) { // （2）过滤掉控制位
+//       var element = array[i];
+//       %CreateDataProperty(result, i, %_Call(f, receiver, element, i, array));
+//     }
+//   }
+//   return result;
+// }
+
 // es6 Array.from方法
 const a6 = Array.from({ length: 10 }, () => 1)
 console.log(a6)
