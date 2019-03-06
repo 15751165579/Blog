@@ -1,4 +1,4 @@
-# 全面了解Cookie
+# 前端基础 -- 全面了解Cookie
 
 ### 一、Cookie的出现
 
@@ -205,9 +205,13 @@ function removeCookie (key) {
   Cookie: bar=b; baz=c
 ```
 
-### 五、其它
+### 五、网站性能优化
 
-  
+  &emsp;&emsp;Cookie在服务端和浏览器的通信中，主要依靠HTTP的响应头和请求头传输的，所以Cookie会占据一定的带宽。
+
+  &emsp;&emsp;前面提到浏览器会为每一次HTPP请求自动携带上Cookie信息，但是对于同站内的静态资源，服务器并不需要处理其携带的Cookie，这无形中便浪费了带宽。
+
+  &emsp;&emsp;在最佳实践中，一般都会将静态资源部署到独立的域名上，从而可以避免无效Cookie的影响。
 
 
 
