@@ -30,7 +30,7 @@
       document.body.appendChild(newDiv)
       newDiv.innerHTML = copyText
       window.getSelection().selectAllChildren(newDiv)
-      setTimeout(_ => {
+      setTimeout(() => {
         document.body.removeChild(newDiv)
       }, 0)
     })
