@@ -8,18 +8,17 @@ const server = http.createServer((req, res) => {
 
   res.setHeader('123', '213')
 
-  cookies.set('foo', 'a')
-  cookies.set('bar', 'b')
+  cookies.set('foo', 'a', { sameSite: 'strict', signed: false })
+  cookies.set('bar', 'b', { sameSite: 'lax', signed: false })
   cookies.set('baz', 'c')
 
   res.end(`
     <html>
-      <body>a页面</body>
-      <a href="http://localhost:4000/">点击进入b页面</a>
+      <body>b页面</body>
     </html>
   `)
 })
 
-server.listen(3000, () => {
-  console.log('listen on http://127.0.0.1:3000/')
+server.listen(4000, () => {
+  console.log('listen on http://127.0.0.1:4000/')
 })
