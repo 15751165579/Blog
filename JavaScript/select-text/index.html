@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .demo {
+      width: 400px;
+      height: 300px;
+      padding: 20px;
+      border: 1px solid red;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo" contenteditable="true"></div>
+  <input type="text" class="demo1" value="2132312">
+  <select class="demo2">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+  </select>
+  <p class="demo3">还是的哈猴神大叔发货单号省份和很烦 的是非得失 地方的</p>
+
+  <button id="btn1">获取可编辑元素的内容</button>
+  <button id="btn2">获取input textarea</button>
+  <button id="btn3">获取select元素</button>
+  <button id="btn4">获取一般元素</button>
+
+  <script>
+
+    // 获取值 只要分为两部分 element.value textcontent innertext outertext 区别
+    // 设置光标
+    window.onload = () => {
+
+      document.getElementById('btn1').addEventListener('click', () => {
+        const element = document.querySelector('.demo')
+        const selection = window.getSelection()
+        const range = document.createRange()
+        range.selectNodeContents(element)
+        selection.removeAllRanges()
+        selection.addRange(range)
+
+        console.log(selection.toString())
+      })
+
+      document.getElementById('btn2').addEventListener('click', () => {
+        const element = document.querySelector('.demo1')
+        
+        // 光标
+        element.select()
+        element.setSelectionRange(0, element.value.length)
+        console.log(element.value)
+      })
+
+      document.getElementById('btn3').addEventListener('click', () => {
+        const element = document.querySelector('.demo2')
+        element.focus()
+        console.log(element.value)
+      })
+
+      document.getElementById('btn4').addEventListener('click', () => {
+        const element = document.querySelector('.demo3')
+        const selection = window.getSelection()
+        const range = document.createRange()
+        range.selectNodeContents(element)
+        selection.removeAllRanges()
+        selection.addRange(range)
+
+        console.log(selection.toString())
+      })
+
+    }
+  </script>
+</body>
+</html>
