@@ -7,6 +7,7 @@
   - [掘金](https://juejin.im/user/57c5ae26c4c9710061a1defc)
   - [segmentfault](https://segmentfault.com/u/daiqingyun)
   - [知乎](https://www.zhihu.com/people/dai-qing-yun-58/activities)
+  - 微信公众号： **漫谈大前端**
 
 ## 🎉 文章列表
 
