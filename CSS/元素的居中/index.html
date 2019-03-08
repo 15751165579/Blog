@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>元素的居中</title>
+  <style>
+    body {
+      line-height: 1.5;
+      padding: 50px 100px;
+    }
+    h4 {
+      text-align: center;
+    }
+
+    .item {
+      width: 100px;
+      height: 100px;
+      background: red;
+    }
+    .border {
+      padding: 10px;
+      border: 1px dashed rgb(213,213,213);
+    }
+    .demo {
+      width: 200px;
+      height: 200px;
+      background: red;
+    }
+    .demo1 {
+      text-align: center;
+    }
+
+    .demo2 {
+      margin: 0 auto;
+    }
+
+    .demo3 {
+      line-height: 100px;
+    }
+
+    .demo4 {
+      width: 600px;
+      margin: 0 auto;
+      height: 600px;
+      border: 1px dashed red;
+      display: table-cell;
+      vertical-align: middle;
+    }
+
+    .square {
+      width: 200px;
+      height: 200px;
+      background-color: blueviolet;
+    }
+
+    .square-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+      border: 1px dashed rgb(213,213,213);
+    }
+
+    .demo5 {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      margin-left: -100px;
+      margin-top: -100px;
+    }
+
+    .demo6 {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+    }
+
+    .demo7 {
+      line-height: 300px;
+      text-align: center;
+    }
+
+    .demo8 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .demo9 {
+      display: grid;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // 主要针对这几种元素 inline inline-block block
+    // 文本 图片 div
+    // 水平居中 内联元素 text-align
+    // 块级元素 margin: 0 auto
+
+    // 垂直居中
+    // 单行文本居中 line-height
+    // 对于图片或者多行文本 table-cell
+
+    // 水平垂直居中
+
+
+    // css3新特性
+
+    // transform
+    // flex
+    // grid
+
+    
+  </script>
+  <h4>水平居中</h4>
+  <p>1、对于行内元素，采用text-align: center;</p>
+  <p class="demo1 border">我是需要水平居中的文本</p>
+  
+  <p>2、固定宽度的块级元素， margin</p>
+  <div class="demo demo2"></div>
+
+  <h4>垂直居中</h4>
+  <p>1、单行文本，采用line-height</p>
+  <p class="border demo3" style="height: 100px;">我是需要垂直居中的文本</p>
+
+  <h4>2、图片垂直居中</h4>
+  <div class="demo4">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="300px" alt="">
+  </div>
+
+  <h4>水平垂直居中</h4>
+  <p>元素的高度和宽度固定， 采用(absolute 或者 relative)定位 + margin负边距</p>
+  <div class="square-container">
+    <div class="square demo5"></div>
+  </div>
+  
+  <p>元素的高度和宽度不固定 定位 +  transform</p>
+  <div class="square-container">
+    <div class="square demo6"></div>
+  </div>
+
+  <p>单行文本内容</p>
+  <div class="square-container">
+    <p class="demo7">我是垂直居中文本</p>
+  </div>
+
+  <p>table-cell 内联元素垂直水平居中</p>
+  <div class="square-container" style="display: table-cell; vertical-align: middle;text-align: center;">
+    <!-- <div class="square demo6"></div> -->
+    <!-- <p>2121</p>
+    <p>343433</p> -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
+  </div>
+
+  <p>flex</p>
+  <div class="square-container demo8">
+    <div class="square"></div>
+  </div>
+
+  <p>grid</p>
+  <div class="square-container demo9">
+    <div class="square" style="margin: auto;"></div>
+  </div>
+</body>
+</html>
