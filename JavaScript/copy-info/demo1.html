@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div class="demo">
+    <p>哈哈哈收到货</p>
+    <p>一沙地上的婚纱</p>
+  </div>
+  <button class="js-btn">选择内容</button>
+  <script>
+    // 1、发布订阅模式
+    // 2、事件绑定的方式
+    // 3、选择文本内容 selection  range 以及对于3大元素的处理 （select input和textarea 可编辑元素）
+    // 4、复制到剪贴板上的api
+    // 5、应用 拦截copy事件 主要是select的作用
+    // 6、自动复制到剪贴板上
+    window.onload = () => {
+      
+      document.querySelector('.js-btn').addEventListener('click', () => {
+        const el = document.querySelector('.demo')
+      
+        const selection = window.getSelection()
+
+        selection.removeAllRanges()
+
+        const range = document.createRange()
+
+        range.selectNodeContents(el)
+
+        selection.addRange(range)
+
+        document.execCommand('copy')
+      })
+
+    }
+  </script>
+</body>
+</html>

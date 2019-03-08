@@ -19,7 +19,7 @@
 
   <script>
     window.getSelection().selectAllChildren(document.getElementById('demo'))
-    document.addEventListener('copy', _ => {
+    document.addEventListener('copy', () => {
       const copyObj = window.getSelection()
       const copyLink = `<br></br>该文章的版权地址${document.location.href}`
       const copyText = copyObj + copyLink
@@ -29,7 +29,8 @@
       newDiv.style.zIndex = '-9999px'
       document.body.appendChild(newDiv)
       newDiv.innerHTML = copyText
-      window.getSelection().selectAllChildren(newDiv)
+      const s = window.getSelection().selectAllChildren(newDiv)
+      console.log(s)
       setTimeout(() => {
         document.body.removeChild(newDiv)
       }, 0)
