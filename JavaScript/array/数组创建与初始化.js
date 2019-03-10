@@ -62,3 +62,32 @@ const a6 = Array.from({ length: 10 }, () => 1)
 console.log(a6)
 
 
+const s1 = new Array(10)
+const s2 = s1.map(() => 1)
+console.log(s2)
+
+
+const demo1 = []
+for (let i = 0; i < 10; i++) {
+  demo1[i] = i
+}
+console.log(demo1)
+
+const demo2 = []
+for (let i = 0; i < 10; demo2[i++] = i - 1);
+console.log(demo2)
+
+console.log(Array.from(new Array(10)).map((item, index) => index))
+
+console.log(new Array(10).fill(0).map((item, index) => index))
+
+console.log([...new Array(10)].map((item, index) => index))
+
+function some () {
+  console.log(Array.isArray(Array.prototype.slice.call(arguments)))
+}
+some(1, 2, 3)
+
+
+console.log(Array.from({ length: 10 }).map((item, index) => index))
+console.log(Array.apply(this, { length: 10 }).map((item, index) => index))
