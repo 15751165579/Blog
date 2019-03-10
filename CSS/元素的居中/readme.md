@@ -1,10 +1,10 @@
-# 前端小贴士 -- 元素水平垂直居中
+# 前端小贴士 -- 元素水平垂直居中方案总结
 
 ### 一、前言
 
-  &emsp;&emsp;在前端开发的过程中，元素垂直居中场景是非常常见的。
+  &emsp;&emsp;在前端开发的过程中，元素水平垂直居中的场景是非常常见的。
 
-  &emsp;&emsp;根据元素是块级元素还是内联元素，或者根据其容器的性质不同，可以采用合适的水平垂直居中方案。
+  &emsp;&emsp;根据元素是块级元素还是内联元素，或者根据其容器的性质不同，可以采用不同的水平垂直居中方案。
 
 ### 二、单行文本
 
@@ -49,7 +49,7 @@
 
   ![多行文本水平垂直居中](./多行文本水平垂直居中.png)
 
-  &emsp;&emsp;css还有一种特殊的内联块级元素，比如常见的img标签。如果容器内包含任意的文本和图片，该如何实现水平垂直居中呢？
+  &emsp;&emsp;css中还有一种特殊的内联块级元素，比如常见的img标签。如果容器内包含任意的文本和图片，情况就变得复杂多了，这时可以采用table-cell布局方式处理。
 
 ```html
   <div class="complex-inline-container">
@@ -79,7 +79,7 @@
 
 ### 三、块级元素
 
-  &emsp;&emsp;首先对于已知块级元素的高度和宽度的情况，可以采用定位（absolute 或者 relative + top + left）和负margin来处理：
+  &emsp;&emsp;首先对于已知块级元素高度和宽度的情况，可以采用定位（absolute 或者 relative + top + left）和负margin来处理：
 
 ```html
 <div class="square-container">
@@ -113,7 +113,7 @@
 
   &emsp;&emsp;上述css代码主要通过top和left让元素向下和向右偏移父级元素高度和宽度的一半，再通过负margin往反方向偏移自身宽高的一半，实现元素的水平垂直居中。
 
-  &emsp;&emsp;那么如果我们并不知道元素的宽高，那么则没有办法设置margin的值。这里可以采用transform中的translate代替，因为translate属性中的百分比是相对于自身的宽高。
+  &emsp;&emsp;那么如果我们并不知道元素的宽高，则没有办法设置margin的值。这里可以采用transform中的translate代替，因为translate属性中的百分比是相对于自身的宽高。
 
 ```css
 .demo6 {
@@ -143,7 +143,7 @@
 }
 ```
 
-  &emsp;&emsp;当然Flex的功能并不仅仅体现在元素的水平垂直居中上，如果你对Flex还不熟悉的话，可以先看看下面两篇文章：
+  &emsp;&emsp;当然Flex的功能并不仅仅体现在水平垂直居中的场景，如果你对Flex还不熟悉的话，可以先看看下面两篇文章：
   - [Flex的基本语法](http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html)
   - [Flex的实践示例](http://www.ruanyifeng.com/blog/2015/07/flex-examples.html)
 
@@ -170,7 +170,7 @@
 }
 ```
 
-  &emsp;&emsp;在普通的布局方式上，margin的auto只能作用在水平方向，而在Grid Layout中auto居然可以作用与水平和垂直方向，是不是很神奇。如果你想更深入的了解Grid Layout，可以阅读[全面认识Grid Layout]](https://juejin.im/post/5bafb20f518825573058337d)
+  &emsp;&emsp;在普通的布局方式上，margin的auto只能作用在水平方向，而在Grid Layout中auto居然可以作用于水平和垂直方向，是不是很神奇。如果你想更深入的了解Grid Layout，可以阅读[全面认识Grid Layout](https://juejin.im/post/5bafb20f518825573058337d)
 
 ### 六、总结
 
