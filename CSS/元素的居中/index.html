@@ -92,6 +92,62 @@
     .demo9 {
       display: grid;
     }
+
+    .single-text-container {
+      width: 400px;
+      height: 100px;
+      margin: 20px auto;
+      border: 1px dashed rgb(213,213,213);
+      box-sizing: border-box;
+      text-align: center;
+      line-height: 100px;
+    }
+
+    .single-text-container-1 {
+      width: 400px;
+      margin: 0 auto;
+      border: 1px dashed rgb(213,213,213);
+      box-sizing: border-box;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .complex-inline-container {
+      position: relative;
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
+      width: 300px;
+      padding: 10px;
+      margin: 0 auto;
+      border: 1px dashed rgb(213,213,213);
+    }
+
+    img {
+      border: 1px solid rgb(213,213,213);
+    }
+
+    .flex-container {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      width: 300px;
+      height: 300px;
+      border: 1px dashed rgb(213,213,213);
+    }
+
+    .grid-container {
+      display: grid;
+      margin: 0 auto;
+      width: 300px;
+      height: 300px;
+      border: 1px dashed rgb(213,213,213);
+    }
+    .grid-item {
+      margin: auto;
+    }
   </style>
 </head>
 <body>
@@ -133,6 +189,25 @@
   </div>
 
   <h4>水平垂直居中</h4>
+
+  <div class="single-text-container">
+    <span>单行文本水平垂直居中</span>
+  </div>
+
+  <div class="single-text-container-1">
+    <span>这是多行文本的情况。这是多行文本的情况。这是多行文本的情况。这是多行文本的情况。这是多行文本的情况。这是多行文本的情况。这是多行文本的情况。这是多行文本的情况。这是多行文本的情况。</span>
+  </div>
+
+  <p>table-cell 内联元素垂直水平居中</p>
+  <div class="complex-inline-container">
+    <p>the only one to build me up</p>
+    <p>when things don't go as planned</p>
+    <p>soldier on</p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
+  </div>
+
   <p>元素的高度和宽度固定， 采用(absolute 或者 relative)定位 + margin负边距</p>
   <div class="square-container">
     <div class="square demo5"></div>
@@ -143,30 +218,14 @@
     <div class="square demo6"></div>
   </div>
 
-  <p>单行文本内容</p>
-  <div class="square-container">
-    <p class="demo7">我是垂直居中文本</p>
-  </div>
-
-  <p>table-cell 内联元素垂直水平居中</p>
-  <div class="square-container" style="display: table-cell; vertical-align: middle;text-align: center;">
-    <!-- <div class="square demo6"></div> -->
-    <!-- <p>2121</p>
-    <p>343433</p> -->
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/440px-Huskiesatrest.jpg" width="100px" alt="">
-  </div>
-
   <p>flex</p>
-  <div class="square-container demo8">
+  <div class="flex-container">
     <div class="square"></div>
   </div>
 
   <p>grid</p>
-  <div class="square-container demo9">
-    <div class="square" style="margin: auto;"></div>
+  <div class="grid-container">
+    <div class="square grid-item"></div>
   </div>
 </body>
 </html>
