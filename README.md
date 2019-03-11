@@ -15,7 +15,7 @@
 
 | 文章名称  | -- |
 | :------------------------------------------------------------------------------- | :---: |
-
+| [前端小贴士 -- 类数组](https://blog.csdn.net/dai_qingyun/article/details/88406943) | -- |
 | [前端小贴士 -- 全面了解Cookie](https://blog.csdn.net/dai_qingyun/article/details/88267349) | -- |
 | [JavaScript中不得不说的断言?](https://github.com/15751165579/Blog/issues/17) | [![](https://badge.juejin.im/entry/5b1684676fb9a01e6c0b391d/likes.svg?style=plastic)](https://juejin.im/post/5b1683bee51d4506d73f176b) |
 | [快来围观一下JavaScript的Proxy](https://github.com/15751165579/Blog/issues/16)  | [![](https://badge.juejin.im/entry/5b0938166fb9a07ac23b3118/likes.svg?style=plastic)](https://juejin.im/post/5b09234d6fb9a07acf569905) |
