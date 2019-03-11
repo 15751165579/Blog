@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>点击区域处理</title>
+  <style>
+    .demo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 400px;
+      height: 400px;
+      margin: 100px auto;
+      border: 1px solid rgb(213,213,213);
+    }
+    .demo1 {
+      width: 50px;
+      height: 50px;
+      background-color: aqua;
+      margin: 10px;
+    }
+
+    .border {
+      border: 10px solid red;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo" id="js-container">
+    <div class="demo1"></div>
+    <div class="demo1"></div>
+    <div class="demo1"></div>
+    <div class="demo1"></div>
+  </div>
+
+  <script>
+    window.onload = () => {
+
+      function SingleElement () {
+        if (!(this instanceof SingleElement)) {
+          return new SingleElement()
+        }
+        this.element = null
+      }
+
+      SingleElement.prototype = {
+        add (target, className) {
+          const el = this.element
+          if (el) {
+            this.remove(className)
+          }
+          target.classList.add(className)
+          this.element = target
+        },
+        remove (className) {
+          const el = this.element
+          if (el) {
+            el.classList.remove(className)
+            this.element = null
+          }
+        }
+      }
+
+      const element = new SingleElement()
+      document.addEventListener('click', (e) => {
+        const targetElement = document.getElementById('js-container')
+        const event = e || window.event
+        const target = event.target || event.srcElement
+        if (target !== targetElement && targetElement.contains(target)) {
+          element.add(target, 'border')
+        } else {
+          element.remove('border')
+        }
+      }, false)
+
+
+    }
+  </script>
+</body>
+</html>
