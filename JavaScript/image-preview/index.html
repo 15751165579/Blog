@@ -8,7 +8,7 @@
 </head>
 <body>
   <div>
-    <input type="file" id="js-file">
+    <input type="file" id="js-file" multiple>
     <div>
       <img src="" id="js-image-1" width="200px" alt="">
     </div>
@@ -23,14 +23,16 @@
       document.getElementById('js-file').addEventListener('change', e => {
         const event = e || window.event
         const target = event.target || event.srcElement
-        const file = target.files[0]
+        const files = target.files
+        console.log(Array.from(files).pop())
+        const file = files[0]
         previewImage(file, document.getElementById('js-image-1'))
         previewImage2(file, document.getElementById('js-image-2'))
       }, false)
 
       function previewImage (file, el) {
         if (typeof FileReader === 'undefined') {
-          throw new TypeError('该浏览器不支持FileReader')
+          new Error('该浏览器不支持FileReader')
         }
 
         const fr = new FileReader()
@@ -47,12 +49,13 @@
         fr.onloadend = function (e) {
           console.log(' === 文件读入成功 === ')
           const { target } = e
+          console.log(target.result)
           el.setAttribute('src', target.result)
         }
         fr.onprogress = function (e) {
           const { lengthComputable, loaded, total } = e
           if (lengthComputable) {
-            console.log(`正在加载中 ${(loaded / total).toFixed(2) * 100}%`)
+            console.log(`总结字节数：${total}, 已经加载字节数：${loaded}`)
           }
         }
         fr.readAsDataURL(file)
@@ -60,15 +63,31 @@
 
       function previewImage2 (file, el) {
         if (window.URL) {
+          console.log(' ==== 对象URL ==== ')
+          console.log(window.URL.createObjectURL(file))
           el.setAttribute('src', window.URL.createObjectURL(file))
         } else if (window.webkitURL) {
           el.setAttribute('src', window.URL.createObjectURL(file))
         } else {
-          throw new TypeError('该浏览器支持URL')
+          new Error('该浏览器支持URL')
         }
       }
 
+      function createObjectURL (file) {
+        if (typeof window === 'undefined') {
+          new Error('非浏览器环境')
+        }
+        if (window.URL) {
+          return window.URL.createObjectURL(file)
+        } else if (window.webkitURL) {
+          return window.webkitURL.createObjectURL(file)
+        } else {
+          return ''
+        }
+      }
+      console.log(createObjectURL)
       // revokeObjectURL 清除引用
+
     }
   </script>
 </body>
