@@ -18,7 +18,7 @@
 
   &emsp;&emsp;设置mutiple属性则支持用户同时选中多个文件。
 
-  &emsp;&emsp;通过设置input的事件监听可以拿到本地文件对象：
+  &emsp;&emsp;监听input的change事件可以拿到本地文件对象：
 
 ```JavaScript
 document.getElementById('js-file').addEventListener('change', e => {
@@ -30,7 +30,7 @@ document.getElementById('js-file').addEventListener('change', e => {
 
   &emsp;&emsp;需要特别注意files是一个不常见的类数组对象。
 
-  &emsp;&emsp;拿到本地图片文件并不能直接将图片显示出来，因为无论是通过img标签还是backgroundImage属性，都需要图片的URL地址，那么一起看看JavaScript中提供哪些API生成URL。
+  &emsp;&emsp;拿到本地图片文件并不能直接将图片显示出来，因为无论是通过img标签还是backgroundImage属性，都需要图片的URL，那么一起看看JavaScript中提供哪些API生成URL。
 
 ### 三、URL
 
@@ -51,7 +51,7 @@ function createObjectURL (file) {
 }
 ```
 
-  &emsp;&emsp;Blob URL只能由JavaScript生成，指向浏览器当前内存中的数据，所以它本质上是一种伪协议。
+  &emsp;&emsp;Blob URL只能由JavaScript生成，指向浏览器当前内存中的数据，所以再不需要Blob URL时，需要通过调用revokeObjectURL()方法释放内存。
 
 ### 四、FileReader
 
