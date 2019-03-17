@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>事件委托</title>
+</head>
+<body>
+  <ul id="js-list">
+    <li>
+      <button data-id="1">按钮1</button>
+    </li>
+    <li>
+      <button data-id="2">按钮2</button>
+    </li>
+    <li>
+      <button data-id="3">按钮3</button>
+    </li>
+  </ul>
+  <script>
+    window.onload = () => {
+
+      const el = document.getElementById('js-list')
+
+      function handleClick (e) {
+        const { target } = e
+        if (target.tagName.toLowerCase() === 'button') {
+          const id = target.dataset.id
+          console.log(`删除id为 ${id} 的列表项`)
+        }
+      }
+      
+
+      // el.addEventListener('click', handleClick, false)
+
+      delegate(el, 'button', 'click', handleClick)
+      
+
+      const DOCUMENT_NODE_TYPE = 9
+      // 兼容性写法
+      if (typeof Element !== 'undefined' && !Element.prototype.matches) {
+        const proto = Element.prototype
+        proto.matches = proto.matchesSelector || proto.msMatchesSelector || proto.webkitMatchesSelector || proto.mozMachesSelector
+      }
+      
+      // 寻找事件目标元素
+      function closest (el, selector) {
+        while (el && el.nodeType !== DOCUMENT_NODE_TYPE) {
+          if (typeof el.matches === 'function' && el.matches(selector)) {
+            return el
+          }
+          el = el.parentNode
+        }
+      }
+
+      function delegate (el, selector, type, callback) {
+        if (typeof el === 'string') {
+          el = document.querySelector(el)
+        }
+        const listenerFn = listener.apply(this, arguments)
+        el.addEventListener(type, listenerFn, false)
+
+        return {
+          destroy () {
+            el.removeEventListener(type, listenerFn, false)
+          }
+        }
+      }
+      
+
+      function listener (el, selector, type, callback) {
+        return function (e) {
+          e.delegateTarget = closest(e.target, selector)
+
+          if (e.delegateTarget) {
+            callback.call(el, e)
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
