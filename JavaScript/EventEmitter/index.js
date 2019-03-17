@@ -16,7 +16,7 @@ Event.prototype.on = function (name, fn, ctx) {
 }
 
 Event.prototype.emit = function (name, ...data) {
-  // 订阅者传递的参数 这里采用了ES6中的剩余参数， 在ES5中可以采用arguments
+  // 发布者传递的参数 这里采用了ES6中的剩余参数， 在ES5中可以采用arguments
   const callbacks = this.events[name] || []
   for (let i = 0, max = callbacks.length; i < max; i++) {
     const { fn, ctx } = callbacks[i]

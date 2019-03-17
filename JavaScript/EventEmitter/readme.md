@@ -1,4 +1,4 @@
-### 前端小贴士 - 发布订阅设计模式
+### 前端小贴士 - 实现订阅发布模式
 
 ### 一、什么是发布订阅模式？
 
@@ -9,29 +9,29 @@
   &emsp;&emsp;在前端的开发中，发布订阅模式无处不在：
 
   - addEventListener事件监听。
-  - Vue框架中的数据双向绑定（数据劫持 + 发布订阅模式）。
+  - Vue框架的数据双向绑定（数据劫持 + 发布订阅模式）。
   - NodeJS中的EventEmitter模块。
 
 ### 三、实现
 
-  &emsp;&emsp;JavaScript中实现发布订阅的方式主要采用注册回调函数的方式，核心点如下：
+  &emsp;&emsp;JavaScript主要通过注册回调函数的方式实现发布订阅模式，核心点如下：
 
   - 创建一个对象来维护订阅事件中的回调函数。
   - on方法提供向订阅事件中注册回调函数的功能。
-  - emit方法执行订阅事件中的回调函数。
-  - once方法则是注册的事件只通知一次。
+  - emit方法则是执行订阅事件中的回调函数。
+  - once方法则是只触发一次订阅时间方法。
   - remove方法删除订阅事件中的回调函数。
 
 ```JavaScript
   function Event () {
     if (!(this instanceof Event)) {
-      return new Event() // 确保用户采用new关键字创建对象
+      return new Event() // 确保用户采用构造函数的方式创建对象
     }
     this.events = {} // 用于维护订阅事件的回调函数
   }
 ```
 
-  &emsp;&emsp;on方法的实现相对比较简单，给对应的订阅事件创建数组来保存订阅者的回调函数：
+  &emsp;&emsp;on方法的实现相对比较简单，主要给相应的订阅事件创建数组来保存订阅者的回调函数：
 
 ```JavaScript
   Event.prototype.on = function (name, fn, ctx) {
@@ -45,11 +45,11 @@
   }
 ```
 
-  &emsp;&emsp;接下来就是emit方法，执行相应订阅事件中的回调函数，需要注意回调函数this的绑定问题以及参数问题：
+  &emsp;&emsp;接下来就是emit方法，执行相应订阅事件中的回调函数，需要注意回调函数this的绑定以及传入参数的问题：
 
 ```JavaScript
   Event.prototype.emit = function (name, ...data) {
-    // 订阅者传递的参数 这里采用了ES6中的剩余参数， 在ES5中可以采用arguments
+    // 发布者传递的参数 这里采用了ES6中的剩余参数， 在ES5中可以采用arguments
     const callbacks = this.events[name] || []
     for (let i = 0, max = callbacks.length; i < max; i++) {
       const { fn, ctx } = callbacks[i]
@@ -66,7 +66,7 @@
   Event.prototype.once = function (name, fn, ctx) {
     const self = this
     function listener (...data) {
-      self.remove(name, listener) // 销毁
+      self.remove(name, listener) // 自动销毁
       fn.apply(ctx, data)
     }
     listener._ = fn // 用于手动销毁
