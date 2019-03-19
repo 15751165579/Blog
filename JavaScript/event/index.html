@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>浏览器特性嗅探</title>
+</head>
+<body>
+  <button class="js-btn1">按钮1</button>
+  <button class="js-btn2">按钮2</button>
+  <script>
+    window.onload = () => {
+      // let EventUtil = {
+      //   addHandler (el, type, handler) {
+      //     if (el.addEventListener) {
+      //       console.log('111')
+      //       return el.addEventListener(type, handler, false)
+      //     } else if (el.attachEvent) {
+      //       return el.attachEvent('on' + type, handler)
+      //     } else {
+      //       el['on' + type] = handler
+      //     }
+      //   }
+      // }
+
+      const EventUtil = {
+        addHandler (el, type, handler) {
+          if (el.addEventListener) {
+            EventUtil.addHandler = function (el, type, handler) {
+              return el.addEventListener(type, handler, false)
+            }
+          } else if (el.attachEvent) {
+            EventUtil.addHandler = function (el, type, handler) {
+              return el.attachEvent('on' + type, handler)
+            }
+          } else {
+            EventUtil.addHandler = function (el, type, handler) {
+              return el['on' + type] = handler
+            }
+          }
+          EventUtil.addHandler.call(null, el, type, handler)
+        }
+      }
+
+      function handle (e) {
+        console.log(e.target.tagName)
+      }
+
+      const b1 = document.querySelector('.js-btn1')
+      const b2 = document.querySelector('.js-btn2')
+
+      EventUtil.addHandler(b1, 'click', handle)
+      EventUtil.addHandler(b2, 'click', handle)
+    }  
+  </script>
+</body>
+</html>

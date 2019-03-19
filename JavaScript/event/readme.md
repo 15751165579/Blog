@@ -109,9 +109,34 @@ const EventUtil = {
 }
 ```
 
+  &emsp;&emsp;仔细观察上述代码，会发现每一次注册事件处理程序时，都需要对浏览器特性进行嗅探，这样是不是有点多余。
+
+  &emsp;&emsp;这里可以采用惰性加载函数的方式，使得初次注册事件处理程序时嗅探浏览器特性，后续不再执行重复的操作：
+
+```JavaScript
+const EventUtil = {
+  addHandler (el, type, handler) {
+    if (el.addEventListener) {
+      EventUtil.addHandler = function (el, type, handler) {
+        return el.addEventListener(type, handler, false)
+      }
+    } else if (el.attachEvent) {
+      EventUtil.addHandler = function (el, type, handler) {
+        return el.attachEvent('on' + type, handler)
+      }
+    } else {
+      EventUtil.addHandler = function (el, type, handler) {
+        return el['on' + type] = handler
+      }
+    }
+    EventUtil.addHandler.call(null, el, type, handler)
+  }
+}
+```
+
 ### 六、总结
 
-  &emsp;&emsp;在前端开发的过程中，少不了与事件处理打交道，那么理解DOM事件流和能够写出兼容性的事件处理程序代码是必不可少的。
+  &emsp;&emsp;在前端开发的过程中，少不了与事件处理程序打交道，那么理解DOM事件流和能够写出兼容性的事件处理程序代码是必不可少的。
 
 
 ###### 参考资料
