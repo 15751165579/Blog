@@ -49,17 +49,17 @@
 
   &emsp;&emsp;IE实现了类似DOM2级中的两个方法：
 
-  - attachEvent(name, callback)，注册事件处理程序。
+  - attachEvent(name, callback)，注册事件处理程序；
   - detachEvent(name, callback)，移除事件处理程序。
 
   &emsp;&emsp;记住是类似的两个方法，下面是它与DOM2级事件处理程序的差异性：
 
-  - IE传入的name必须是on+事件名(小写字母)，DOM2中则是直接为事件名。
-  - IE不支持useCapture参数，所以事件处理程序都是注册在事件冒泡阶段。
-  - IE事件执行的顺序与注册的顺序是相反的，DOM2中则是相同的。
-  - IE事件对象作为window对象的一个属性存在，DOM2中则是浏览器在事件执行的时候传入。
-  - IE事件目标通过event.srcElement获取，DOM2中通过event.target获取。
-  - IE通过returnValue属性阻止默认事件行为，DOM2中通过preventDefault方法。
+  - IE传入的name必须是on+事件名(小写字母)，DOM2中则是直接为事件名；
+  - IE不支持useCapture参数，所以事件处理程序都是注册在事件冒泡阶段；
+  - IE事件执行的顺序与注册的顺序是相反的，DOM2中则是相同的；
+  - IE事件对象作为window对象的一个属性存在，DOM2中则是浏览器在事件执行的时候传入；
+  - IE事件目标通过event.srcElement获取，DOM2中通过event.target获取；
+  - IE通过returnValue属性阻止默认事件行为，DOM2中通过preventDefault方法；
   - IE通过cancelBubble属性阻止事件冒泡，DOM2中通过stopPropagation方法。
 
 ### 五、跨浏览器的事件处理

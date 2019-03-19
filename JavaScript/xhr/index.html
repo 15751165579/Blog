@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>XHR</title>
+</head>
+<body>
+
+  <button id="js-btn">按钮</button>
+
+  <script>
+    window.onload = () => {
+
+      const xhr = new XMLHttpRequest()
+
+      document.getElementById('js-btn').addEventListener('click', () => {
+
+        xhr.open('get', 'https://ymd-lcc.oss-cn-beijing.aliyuncs.com/yan/lznyjd/%E7%BB%8F%E5%85%B8%E4%BC%A0%E9%A2%82%E8%A7%86%E9%A2%91.mp4', true)
+      
+        xhr.onload = function () {
+          console.log('下载完成')
+          console.log(xhr.status)
+        }
+
+        xhr.onerror = function () {
+          console.log('下载失败')
+        }
+
+        xhr.onreadystatechange = function (e) {
+          console.log('状态更改')
+          console.log(xhr.readyState)
+        }
+
+        xhr.onprogress = function (e) {
+          console.log(e)
+        }
+
+        xhr.send()
+      }, false)
+      
+    }  
+  </script>
+</body>
+</html>
