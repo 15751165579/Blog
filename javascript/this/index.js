@@ -1,28 +1,78 @@
 /* eslint-disable */
-function sayHi () {
-  console.log(`say hi ${this.name}`)
+
+/**
+ * this指向的五种情况
+ * 
+ * 作为对象的方法调用 (this指向调用的对象)
+ * 函数调用 （非严格模式 this指向 window , 严格模式下 this 指向undefined）
+ * 构造函数 this指向自身
+ * call apply bind 指定this的指向
+ * 箭头函数（绑定外部函数的this）词法this 与动态this区别很大 用apply无效
+ */
+
+// 第一道题目
+// var length = 100
+
+// function foo () {
+//   console.log(this.length)
+// }
+
+// const obj = {
+//   length: 10,
+//   bar (fn) {
+//     fn()
+//     arguments[0]()
+//   }
+// }
+
+// obj.bar(foo, 2)
+
+// 第二道题
+// const obj = {
+//   name: 'local name',
+//   say () {
+//     return () => console.log(this.name)
+//   }
+// }
+// const obj1 = {
+//   name: "other name"
+// }
+
+// obj.say()()
+// obj.say().call(obj1)
+
+
+// new的实现
+/**
+ * 1、创建一个新的对象
+ * 2、将构造函数的作用域赋值给新对象
+ * 3、执行构造函数中的代码
+ * 4、返回新对象
+ */
+
+function isPrimitive (val) {
+  const type = typeof val
+  return type === 'undefined' || type === 'null' || (type !== 'obejct' && type !== 'function')
 }
 
-sayHi.call({ name: 'xaioming'})
-
-sayHi.call({ name: 'xaiohong'})
-
-// this并不指向自身
-function foo () {
-  this.count++
+function applyNew (constructor, ...data) {
+  const o = {}
+  o.__proto__ = constructor.prototype
+  const val = constructor.apply(o, data)
+  if (isPrimitive(val)) {
+    return o
+  }
+  return val
 }
 
-foo.count = 0
+// create
+function applyCreate (proto) {
+  function F () {}
+  F.prototype = proto
+  return new F()
+}
 
-foo()
-console.log(foo.count)
-foo.call(foo)
-console.log(foo.count)
-
-// 更改this指向的集中方法 call apply bind new
-
-
-// 实际上apply call的自定义都是通过调用栈确定this的方式实现
+// 实际上apply call的自定义都是通过调用栈确定this的方式实现 （作为方法调用）
 Function.prototype.applyAction = function (ctx, arr) {
   ctx = ctx || window
   ctx.fn = this
@@ -38,34 +88,6 @@ Function.prototype.applyAction = function (ctx, arr) {
   }
   delete ctx.fn
   return result
-}
-
-function bar (a) {
-  console.log(a + '' + this.name)
-}
-
-bar.applyAction({ name: 'foo' }, ['you can do: '])
-
-// new 
-function createNew () {
-  const obj = new Object()
-  const args = Array.from(arguments)
-  const C = args.shift()
-  Object.setPrototypeOf(obj, C.prototype)
-  const ret = Constructor.apply(obj, args)
-  return typeof ret === 'object' ? ret : obj
-}
-
-
-// create 
-function create (proto) {
-  function F () {}
-  F.prototype = proto
-  return new F()
-}
-
-function Baz (name) {
-  this.name = name
 }
 
 // bind的实现
@@ -88,5 +110,23 @@ Function.prototype.bindAction = function (oThis) {
   return fBound
 }
 
+Function.prototype.bind = function (oThis, ...data) {
+  if (typeof this !== 'function') {
+    throw new Error('this is not a function')
+  }
+  const fn = this
+  const F = function () {} 
+  const FBound = function () {
+    // 是否采用new关键字构造
+    return fn.apply(this instanceof F ? this: oThis, data)
+  }
+
+  // 维护原型链
+  if (this.prototype) {
+    F.prototype = this.prototype
+  }
+  FBound.prototype = new F()
+  return FBound
+}
 
 
