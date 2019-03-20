@@ -18,15 +18,19 @@
   </style>
 </head>
 <body>
-  <img class="lazyload" data-src="./1.jpeg" width="300" height="168" alt="">
-  <img class="lazyload" data-src="./2.jpeg" width="275" height="183" alt="">
-  <img class="lazyload" data-src="./3.jpeg" width="300" height="168" alt="">
-  <img class="lazyload" data-src="./4.jpeg" width="300" height="168" alt="">
-  <img class="lazyload" data-src="./5.jpeg" width="284" height="177" alt="">
-  <img class="lazyload" data-src="./6.jpeg" width="284" height="177" alt="">
-  <img class="lazyload" data-src="./7.jpeg" width="284" height="177" alt="">
+  <img class="lazyload" data-src="./1.jpeg" src="./1.jpeg" width="300" height="168" alt="">
+  <img class="lazyload" data-src="./2.jpeg" src="./1.jpeg" width="275" height="183" alt="">
+  <img class="lazyload" data-src="./3.jpeg" src="./1.jpeg" width="300" height="168" alt="">
+  <img class="lazyload" data-src="./4.jpeg" src="./1.jpeg" width="300" height="168" alt="">
+  <img class="lazyload" data-src="./5.jpeg" src="./1.jpeg" width="284" height="177" alt="">
+  <img class="lazyload" data-src="./6.jpeg" src="./1.jpeg" width="284" height="177" alt="">
+  <img class="lazyload" data-src="./7.jpeg" src="./1.jpeg" width="284" height="177" alt="">
 
   <script>
+
+    // 1、图片懒加载 getBoundingClientRect + scroll (函数节流)
+    // - 判断图片是否在可视区域内
+    // 2、IntersectionObserver 新型API
 
     /* eslint-disable */
     const defaults = {
@@ -47,13 +51,12 @@
         let observerConfig = {
           root: null,
           rootMargin: '0px',
-          threshold: [0, 0.25, 0.5, 0.75, 1] // 多设置几个阈值，以免图片加载失败
+          threshold: [0] // 多设置几个阈值，以免图片加载失败
         }
         // 无法完成距离可视区域多远 加载图片
         this.observer = new IntersectionObserver(entries => {
           entries.forEach(entry => {
             const target = entry.target
-            // intersectionRect intersectionRatio
             if (entry.intersectionRatio > 0) {
               this.observer.unobserve(target)
               const src = target.getAttribute(this.setting.src)
