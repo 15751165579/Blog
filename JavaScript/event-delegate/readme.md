@@ -4,7 +4,7 @@
 
   &emsp;&emsp;通常情况下，注册事件程序有两种方式：
 
-  - DOM0级事件处理程序，例如：onclick。
+  - DOM0级事件处理程序，例如：onclick；
   - DOM2级事件处理程序，addEventListener。
 
   &emsp;&emsp;但是当页面中存在大量的事件处理程序时，会造成以下问题：
@@ -52,7 +52,7 @@ function handleClick (e) {
 
 ### 三、事件委托的封装
 
-  &emsp;&emsp;从上述示例中，可以发现事件委托的核心就是在事件冒泡阶段确定目标事件元素。
+  &emsp;&emsp;从上述示例中，可以发现事件委托的核心就是在事件冒泡阶段确定目标事件元素；
 
   &emsp;&emsp;对于这一点可以采用DOM中的扩展方法Element.matches()来判断当前元素是否与选择器字符串匹配：
 
@@ -107,4 +107,4 @@ function listener (el, selector, type, callback) {
 
 ### 四、写在最后
 
-  &emsp;&emsp;事件委托作为提升网站性能的一种方式，大家掌握了吗！？
+  &emsp;&emsp;事件委托作为提升网站性能的一种方式，大家掌握了吗！
