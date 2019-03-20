@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>图片懒加载</title>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-beta.2/lazyload.js"></script> -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    img {
+      display: block;
+      margin: 200px auto;
+    }
+  </style>
+</head>
+<body>
+  <img class="lazyload" data-src="./1.jpeg" src="./1.jpeg" width="300" height="168" alt="">
+  <img class="lazyload" data-src="./2.jpeg" src="./1.jpeg" width="275" height="183" alt="">
+  <img class="lazyload" data-src="./3.jpeg" src="./1.jpeg" width="300" height="168" alt="">
+  <img class="lazyload" data-src="./4.jpeg" src="./1.jpeg" width="300" height="168" alt="">
+  <img class="lazyload" data-src="./5.jpeg" src="./1.jpeg" width="284" height="177" alt="">
+  <img class="lazyload" data-src="./6.jpeg" src="./1.jpeg" width="284" height="177" alt="">
+  <img class="lazyload" data-src="./7.jpeg" src="./1.jpeg" width="284" height="177" alt="">
+
+  <script>
+
+    function isElementInViewport (el) {
+      const { top, height, left, width } = el.getBoundingClientRect()
+      const w = window.innerWidth || document.documentElement.clientWidth
+      const h = window.innerHeight || document.documentElement.clientHeight
+      return (
+        top <= h &&
+        (top + height) >= 0 &&
+        left <= w &&
+        (left + width) >= 0
+      )
+    }
+
+    function throttle (fn, interval = 500) {
+      const _fn = fn
+      let timer = null
+      let firstTime = true
+
+      return function (...args) {
+        const self = this
+        if (firstTime) {
+          // 第一次加载
+          _fn.apply(self, args)
+          return firstTime = false
+        }
+
+        if (timer) {
+          // 定时器正在执行中，跳过
+          return
+        }
+
+        timer = setTimeout(() => {
+          clearTimeout(timer)
+          timer = null
+          _fn.apply(self, args)
+        }, interval)
+
+      }
+    }
+    
+    function LazyLoad (el) {
+      if (!(this instanceof LazyLoad)) {
+        return new LazyLoad(el)
+      }
+      if (typeof el === 'string') {
+        el = document.querySelectorAll(el)
+      }
+      this.images = []
+
+      for (let i = 0, max = el.length; i < max; i++) {
+        this.images.push({
+          finished: false,
+          el: el[i]
+        })
+      }
+
+      this.listener = this.loadImage()
+      this.listener()
+      this.initEvent()
+    }
+
+    LazyLoad.prototype = {
+      loadImage () {
+        return throttle(function () {
+          let complete = true
+          const images = this.images
+          for (let i = 0; i < images.length; i++) {
+            const { finished, el } = images[i]
+            if (finished) {
+              continue
+            }
+            if (!finished) {
+              complete = false
+            }
+            if (isElementInViewport(el)) {
+              el.src = el.dataset.src
+              images[i].finished = true
+            }
+          }
+          if (complete) {
+            window.removeEventListener('scroll', this.listener, false)
+            this.images = null
+          }
+        }).bind(this)
+      },
+      initEvent () {
+        window.addEventListener('scroll', this.listener, false)
+      }
+    }
+
+    const lazyload = new LazyLoad('.lazyload')
+
+  </script>
+</body>
+</html>
