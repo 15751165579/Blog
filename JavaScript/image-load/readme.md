@@ -35,15 +35,13 @@
 
 ```JavaScript
 function throttle (fn, interval = 500) {
-  const _fn = fn
   let timer = null
   let firstTime = true
 
   return function (...args) {
-    const self = this
     if (firstTime) {
       // 第一次加载
-      _fn.apply(self, args)
+      fn.apply(this, args)
       return firstTime = false
     }
 
@@ -55,7 +53,7 @@ function throttle (fn, interval = 500) {
     timer = setTimeout(() => {
       clearTimeout(timer)
       timer = null
-      _fn.apply(self, args)
+      fn.apply(this, args)
     }, interval)
 
   }
