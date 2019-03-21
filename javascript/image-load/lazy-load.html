@@ -33,14 +33,12 @@
     // 2、IntersectionObserver 新型API
 
     /* eslint-disable */
-    const defaults = {
-      src: 'data-src',
-      srcset: 'data-srcset',
-      selector: '.lazyload'
-    }
 
-    function LazyLoad (images, options) {
-      this.setting = Object.assign({}, defaults, options || {})
+    function LazyLoad (images, options = {}) {
+      if (!(this instanceof LazyLoad)) {
+        return new LazyLoad(images, options)
+      }
+      this.setting = Object.assign({}, { src: 'data-src', srcset: 'data-srcset', selector: '.lazyload' }, options)
       this.images = images || document.querySelectorAll(this.setting.selector)
       this.observer = null
       this.init()
@@ -48,34 +46,33 @@
 
     LazyLoad.prototype.init = function () {
       let self = this
-        let observerConfig = {
-          root: null,
-          rootMargin: '0px',
-          threshold: [0] // 多设置几个阈值，以免图片加载失败
-        }
-        // 无法完成距离可视区域多远 加载图片
-        this.observer = new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            const target = entry.target
-            if (entry.intersectionRatio > 0) {
-              this.observer.unobserve(target)
-              const src = target.getAttribute(this.setting.src)
-              const srcset = target.getAttribute(this.setting.srcset)
-              if ('img' === target.tagName.toLowerCase()) {
-                if (src) {
-                  target.src = src
-                }
-                if (srcset) {
-                  target.srcset = srcset
-                }
-              } else {
-                target.style.backgroundImage = `url(${src})`
+      let observerConfig = {
+        root: null,
+        rootMargin: '0px',
+        threshold: [0] // 可以多设置几个阈值，以免图片加载失败
+      }
+      this.observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const target = entry.target
+          if (entry.intersectionRatio > 0) {
+            this.observer.unobserve(target)
+            const src = target.getAttribute(this.setting.src)
+            const srcset = target.getAttribute(this.setting.srcset)
+            if ('img' === target.tagName.toLowerCase()) {
+              if (src) {
+                target.src = src
               }
+              if (srcset) {
+                target.srcset = srcset
+              }
+            } else {
+              target.style.backgroundImage = `url(${src})`
             }
-          })
-        }, observerConfig)
+          }
+        })
+      }, observerConfig)
 
-        this.images.forEach(image => this.observer.observe(image))
+      this.images.forEach(image => this.observer.observe(image))
     }
 
     const lazyload = new LazyLoad(document.querySelectorAll('.lazyload'))
@@ -89,22 +86,22 @@
     // webp apng
     // 虽然这样解决图片多的情况，但是对于图片本身就很大。medium图片加载方案
     // Google主色块 预加载
-    function isElementInViewport (el) {
-      const rect = el.getBoundingClientRect()
-      const w = window.innerWidth || document.documentElement.clientWidth
-      const h = window.innerHeight || document.documentElement.clientHeight
-      return (
-        rect.top <= h &&
-        (rect.top + rect.height) >= 0 &&
-        rect.left <= w &&
-        (rect.left + rect.width) >= 0
-      )
-    }
+    // function isElementInViewport (el) {
+    //   const rect = el.getBoundingClientRect()
+    //   const w = window.innerWidth || document.documentElement.clientWidth
+    //   const h = window.innerHeight || document.documentElement.clientHeight
+    //   return (
+    //     rect.top <= h &&
+    //     (rect.top + rect.height) >= 0 &&
+    //     rect.left <= w &&
+    //     (rect.left + rect.width) >= 0
+    //   )
+    // }
 
-    const images = Array.from(document.querySelectorAll('.lazyload'))
-    images.forEach(item => {
-      console.log(isElementInViewport(item))
-    })
+    // const images = Array.from(document.querySelectorAll('.lazyload'))
+    // images.forEach(item => {
+    //   console.log(isElementInViewport(item))
+    // })
   </script>
 </body>
 </html>

@@ -67,21 +67,17 @@
       }
     }
     
-    function LazyLoad (el) {
+    function LazyLoad (el, options) {
       if (!(this instanceof LazyLoad)) {
         return new LazyLoad(el)
       }
+
+      this.setting = Object.assign({}, { src: 'data-src', srcset: 'data-srcset', selector: '.lazyload' }, options)
+
       if (typeof el === 'string') {
         el = document.querySelectorAll(el)
       }
-      this.images = []
-
-      for (let i = 0, max = el.length; i < max; i++) {
-        this.images.push({
-          finished: false,
-          el: el[i]
-        })
-      }
+      this.images = Array.from(el)
 
       this.listener = this.loadImage()
       this.listener()
@@ -91,34 +87,45 @@
     LazyLoad.prototype = {
       loadImage () {
         return throttle(function () {
-          let complete = true
-          const images = this.images
-          for (let i = 0; i < images.length; i++) {
-            const { finished, el } = images[i]
-            if (finished) {
+          let startIndex = 0
+          while (startIndex < this.images.length) {
+            const image = this.images[startIndex]
+            if (isElementInViewport(image)) {
+              const src = image.getAttribute(this.setting.src)
+              const srcset = image.getAttribute(this.setting.srcset)
+              if (image.tagName.toLowerCase() === 'img') {
+                if (src) {
+                  image.src = src
+                }
+                if (srcset) {
+                  image.srcset = srcset
+                }
+              } else {
+                image.style.backgroundImage = `url(${src})`
+              }
+              this.images.splice(startIndex, 1)
               continue
             }
-            if (!finished) {
-              complete = false
-            }
-            if (isElementInViewport(el)) {
-              el.src = el.dataset.src
-              images[i].finished = true
-            }
+            startIndex++
           }
-          if (complete) {
-            window.removeEventListener('scroll', this.listener, false)
-            this.images = null
+          
+          if (!this.images.length) {
+            this.destroy()
           }
         }).bind(this)
       },
       initEvent () {
         window.addEventListener('scroll', this.listener, false)
+      },
+      destroy () {
+        window.removeEventListener('scroll', this.listener, false)
+        this.images = null
+        this.listener = null
       }
     }
 
     const lazyload = new LazyLoad('.lazyload')
-
+    console.log(lazyload)
   </script>
 </body>
 </html>
