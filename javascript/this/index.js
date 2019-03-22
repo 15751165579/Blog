@@ -28,18 +28,25 @@
 // obj.bar(foo, 2)
 
 // 第二道题
-// const obj = {
-//   name: 'local name',
-//   say () {
-//     return () => console.log(this.name)
-//   }
-// }
-// const obj1 = {
-//   name: "other name"
-// }
+const obj = {
+  name: 'local name',
+  say () {
+    return () => console.log(this.name)
+  },
+  some () {
+    const that = this
+    return function () {
+      console.log(that.name)
+    }
+  }
+}
+const obj1 = {
+  name: "other name"
+}
 
-// obj.say()()
-// obj.say().call(obj1)
+obj.say()()
+obj.say().call(obj1)
+obj.some().call(obj1)
 
 
 // new的实现

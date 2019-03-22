@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .question {
+      display: block;
+      width: 400px;
+      padding: 20px;
+      margin: 50px auto;
+      letter-spacing: 2px;
+    }
+    .content {
+      color: blue;
+      outline: none;
+      padding: 0 10px;
+    }
+
+    .js-demo {
+      margin: 0 auto;
+      border: 1px solid rgb(213,213,213);
+    }
+  </style>  
+</head>
+<body>
+  <h5 style="text-align: center;">填空题</h5>
+
+  <!-- 光标问题 -->
+  <p class="question">
+    <span>主流媒体要及时提供更多真实客观、观点鲜明的信息内容，掌握舆论场</span>
+    <span>【</span>
+    <span class="content" contenteditable="true"></span>
+    <span>】</span>
+    <span>权和【</span>
+    <span class="content" contenteditable="true"></span>
+    <span>】权。</span>
+  </p>
+
+
+  <div class="js-demo" style="width: 400px;height: 200px;"></div>
+  <script>
+    // 高度自适应输入框
+    // 两种方案
+    // 1、直接通过获取 scrollHeight 获取
+    // 2、通过getComputedStyle 获取到textarea的样式 之后通过创建一个fakerTextarea 来计算高度 咦嘻嘻
+
+    window.onload = () => {
+
+      const el = document.querySelector('.js-demo')
+      
+      console.log(el.style.width)
+      console.log(el.style.border)
+
+    }
+  </script>
+</body>
+</html>
