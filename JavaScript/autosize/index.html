@@ -16,12 +16,24 @@
     .content {
       color: blue;
       outline: none;
+    }
+
+    .content:empty {
       padding: 0 10px;
     }
 
     .js-demo {
       margin: 0 auto;
       border: 1px solid rgb(213,213,213);
+    }
+
+    .demo {
+      width: 200px;
+      height: auto;
+      min-height: 20px;
+      overflow-x: hidden;
+      border: 1px solid red;
+      padding: 10px;
     }
   </style>  
 </head>
@@ -31,13 +43,17 @@
   <!-- 光标问题 -->
   <p class="question">
     <span>主流媒体要及时提供更多真实客观、观点鲜明的信息内容，掌握舆论场</span>
-    <span>【</span>
+    <span class="pre-left">【</span>
     <span class="content" contenteditable="true"></span>
-    <span>】</span>
-    <span>权和【</span>
+    <span class="pre-right">】</span>
+    <span class="pre-left">权和【</span>
     <span class="content" contenteditable="true"></span>
-    <span>】权。</span>
+    <span class="pre-right">】权。</span>
   </p>
+
+  <div class="demo" contenteditable="true">
+
+  </div>
 
 
   <div class="js-demo" style="width: 400px;height: 200px;"></div>

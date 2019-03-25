@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>高度自适应</title>
+  <style>
+    .demo {
+      margin: 50px auto;
+      width: 400px;
+      padding: 20px;
+      border: 10px solid red;
+      height: auto;
+      min-height: 40px;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div contenteditable="true" class="demo" id="js-div"></div>
+  <button id="js-button">获取内容</button>
+
+  <script>
+
+    window.onload = () => {
+
+      document.getElementById('js-button').addEventListener('click', () => {
+        const el = document.getElementById('js-div')
+        console.log(el.value) // undefined
+        console.log(el.textContent)
+      })
+    }
+  </script>
+</body>
+</html>
