@@ -104,12 +104,60 @@ AutoSize.prototype = {
 
 ### 三、contenteditable
 
-  &emsp;&emsp;HTML 中还有一个很特别的属性 -- contenteditable，该属性可以规定当前元素是否可编辑。
+##### 1、简介
+
+  &emsp;&emsp;HTML 中还有一个很特别的属性 -- contenteditable，该属性可以规定当前元素是否可编辑，该属性的取值有以下几种：
+
+  - true 或者空字符串，表示元素是可以编辑的；
+  - false 表示元素是不可编辑的；
+  - inherit 表明该元素继承了其父元素的可编辑状态。
+
+  &emsp;&emsp;另外，向设置 contenteditable 属性的元素中输入内容时，实际上是向该元素中插入 DOM 元素，并且可以结合 document.execCommand() 方法，所以可以用来开发富文本编辑器，例如：[medium-editor](https://github.com/yabwe/medium-editor)。
+
+  &emsp;&emsp;但是，在这个过程中需要注意很多细节问题，欢迎有这方面开发经验的小伙伴留言讨论。
+
+##### 2、高度自适应
 
 ```HTML
-  <div contenteditable="true" class="demo" id="js-div"></div>
+  <div contenteditable="true" class="demo" id="js-div" data-placeholder="这是占位文字"></div>
 ```
 
-  &emsp;&emsp;
+  &emsp;&emsp;上述代码仅仅通过指定 contenteditable 属性，就可以实现多行输入框高度自适应的功能，不过正如前面提到的，需要注意诸多的细节问题，下面列举两个简单的问题：（难的，实在处理不了-_-!）
 
+##### 3、placeholder
+
+  &emsp;&emsp;例如上述示例实现的多行输入框就需要我们自己实现 placeholder 的效果：
+
+```CSS
+  [contenteditable=true]:empty::before {
+    content: attr(data-placeholder);
+    color: red;
+    display: block;
+  }
+```
+
+##### 4、value
+
+  &emsp;&emsp;对于 input 和 textarea 标签，可以通过 value 属性值获取用户输入的内容。但是对于设置 contenteditable 属性的元素来说，就需要看情况了：
+
+  - 如果需要获取 HTML 结构，那么就需要采用 innerHTML 属性；
+  - 如果仅仅获取文本内容，那么可以考虑 innerText 和 textContent。
+
+  &emsp;&emsp;是不是遇到了一个让你傻傻分不清的两个属性，关于它们的区别主要有：
+
+  - textContent 会获取所有元素的内容，包括 script 和 style 标签元素，而 innerText 不会；
+  - innerText 受 CSS 样式的影响，不会返回隐藏元素的文本，而 textContent 会；
+  - innerText 返回的文本内容会格式化。
+
+  &emsp;&emsp;综上所述，采用 innerText 属性比较好一点。
+
+
+##### 5、填空题输入框的实现
+
+  &emsp;&emsp;抛开 contenteditable 属性的诸多问题，它依然有很多的闪光点，例如实现这样一个填空题输入框：
+
+  ![填空题输入框](./tiankongti.gif)
+ 
 ### 四、总结
+
+  &emsp;&emsp;虽然 contenteditable 属性可以轻松实现高度自适应的输入框，但是需要处理非常多的细节问题和跨浏览器问题，所以大部分还采用第一种实现方式。

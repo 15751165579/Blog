@@ -15,21 +15,34 @@
       min-height: 40px;
       outline: none;
     }
+    [contenteditable=true]:empty::before {
+      content: attr(data-placeholder);
+      color: red;
+      display: block;
+    }
   </style>
 </head>
 <body>
-  <div contenteditable="true" class="demo" id="js-div"></div>
+  <div contenteditable="true" class="demo" id="js-div" data-placeholder="这是占位文字"></div>
   <button id="js-button">获取内容</button>
 
   <script>
 
     window.onload = () => {
-
-      document.getElementById('js-button').addEventListener('click', () => {
-        const el = document.getElementById('js-div')
-        console.log(el.value) // undefined
-        console.log(el.textContent)
-      })
+      document.getElementById('js-div').addEventListener('paste', e => {
+        e.preventDefault()
+        navigator.clipboard.readText().then(res => {
+          document.execCommand("insertText", false, res)
+        })
+      }, false)
+      // document.getElementById('js-button').addEventListener('click', () => {
+      //   const el = document.getElementById('js-div')
+      //   console.log(el.value) // undefined
+      //   console.log(el.textContent)
+      //   console.log(el.innerHTML)
+      //   console.log(el.innerText)
+      //   el.innerHTML = '<h1>哈哈十大</h1>'
+      // })
     }
   </script>
 </body>
