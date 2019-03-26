@@ -24,28 +24,28 @@
   </style>
 </head>
 <body>
-  <div contenteditable="true" class="demo" id="js-div" data-placeholder="这是占位文字"></div>
+  <div contenteditable="plaintext-only" class="demo" id="js-div" data-placeholder="这是占位文字"></div>
   <button id="js-button">获取内容</button>
 
   <script>
 
     window.onload = () => {
-      document.getElementById('js-div').addEventListener('paste', e => {
-        e.preventDefault()
-        console.log(window)
-        // 兼容性 堪忧 并且需要 用户授权
-        // navigator.clipboard.readText().then(res => {
-        //   document.execCommand("insertText", false, res)
-        // })
-      }, false)
-      // document.getElementById('js-button').addEventListener('click', () => {
-      //   const el = document.getElementById('js-div')
-      //   console.log(el.value) // undefined
-      //   console.log(el.textContent)
-      //   console.log(el.innerHTML)
-      //   console.log(el.innerText)
-      //   el.innerHTML = '<h1>哈哈十大</h1>'
-      // })
+
+      // -webkit-user-modify: read-write-plaintext-only;
+      // document.getElementById('js-div').addEventListener('paste', e => {
+      //   e.preventDefault()
+      //   navigator.clipboard.readText().then(res => {
+      //     document.execCommand("insertText", false, res)
+      //   })
+      // }, false)
+      document.getElementById('js-button').addEventListener('click', () => {
+        const el = document.getElementById('js-div')
+        console.log(el.value) // undefined
+        console.log(el.textContent)
+        console.log(el.innerHTML)
+        console.log(el.innerText)
+        // el.innerHTML = '<h1>哈哈十大</h1>'
+      })
     }
   </script>
 </body>
