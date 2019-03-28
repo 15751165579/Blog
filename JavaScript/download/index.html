@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+  <button id="js-button">下载</button>
+<body>
+  <script>
+    // 下载文件
+    // 功能函数
+    // 1、下载文件 url 进度 取消 abort
+    // 2、生成 对象blob url
+    // 3、创建fakerA 通过download（各个浏览器策略不一样，有的是禁止跨域）
+    // 4、获取文件后缀
+    document.getElementById('js-button').addEventListener('click', () => {
+
+      getImageBlob().then(res => {
+
+        const url = URL.createObjectURL(res)
+        let aDom = document.createElement('a')
+        aDom.href = url
+        aDom.download = '样例视频.mp4' // https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/a
+        aDom.text = '下载文件'
+        aDom.style.display = 'none'
+        document.documentElement.appendChild(aDom)
+        aDom.click()
+        setTimeout(() => {
+          document.documentElement.removeChild(aDom)
+          aDom = null
+        }, 0)
+      })
+      })
+
+      function getImageBlob () {
+        return new Promise((resolve) => {
+          const xhr = new XMLHttpRequest()
+          // https://ymd-lcc.oss-cn-beijing.aliyuncs.com/yan/lznyjd/%E7%BB%8F%E5%85%B8%E4%BC%A0%E9%A2%82%E8%A7%86%E9%A2%91%E7%BC%A9%E7%95%A5%E5%9B%BE.jpg
+          // https://ymd-lcc.oss-cn-beijing.aliyuncs.com/yan/lznyjd/%E7%BB%8F%E5%85%B8%E4%BC%A0%E9%A2%82%E8%A7%86%E9%A2%91.mp4
+          xhr.open('get', 'https://ymd-lcc.oss-cn-beijing.aliyuncs.com/yan/lznyjd/%E7%BB%8F%E5%85%B8%E4%BC%A0%E9%A2%82%E8%A7%86%E9%A2%91.mp4', true)
+          xhr.responseType = 'blob'
+          xhr.onload = function () {
+            if (this.status === 200) {
+              resolve(this.response)
+            }
+          }
+          xhr.onprogress = function ({ lengthComputable, loaded, total}) {
+            if (lengthComputable) {
+              console.log(total + ' ' + loaded)
+            }
+          }
+          xhr.send()
+        })
+      }
+  </script>
+</body>
+</html>
