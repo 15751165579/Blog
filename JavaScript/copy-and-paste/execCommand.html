@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>document.execCommand</title>
-  <!-- <link rel="manifest" href="./manifest.json"> -->
 </head>
 <body>
   <div contenteditable="true">金海环境爱很简单家哈桑</div>
@@ -21,6 +20,14 @@
 
     // 可编辑内容区域
     window.onload = () => {
+
+      navigator.permissions.query({ name: 'clipboard-read' }).then( permission => {
+        console.log(permission)
+        console.log(permission.state)
+        permission.onchange = function () {
+          console.log(this.state)
+        }
+      })
 
       function execCommand (commandName) {
         let success = true
