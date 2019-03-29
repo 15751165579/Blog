@@ -16,6 +16,37 @@
     // 2、生成 对象blob url
     // 3、创建fakerA 通过download（各个浏览器策略不一样，有的是禁止跨域）
     // 4、获取文件后缀
+    /* eslint-disable */
+    function getFileSuffix (filename) {
+      const index = filename.lastIndexOf('.')
+      return filename.substring(index + 1)
+    }
+
+    function createObjectURL (blob) {
+      if (typeof window === 'undefined') {
+        throw new Error('window is undefined')
+      }
+      if (window.URL) {
+        return window.URL.createObjectURL(blob)
+      } else if (window.webkitURL) {
+        return window.webkitURL.createObjectURL(blob)
+      }
+    }
+
+    function createFakerA (url, name, suffix) {
+      let fakerA = document.createElement('a')
+      fakerA.href = url
+      fakerA.download = `${name}.${suffix}`
+      fakerA.display = 'none'
+      document.documentElement.appendChild(fakerA)
+      fakerA.click()
+      setTimeout(() => {
+        document.documentElement.removeChild(fakerA)
+        fakerA = null
+        window.URL.revokeObjectURL(url)
+      })
+    }
+
     document.getElementById('js-button').addEventListener('click', () => {
 
       getImageBlob().then(res => {
