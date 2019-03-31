@@ -10,6 +10,10 @@
   <p>123121212</p>
 
   <textarea name="" id="" cols="30" rows="10" placeholder="哈哈哈"></textarea>
+
+  <div>
+    <button id="js-button">读取操作系统剪贴板的文本内容</button>
+  </div>
   <script>
     window.onload = () => {
 
@@ -28,6 +32,33 @@
         const s = e.clipboardData.getData('text/plain')
         e.preventDefault()
       })
+
+      document.getElementById('js-button').addEventListener('click', writeTextToClipboard, false)
+
+      function readTextFromClipboard () {
+        // 查询浏览器是否有读取剪贴板的权限
+        navigator.permissions.query({ name: 'clipboard-read' }).then(({ state }) => {
+          if (state === 'granted' || state === 'prompt') {
+            // 读取内容
+            navigator.clipboard.readText().then(data => {
+              console.log(data)
+            })
+          }
+        })
+      }
+
+      function writeTextToClipboard () {
+        navigator.permissions.query({ name: 'clipboard-write' }).then(({ state }) => {
+          if (state === 'granted' || state === 'prompt') {
+            navigator.clipboard.writeText(' Clipboard API').then(() => {
+              console.log('写入成功')
+            }).catch(() => {
+              console.log('写入失败')
+            })
+          }
+
+        })
+      }
     }
   </script>
 </body>

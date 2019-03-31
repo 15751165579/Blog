@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Selection</title>
+  <style>
+    
+    p {
+      text-align: center;
+    }
+    p::selection {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <p id="p1">123456789</p>
+  <p id="p2">hello world</p>
+
+  <button id="js-button">选中内容</button>
+  <script>
+    window.onload = () => {
+
+      const selection = window.getSelection()
+      selection.removeAllRanges()
+      const range = document.createRange()
+      range.setStart(document.getElementById('p1'), 0)
+      range.setEnd(document.getElementById('p2'), 1)
+      selection.addRange(range)
+
+      document.getElementById('js-button').addEventListener('click', () => {
+        console.log(window.getSelection())
+      }, false)
+
+    }
+  </script>
+</body>
+</html>

@@ -5,36 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>JS复制内容加版权</title>
-  <style>
-    *::selection {
-      color: red;
-    }
-  </style>
 </head>
 <body>
-  <section id="demo">
-    <h3>文章的标题</h3>
-    <p>今天有个好天气</p>
-  </section>
+  <p>这是一段原创内容</p>
+
+  <button id="js-button" data-text="hello world">复制</button>
 
   <script>
-    window.getSelection().selectAllChildren(document.getElementById('demo'))
-    document.addEventListener('copy', () => {
-      const copyObj = window.getSelection()
-      const copyLink = `<br></br>该文章的版权地址${document.location.href}`
-      const copyText = copyObj + copyLink
+    document.addEventListener('copy', protectText, false)
 
-      const newDiv = document.createElement('div')
-      newDiv.style.position = 'absolute'
-      newDiv.style.zIndex = '-9999px'
-      document.body.appendChild(newDiv)
-      newDiv.innerHTML = copyText
-      const s = window.getSelection().selectAllChildren(newDiv)
-      console.log(s)
+    function protectText () {
+      const selection = window.getSelection()
+      const text = `<br/>作者：xxx<br/>链接：xxxxxx<br/>来源：xxxx<br/>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。`
+      const newText = selection + text
+      let fakerEl = document.createElement('div')
+      fakerEl.style.position = 'absolute'
+      fakerEl.style.opacity = 0
+      fakerEl.style.zIndex = '-99999'
+      fakerEl.innerHTML = newText
+      document.body.appendChild(fakerEl)
+      selection.selectAllChildren(fakerEl)
       setTimeout(() => {
-        document.body.removeChild(newDiv)
+        document.body.removeChild(fakerEl)
+        fakerEl = null
       }, 0)
-    })
+    }
+
   </script>
 </body>
 </html>

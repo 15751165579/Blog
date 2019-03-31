@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>自动复制</title>
+</head>
+<body>
+  <button id="js-button" data-text="hello world">复制</button>
+
+  <script>
+
+    document.getElementById('js-button').addEventListener('click', copy, false)
+    
+    function execCommand (...args) {
+      let success = true
+      try {
+        success = document.execCommand(args)
+      } catch (err) {
+        success = false
+      }
+      return success
+    }
+
+    function copy (e) {
+      const text = e.target.dataset.text
+      let fakerElement = document.createElement('div')
+      fakerElement.style.position = 'absolute'
+      fakerElement.style.opacity = 0
+      fakerElement.style.zIndex = '-9999'
+      fakerElement.setAttribute('contenteditable', 'true')
+      fakerElement.textContent = text
+      document.body.appendChild(fakerElement)
+      const selection = window.getSelection()
+      const range = document.createRange()
+      range.selectNodeContents(fakerElement)
+      selection.removeAllRanges()
+      selection.addRange(range)
+      execCommand('copy')
+      setTimeout(() => {
+        document.body.removeChild(fakerElement)
+        fakerElement = null
+      }, 0)
+    }
+  </script>
+</body>
+</html>
