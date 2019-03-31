@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    
+    // 元编程的出现
+    function Teacher () {}
+
+    Teacher[Symbol.hasInstance] = (instance) => {
+      console.log('11')
+      return Array.isArray(instance)
+    }
+    const t1 = new Teacher()
+    console.log(t1 instanceof Teacher)  
+  </script>
+</body>
+</html>
