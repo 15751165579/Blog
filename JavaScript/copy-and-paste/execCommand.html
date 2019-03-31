@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>document.execCommand</title>
+</head>
+<body>
+  <div contenteditable="true">金海环境爱很简单家哈桑</div>
+  <textarea name="" id="" cols="30" rows="10">哈哈是大花洒好的哈</textarea>
+  <input type="text" value="安徽建华大街会撒娇好的机会撒">  
+  <div id="js-button">
+    <button data-text="bold">bold</button>
+    <button data-text="copy">copy</button>
+    <button data-text="cut">cut</button>
+    <button data-text="paste">paste</button>
+  </div>
+  <script>
+
+    // 可编辑内容区域
+    window.onload = () => {
+
+      navigator.permissions.query({ name: 'clipboard-read' }).then( permission => {
+        console.log(permission)
+        console.log(permission.state)
+        permission.onchange = function () {
+          console.log(this.state)
+        }
+      })
+
+      function execCommand (commandName) {
+        let success = true
+        try {
+          success = document.execCommand(commandName)
+        } catch (err) {
+          console.log(err)
+          success = false
+        }
+        console.log(success)
+        return success
+      }
+
+      document.getElementById('js-button').addEventListener('click', (e) => {
+        const el = e.target
+        if (el.tagName.toLowerCase() === 'button') {
+          const commandName = el.dataset.text
+          if (execCommand(commandName)) {
+            console.log(`执行命令 ${commandName} 成功`)
+          } else {
+            console.log(`执行命令 ${commandName} 失败`)
+          }
+        }
+      }, false)
+      
+    }
+  </script>
+</body>
+</html>

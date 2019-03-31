@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // query-string 解析
+    window.onload = () => {
+      // location 和 a 标签 都可以访问这些信息
+      var url = document.createElement('a');
+      url.href = 'https://developer.mozilla.org/en-US/search?q=URL#search-results-close-container';
+      console.log(url)
+      console.log(url.href);      // https://developer.mozilla.org/en-US/search?q=URL#search-results-close-container
+      console.log(url.protocol);  // https:
+      console.log(url.host);      // developer.mozilla.org
+      console.log(url.hostname);  // developer.mozilla.org
+      console.log(url.port);      // (blank - https assumes port 443)
+      console.log(url.pathname);  // /en-US/search
+      console.log(url.search);    // ?q=URL
+      console.log(url.hash);      // #search-results-close-container
+      console.log(url.origin); 
+
+      console.log(location.href);     
+      console.log(location.protocol);  
+      console.log(location.host);     
+      console.log(location.hostname);  
+      console.log(location.port);      
+      console.log(location.pathname);  
+      console.log(location.search);    
+      console.log(location.hash);      
+      console.log(location.origin);
+    }  
+  </script>
+</body>
+</html>
