@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Clipboard API</title>
+</head>
+<body>
+  <p>123121212</p>
+
+  <textarea name="" id="" cols="30" rows="10" placeholder="哈哈哈"></textarea>
+  <script>
+    window.onload = () => {
+
+      document.addEventListener('copy', e => {
+        console.log(e)
+        e.clipboardData.setData('text/plain', 'hello world')
+        e.preventDefault()
+      }, false)
+
+
+      document.addEventListener('paste', e => {
+        console.log(e.clipboardData.types)
+        console.log(e.clipboardData.getData('text/plain'))
+        console.log(e.clipboardData.getData('text/html'))
+
+        const s = e.clipboardData.getData('text/plain')
+        e.preventDefault()
+      })
+    }
+  </script>
+</body>
+</html>
