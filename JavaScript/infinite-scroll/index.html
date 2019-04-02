@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>scroll</title>
+  <style>
+    p {
+      line-height: 1.5;
+    }
+    .demo {
+      width: 400px;
+      height: 100px;
+      overflow-y: scroll;
+    }
+  </style>
+</head>
+<body>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas eveniet modi deserunt vel sint sit, adipisci, tempore dolorem nulla qui numquam voluptatum neque enim, id ad nostrum. Sed, cum iusto.</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam recusandae tenetur alias nihil ipsa, illum facilis quisquam ipsam. Voluptatibus exercitationem ullam sint totam placeat qui perspiciatis, suscipit veniam delectus reprehenderit.</p>
+  <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus magni, placeat vel, quos fugiat provident recusandae similique voluptatibus inventore doloribus ducimus excepturi aperiam qui cum, veniam hic facilis omnis. At!</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo voluptates ut dolorem molestias at inventore assumenda voluptate rerum, quasi fuga eligendi, atque mollitia, voluptatem earum placeat? Quas ab ducimus corrupti.</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis culpa, impedit ab tenetur aliquid sequi expedita aliquam veniam labore natus, non, eum consequuntur quibusdam exercitationem voluptatibus maxime? Consequuntur, commodi nobis!</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, adipisci suscipit iure expedita autem dignissimos cupiditate assumenda voluptatibus quibusdam, ullam ex obcaecati perferendis debitis minus, accusantium reiciendis officiis ad rem?</p>
+  <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore, ut vel quis, natus repellendus quaerat animi eligendi deleniti sint maxime dolorem quidem ducimus illum atque minus quam iste voluptatibus ipsum.</p>
+  <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus quia quo voluptates hic, exercitationem rem aperiam optio, asperiores, aliquam id quisquam! Ipsam quis laborum esse unde dicta in dolor explicabo?</p>
+
+  <div class="demo" id="js-div">
+      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore, ut vel quis, natus repellendus quaerat animi eligendi deleniti sint maxime dolorem quidem ducimus illum atque minus quam iste voluptatibus ipsum.</p>
+      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus quia quo voluptates hic, exercitationem rem aperiam optio, asperiores, aliquam id quisquam! Ipsam quis laborum esse unde dicta in dolor explicabo?</p>
+  </div>
+  <button id="js-button">获取</button>
+  <script>
+
+    // pageYOffset 与 scrollY 是一样的 但是前者兼容性好
+    // 文档滚动的距离
+
+     // scrollTop（应用于元素） 与 pageYOffset（应用于window）
+     // document.documentElement.scrollTop === window.pageYOffset
+    window.onload = () => {
+      // console.log(window.pageYOffset)
+      // setTimeout(() => {
+      //   window.scrollBy({
+      //     left: 0,
+      //     top: window.innerHeight,
+      //     behavior: 'smooth'
+      //   })
+      // })
+      // setTimeout(() => {
+      //   console.log(window.pageYOffset)
+      // }, 1000)
+      const el = document.getElementById('js-div')
+      document.getElementById('js-button').addEventListener('click', () => {
+        console.log(el.pageYOffset)
+        console.log(el.scrollTop)
+
+        console.log(window.pageYOffset)
+        console.log(window.scrollTop)
+        console.log(document.documentElement.scrollTop)
+      })
+    }
+  </script>
+</body>
+</html>
