@@ -91,31 +91,13 @@ Function.prototype.applyAction = function (ctx, arr) {
     for (let i = 0, max = arr.length; i < max; i++) {
       args.push(`arr[${i}]`)
     }
-    result = eval(`ctx.fn(${args})`)
+    result = eval(`ctx.fn(${args})`) // 1,2,3
   }
   delete ctx.fn
   return result
 }
 
 // bind的实现
-
-Function.prototype.bindAction = function (oThis) {
-  if (typeof this !== 'function') {
-    throw new Error('error')
-  }
-  const aArgs = Array.from(arguments).slice(1)
-  const fToBind = this
-  const fNOP = function () {}
-  const fBound = function () {
-    return fToBind.apply(this instanceof fNOP ? this : oThis, aArgs.concat(Array.from(arguments)))
-  }
-  // 维护原型
-  if (this.prototype) {
-    fNOP.prototype = this.prototype
-  }
-  fBound.prototype = new fNOP()
-  return fBound
-}
 
 Function.prototype.bind = function (oThis, ...data) {
   if (typeof this !== 'function') {
@@ -124,7 +106,7 @@ Function.prototype.bind = function (oThis, ...data) {
   const fn = this
   const F = function () {} 
   const FBound = function () {
-    // 是否采用new关键字构造
+    // new 关键字优先
     return fn.apply(this instanceof F ? this: oThis, data)
   }
 
@@ -136,4 +118,22 @@ Function.prototype.bind = function (oThis, ...data) {
   return FBound
 }
 
+
+Function.prototype.bind = function (oThis, ...data) {
+  if (typeof this !== 'function') {
+    throw new Error('this is not a function')
+  }
+
+  const fn = this
+  const F = function () {}
+  const FBind = function () {
+    return fn.apply(this instanceof F ? this : oThis, data)
+  }
+
+  if (this.prototype) {
+    F.prototype = this.prototype
+  }
+  FBind.prototype = new F()
+  return FBind
+}
 
