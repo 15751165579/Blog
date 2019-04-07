@@ -15,9 +15,6 @@ console.log(s.has(1))
 
 // Map 上的方法 set(key, value) get(key) clear() delete(key)
 
-// WeakSet WeakMap 若引用
-
-
 // Set Map 遍历 都可以采用 keys() values() entries() 以及扩展运算符
 
 // Set 可以用于数组去重
@@ -47,3 +44,17 @@ console.log(m1)
 
 console.log(Array.from(m1))
 console.log(Array.from(m1.values()))
+
+// WeakSet WeakMap 弱引用 只能用对象作为键
+// 并且不能被遍历
+
+let demo1 = new Object()
+let demo2 = demo1
+demo1 = null
+console.log(demo2)
+
+let demo3 = new Object()
+
+const wm = new WeakMap()
+
+wm.set(demo3, 1)
