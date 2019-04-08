@@ -12,10 +12,32 @@
   状态 
 
               ----- fulfilled --> 必须返回一个值，不能更改
-  pedding ---- 
+  pendding ---- 
               ----- rejected  --> 必须有一个拒绝的理由，不能够更改。
 
 
+  
+  三种状态 pendding | fulfilled (resolved) | rejected
 
+  当处于 pedding 状态， 可以转移到 fulfilled (resolved) 状态 或者是 rejected 状态
+
+  当处于上述二者状态时，则不可以被改变。
 
 [Promise/A+](https://promisesaplus.com/)
+
+
+```JavaScript
+const promise = new Promise((resolve, reject) => {
+  if (操作成功) {
+    resolve(value)
+  } else {
+    reject(error)
+  }
+})
+
+promise.then(value => {
+  // success
+}, error => {
+  // error
+})
+```
