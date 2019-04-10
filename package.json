@@ -66,6 +66,7 @@
   },
   "dependencies": {
     "@log4js-node/smtp": "^1.0.1",
+    "asap": "^2.0.6",
     "axios": "^0.18.0",
     "bloom-redis": "^0.0.1",
     "bloomfilter": "^0.0.18",
