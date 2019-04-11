@@ -13,7 +13,7 @@
  * 数据劫持 + 发布订阅
  */
 
-// 二、自身设置了 getter setter
+// 三、自身设置了 getter setter
 function defineReactive (obj, key) {
   let val = obj[key]
 
