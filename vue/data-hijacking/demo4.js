@@ -19,10 +19,13 @@ const arrayProto = Array.prototype
 
 const injackingPrototype = Object.create(arrayProto)
 
-injackingPrototype.prototype.push = function () {
-  console.log('劫持原生的 push 方法')
-  arrayProto.prototype.push.apply(this, arguments)
-}
+
+methods.forEach(method => {
+  injackingPrototype[method] = function () {
+    console.log(`劫持原生的 ${method} 方法`)
+    return arrayProto[method].apply(this, arguments)
+  }
+})
 
 // arr [[Prototype]] ----> injackingPrototype
 
@@ -30,3 +33,8 @@ Object.setPrototypeOf(arr, injackingPrototype)
 
 
 arr.push(4)
+console.log(arr)
+arr.unshift(0)
+console.log(arr)
+arr.sort()
+console.log(arr)
