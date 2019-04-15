@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>shadow dom</title>
+  <style>
+    el-button:defined {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <template class="template">
+    <style>
+      :host {
+
+      }
+    </style>
+    <div>
+      <p>哈哈哈哈</p>
+      <p>咦嘻嘻嘻</p>
+    </div>
+  </template>
+
+  <template id="demo">
+    <section>
+      <h1>Hello World</h1>
+      <p>do something</p>
+    </section>
+  </template>
+
+  <el-button></el-button>
+
+  <button id="js-button">按钮</button>
+  <button id="js-open-mode">open 模式可以修改组件内部样式</button>
+  <button id="js-closed-mode">closed 模式无法修改</button>
+  <script>
+    // https://developers.google.com/web/fundamentals/web-components/customelements
+
+
+    // HTML5 自定义组件的创建方式 template + customElement.define + shadow dom
+
+    // 隔离DOM 组件的 DOM 是独立的，不能够被外层操作
+    // 作用域CSS 样式规则不会被泄漏 也不渗入
+    // 组合 为组件设计一个声明性，基于标记的API
+    // 简化 CSS 选择器可以采用更通用的命名，无需担心冲突
+
+    // 两大概念 ShadowHost 以及 ShadowRoot 其中可以通过 attachShadow 方法给 ShadowHost 添加一个 ShadowRoot
+    // mode 中 closed 与 open 的区别
+
+    // shadow dom 中的 CSS 变更
+    // :host 设置挂载元素的样式
+    // :defined 表示通过 customElements.define 方法创建的元素
+
+    // template 相关
+    // 该内容不会在页面加载时呈现，但随后可以通过运行 JavaScript 实例化
+    // content 属性 获取内容
+    // slot 插槽
+    window.onload = () => {
+
+      class Button extends HTMLElement {
+        constructor () {
+          super()
+          this.attachShadow({mode: 'open'})
+          // closed 模式
+          // const shadowRoot = this.attachShadow({mode: 'closed'})
+          // const template = document.querySelector('.template')
+          // shadowRoot.appendChild(document.importNode(template.content, true))
+        }
+        connectedCallback () { // 元素每次插入到 DOM 时都会调用
+          const template = document.querySelector('.template')
+          this.shadowRoot.appendChild(document.importNode(template.content, true))
+        }
+        disconnectedCallback () {}
+        attributeChangedCallback(attrName, oldVal, newVal) {
+          console.log(attrName)
+          console.log(oldVal)
+          console.log(newVal)
+        }
+      }
+
+      window.customElements.define('el-button', Button)
+
+      document.querySelector('#js-button').addEventListener('click', () => {
+        console.log(document.querySelector('p'))
+      }, false)
+
+      // mode: open
+
+      const elButton = document.querySelector('el-button')
+
+      document.querySelector('#js-open-mode').addEventListener('click', () => {
+        console.log(elButton.shadowRoot)
+        elButton.shadowRoot.innerHTML = `<p>modify ${Math.random()}</p>`
+      }, false)
+
+
+      // mode: closed
+      document.querySelector('#js-closed-mode').addEventListener('click', () => {
+        console.log(elButton.shadowRoot)
+      }, false)
+    }
+  </script>
+</body>
+</html>

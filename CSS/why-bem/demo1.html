@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>shadow dom</title>
+</head>
+<body>
+  <p id="demo"></p>
+
+  <p>outer content</p>
+
+  <script>
+
+    // shadow host 影子宿主
+    // shadow root 影子根节点
+    // shadow dom 也是可以嵌套的
+
+    // 影子宿主 与 影子根节点 之前存在边界 两者的 JavaScript 和 CSS 互不影响
+    window.onload = () => {
+
+      const el = document.querySelector('#demo')
+
+      const shadowElement = el.attachShadow({ mode: 'open' })
+
+      shadowElement.innerHTML = '<p>hello world</p>'
+
+      shadowElement.innerHTML += '<style> p { color: red; }</style>'
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Shadow DOM</title>
+</head>
+<body>
+  <div class="shadow-host">
+    <em class="shadow-content-1">dance</em>
+    <em class="shadow-content-2">sing</em>
+  </div>
+
+  <template  class="template">
+    <h1>
+      <span>你</span>
+      <content select=".shadow-content-1"></content>
+      <span>我</span>
+      <content select=".shadow-content-2"></content>
+    </h1>
+  </template>
+
+  <script>
+
+    // 目前业界两种方式
+    // css module 为我们的类名 添加 hash 值 保证唯一性
+
+    // css scoped 加权重 （属性选择器 ） 这种情况还是存在选择器优先级的问题。
+    // 点击事件的差异
+    window.onload = () => {
+
+      const shadowHost = document.querySelector('.shadow-host')
+      
+      const shadowRoot = shadowHost.createShadowRoot()
+
+      const template = document.querySelector('.template')
+
+
+      shadowRoot.appendChild(document.importNode(template.content, true))
+    }
+  </script>
+</body>
+</html>
