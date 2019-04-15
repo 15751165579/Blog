@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CSS 级联问题</title>
+  <style>
+    .demo > .title {
+      color: red;
+    }
+    .list .title {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo">
+    <p class="title">Hello World</p>
+  </div>
+
+  <p class="title">Other Message</p>
+</body>
+</html>
