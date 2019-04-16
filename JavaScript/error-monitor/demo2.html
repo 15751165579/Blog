@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script src="./jstracker.js"></script>
+
+  <script>
+    window.onerror = function (message, source, lineno, colno, error) {
+      console.log(message)
+      console.log(source)
+      console.log(lineno)
+      console.log(colno)
+      console.log(error)
+    }
+    window.onload = () => {
+      /* eslint-disable */
+      // jstracker.init({
+      //   concat: false,
+      //   report: function(errorLogs) {
+      //     console.log(errorLogs)
+      //   }
+      // })
+
+      setTimeout(() => {
+        throw new Error('1111')
+      }, 1000)
+
+    }
+  </script>
+</body>
+</html>
