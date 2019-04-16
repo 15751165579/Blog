@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+    // try/catch 只能捕获到运行时错误 但是无法捕获到语法错误 和 异步错误
+
+    /**
+     * onerror 的几个问题
+     * 
+     * 1、它必须在所有代码之前，才能捕获到语法错误
+     * 
+     * 2、跨域脚本错误 只会显示 script error，需要加上 crossorigin 属性 而且需要前后端支持
+     * 
+     * 3、该函数只有返回 true 才能避免异常不会向上抛出
+     * 
+     * 4、可以捕获部分异步错误 如： setTimeout ，不能捕获 Promise 错误
+     * 
+     * 5、网络请求异常事件不会冒泡 只能在捕获阶段获取
+     * 
+     * */
+
+    window.onerror = function (message) {
+      console.log('捕获到错误: ' + message)
+      return true
+    }
+
+    window.addEventListener('unhandledrejection', e => {
+      e.preventDefault()
+      console.log('捕获promise错误')
+      console.log(e)
+    })
+
+    // 第5种情况 只能在捕获阶段获取， 但是你无法知道网络请求的最终状态
+    window.addEventListener('error', () => {
+      console.log('捕获错误')
+    }, true)
+
+    // setTimeout(() => {
+    //   throw new Error('哈哈哈')
+    // }, 1000)
+
+    /* eslint-disable */
+    function foo () {
+      return new Promise((resolve, reject) => {
+        const s = Math.floor(Math.random() * 100)
+        throw new Error('promise 内部错误')
+        if (s > 50) {
+          resolve(s)
+        } else {
+          reject(s)
+        }
+      })
+    }
+
+    foo()
+
+
+    // source map 对于现在压缩文件的重要性
+  </script>
+
+  <img src="dsdsd" alt="图片">
+</body>
+</html>
