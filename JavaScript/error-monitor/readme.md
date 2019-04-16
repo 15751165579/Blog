@@ -51,3 +51,18 @@
     raven.js 进一步处理信息 以及上报错误 其中对于一些常用的函数进行包装
 
     与第三方框架的结合，主要在于框架本身可能已经对于一些错误进行处理，这里需要通过插件的获取到 框架内部错误信息。
+
+
+    私有化 部署
+
+    mac：
+
+    brew cask install docker
+
+    一、安装各种依赖
+
+    docker pull redis
+    docker pull postgres
+    docker pull sentry
+
+    https://docs.docker.com/samples/library/sentry/
