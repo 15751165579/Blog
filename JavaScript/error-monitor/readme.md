@@ -65,4 +65,4 @@
     docker pull postgres
     docker pull sentry
 
-    https://docs.docker.com/samples/library/sentry/
+    https://docs.docker.com/samples/library/sentry/ (welcome page errors)
