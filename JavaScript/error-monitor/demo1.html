@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>hijacking methods</title>
+</head>
+<body>
+  
+
+  <script>
+
+    const originSetTimeout = window.setTimeout
+
+    window.setTimeout = function (fn, interval) {
+      const self = this
+      return originSetTimeout(function () {
+        try {
+          fn.call(self)
+        } catch (e) {
+          // 处理错误
+          console.log(' === 捕获错误 ==== ')
+          console.log(e)
+        }
+      }, interval)
+    }
+    
+    function foo (callback) {
+      setTimeout(callback, 1000)
+    }
+
+    // 无法捕获到错误
+
+    // try {
+    //   foo(() => {
+    //     throw new Error('哈哈哈')
+    //   })
+    // } catch (e) {
+    //   console.log('捕获到错误')
+    // }
+
+    foo(() => {
+      throw new Error('哈哈哈')
+    })
+  </script>
+</body>
+</html>
