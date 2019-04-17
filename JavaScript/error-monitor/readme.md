@@ -66,3 +66,67 @@
     docker pull sentry
 
     https://docs.docker.com/samples/library/sentry/ (welcome page errors)
+
+    上述安装问题 特别大 ，选择 onpremise 安装
+
+    注意注意！！！！！！
+
+    先 修改 config.yml 文件
+    
+```s
+  auth.allow-registration: false
+  beacon.anonymous: true
+  mail.from: ""
+  mail.host: ""
+  mail.password: ""
+  mail.port: 465
+  mail.use-tls: true
+  mail.username: ""
+  system.admin-email: ""
+  system.url-prefix: ""
+```
+
+    查看 readme.md 文件中的安装步骤 
+
+
+    另外需要注意的 sourcemap 似乎问题很大
+
+    sentry-cli 可以通过 @sentry/webpack-plugin
+
+  ```JavaScript
+      new SentryCliPlugin({
+        release: 'xxxx',
+        include: './dist',
+        ignore: ['node_modules', 'vue.config.js']
+      })
+  ```
+
+    根目录添加 .sentryclirc
+
+  ```s
+    [defaults]
+    url=xxxx
+    org=xxx
+    project=xxxx
+    [auth]
+    token=xxxx
+  ``` 
+
+    项目中
+
+  ```s
+    import Vue from 'vue'
+    import * as Sentry from '@sentry/browser'
+    import * as Integrations from '@sentry/integrations'
+    const dsn = 'http://<公钥>:<私钥>@<域名>/<项目编号>'
+    Sentry.init({
+      dsn,
+      release: '版本号',
+      integrations: [
+        new Integrations.Vue({
+          Vue,
+          attachProps: true
+        })
+      ]
+    })
+  ```
