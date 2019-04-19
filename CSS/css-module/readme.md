@@ -44,6 +44,8 @@
   3、将样式拆分之后，更加利于代码的复用。
   4、组件化开发思想（开发者不再以页面为基本单位，而是以网站中的组件为基本单位）
 
+  在实践的过程中，可能大家都是吸取这三个思想中适合自己团队开发的部分
+
 ### 三、CSS 预处理器
 
   Sass ruby
@@ -56,7 +58,7 @@
   2、提供变量（现代CSS 也有滴）
   3、合理的重用机制
 
-  Sass:
+  Scss:
 
   1、嵌套选择器 嵌套属性
   2、父级选择器的引用 &
@@ -65,10 +67,44 @@
   5、变量 $name: value; !default (默认值)
   6、占位字符串 #{$name}
   7、@import 导入其它样式文件
-  8、@extend 实现分组选择器的效果
+  8、@extend 实现分组选择器的效果 （DRY css）don't repeat your css 减少重复代码，但是会增加选择器之间的联系
+  9、@mixin 和 @include 更加灵活（可传入参数）
+  10、@function
 
+  例外还有 postcss 平台
 
+### 四、css module 的实现
 
+  shadow dom 为 CSS 提供了局部作用域（shadow dom 中的样式不会泄露到全局，全局样式也不会渗入到shadow dom）
 
+  css module [CSS Module](https://glenmaddern.com/articles/css-modules) 通过 css-loader自动处理
+
+```css
+.demo {
+  background: red;
+}
+
+.module_demo_2nchO : {
+  background: red;
+}  
+```
+
+  css scoped (vue-loader) 本质上采用属性选择器
+
+```css
+.demo {
+  background: red;
+}
+
+.demo[data-v-7ba5bd90] {
+  background: red;
+}
+
+<div data-v-7ba5bd90 class="demo"></div>
+```
+
+### 五、开源框架的实践
+
+  element-theme-chalk 通过 scss 实现 BEM语法
 
   
