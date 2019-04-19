@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>history api</title>
+  <style>
+    .demo {
+      width: 200px;
+      height: 200px;
+      background: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo"></div>
+
+  <button id="js-button-push">push</button>
+  <button id="js-button-replace">replace</button>
+
+  <script>
+
+    function aop (type) {
+      const origin = window.history[type]
+      const event = new Event(type) // CustomEvent 可以发送更多的数据
+      return function (...data) {
+        event.arguments = data
+        window.dispatchEvent(event)
+        const ret = origin.apply(this, data)
+        return ret
+      }
+    }
+
+    window.history.pushState = aop('pushState')
+    window.history.replaceState = aop('replaceState')
+
+    document.getElementById('js-button-push').addEventListener('click', () => {
+      window.history.pushState({ push: '123' }, 'page 2', 'push.html')
+    }, false)
+
+    document.getElementById('js-button-replace').addEventListener('click', () => {
+      window.history.replaceState({ replace: '456' }, 'page 2', 'replace.html')
+    }, false)
+
+    window.addEventListener('pushState', e => {
+      console.log(' === pushState === ')
+      console.log(e)
+    })
+
+    window.addEventListener('replaceState', e => {
+      console.log(' === replaceState === ')
+      console.log(e)
+    })
+  </script>
+</body>
+</html>
