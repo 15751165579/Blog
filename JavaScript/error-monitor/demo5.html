@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/dsdsd">
+  <title>Document</title>
+</head>
+<body>
+
+  <img src="...dsd" alt="">
+
+  <script>
+    window.addEventListener('error', (e) => {
+      e.preventDefault()
+      const { message, filename, lineno, colno, error } = e
+      console.log(' === 捕获错误 === ')
+      // 上报
+      console.log(message)
+      console.log(filename)
+      console.log(lineno)
+      console.log(colno)
+      console.log(error.stack)
+    }, false)  
+
+
+    window.addEventListener('error', e => {
+      const target = e.target
+      if (target instanceof HTMLScriptElement || target instanceof HTMLImageElement || target instanceof HTMLLinkElement) {
+        console.log(' ==== 静态资源加载错误 ==== ')
+        console.log(target)
+      }
+    }, true)
+
+    setTimeout(() => {
+      throw new Error('异步代码内部错误')
+    }, 1000)
+  </script>
+</body>
+</html>

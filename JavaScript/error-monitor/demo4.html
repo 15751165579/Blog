@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>try/catch</title>
+</head>
+<body>
+
+  <script>
+
+    // 1、无法捕获异步代码错误 
+    // 2、各个浏览器输出的错误对象信息不一致
+    // 3、对于 try/catch 的性能问题，不要在 try/catch 中声明太多的变量，避免变量拷贝带来的性能问题，最好只有一个函数调用。
+    try {
+      throw new Error('错误')
+    }  catch (e) {
+      console.log(' === 捕获错误 === ')
+      console.log(e.message)
+      console.log(e.name)
+      console.log(e.description)
+      console.log(e.filename)
+      console.log(e.lineNumber)
+      console.log(e.columnNumber)
+      console.log(e.stack) 
+    }
+  </script>
+</body>
+</html>
