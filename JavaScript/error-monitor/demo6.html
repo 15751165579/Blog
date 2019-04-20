@@ -13,8 +13,11 @@
     })
 
     window.addEventListener('unhandledrejection', e => {
+      e.preventDefault()
       console.log(' unhandledrejection 捕获 Promise 错误')
-      console.log(e)
+      const { message, stack } = e.reason
+      console.log(message)
+      console.log(stack)
     }, false)
 
     window.addEventListener('error', () => {

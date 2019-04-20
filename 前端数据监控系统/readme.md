@@ -100,3 +100,28 @@ window.addEventListener('error', (e) => {
   - 3、静态资源的加载错误 需要在 捕获阶段获取 但是无法获取到最终的请求状态
 
 
+  &emsp;&emsp;对于 Promise 的错误的捕获：
+
+```JavaScript
+window.addEventListener('unhandledrejection', e => {
+  e.preventDefault()
+  console.log(' unhandledrejection 捕获 Promise 错误')
+  const { message, stack } = e.reason
+  console.log(message)
+  console.log(stack)
+}, false)
+```
+
+  &emsp;&emsp;对于静态资源的加载的错误只能在捕获阶段获取，并且无法知道最终状态。
+
+```JavaScript
+window.addEventListener('error', e => {
+  const target = e.target
+  if (target instanceof HTMLScriptElement || target instanceof HTMLImageElement || target instanceof HTMLLinkElement) {
+    console.log(' ==== 静态资源加载错误 ==== ')
+    console.log(target)
+  }
+}, true)
+```
+
+
