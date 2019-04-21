@@ -272,9 +272,9 @@ Object.setPrototypeOf(arr, injackingPrototype)
   &emsp;&emsp;以上便是 Vue 实现数据劫持的核心原理，主要就是通过 Object.defineProperty() 方法劫持对象的属性，其缺点主要在于：
 
   - 一次只能设置一个属性，所以需要遍历对象或者数组；
-  - 新增属性无法自动探测到；
+  - 新增属性无法自动被探测；
   - 受属性描述符 configurable 的影响是致命的。
 
-  &emsp;&emsp;而 ES6 中的 Proxy 可以完美的解决这些问题，这也是 Vue3.0 中的大动作，有兴趣的读者可以查阅相关的文章。
+  &emsp;&emsp;而 ES6 中的 Proxy 可以完美的解决这些问题，这也是 Vue3.0 中的一个大动作，有兴趣的读者可以查阅相关的文章。
 
-  &emsp;&emsp;最后感觉大家的阅读！
+  &emsp;&emsp;如果本文对您有所帮助，那么点个关注鼓励一下笔者吧。
