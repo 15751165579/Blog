@@ -66,3 +66,10 @@ defineReactive(student, 'name')
 student.name
 student.name = 'xiaohong'
 student.name
+
+
+const foo = {
+  name: '123'
+}
+
+console.log(Object.getOwnPropertyDescriptor(foo, 'name'))

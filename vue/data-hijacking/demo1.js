@@ -31,11 +31,23 @@ function defineReactive (obj, key) {
 }
 
 const student = {
-  name: 'xiaoming'
+  name: 'xiaoming',
+  age: 20
 }
 
-defineReactive(student, 'name')
+Object.keys(student).forEach(key => defineReactive(student, key))
 
 student.name
 student.name = 'xiaohong'
-student.name
+
+student.age
+student.age = 27
+
+const arr = [0]
+
+defineReactive(arr, '0')
+
+arr[0]
+
+arr[0] = 1
+

@@ -49,7 +49,7 @@ function defineReactive (obj, key) {
       console.log(' 当前值为：' + newValue)
 
       if (setter) {
-        // 调用原始的 setter 方法
+        // 调用默认的 setter 方法
         setter.call(obj, newValue)
       } else {
         val = newValue

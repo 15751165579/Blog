@@ -78,9 +78,14 @@ function observe (value) {
   if (value.hasOwnProperty('__ob__') && value.__obj__ instanceof Observer) {
     ob = value.__ob__
   } else if (Object.isExtensible(value)) {
-    // 之前所说的 configurable 描述器的问题
+    // 后续需要定义诸如 __ob__ 这样的属性，所以需要能够扩展
     ob = new Observer(value)
   }
 
   return ob
 }
+
+const obj = { name: 'xiaoming' }
+Object.preventExtensions(obj)
+obj.age = 20
+console.log(obj.age)
