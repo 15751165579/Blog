@@ -279,13 +279,13 @@ Object.setPrototypeOf(arr, injackingPrototype)
 
   &emsp;&emsp;由于 Object.defineProperty() 方法存在的一些缺陷，Vue 中的数据劫持分成两部分：
 
-  - 针对 Object 类型，采用 Object.defineProperty() 方法劫持属性的读取和设置方法；
-  - 针对 Array 类型，采用原型相关的知识劫持常用的函数，从而知晓当前数组发生变化。
+  - **针对 Object 类型，采用 Object.defineProperty() 方法劫持属性的读取和设置方法**；
+  - **针对 Array 类型，采用原型相关的知识劫持常用的函数，从而知晓当前数组发生变化**。
   
   &emsp;&emsp;并且 Object.defineProperty() 方法存在一些缺陷：
 
-  - 每次只能设置一个具体的属性，导致需要遍历对象来设置属性，同时也导致了无法探测新增属性；
-  - 属性描述符 configurable 对其的影响是致命的。
+  - **每次只能设置一个具体的属性，导致需要遍历对象来设置属性，同时也导致了无法探测新增属性**；
+  - **属性描述符 configurable 对其的影响是致命的**。
 
   &emsp;&emsp;而 ES6 中的 Proxy 可以完美的解决这些问题（目前兼容性是个大问题），这也是 Vue3.0 中的一个大动作，有兴趣的读者可以查阅相关的文章。
 
