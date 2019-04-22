@@ -22,12 +22,17 @@ Object.defineProperty(demo, 'age', {
 //   }
 // })
 
-const p = new Proxy(demo, {
+const a1 = [1, 2, 3]
+
+const p = new Proxy(a1, {
   get (target, key) {
     console.log('劫持')
+    console.log(key)
     return target[key]
   }
 })
 
-console.log(p.age)
+console.log(p.length)
+
+p.push(20)
 
