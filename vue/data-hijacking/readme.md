@@ -269,24 +269,26 @@ methods.forEach(method => {
 })
 ```
 
-  &emsp;&emsp;最后，更新劫持数组实例的原型，在 ES6 之前，可以通过浏览器私有属性 __proto__ 指定，ES6 之后可以通过：
+  &emsp;&emsp;最后，更新劫持数组实例的原型，在 ES6 之前，可以通过浏览器私有属性 __proto__ 指定原型，之后，便可以采用如下方法：
 
 ```JavaScript
 Object.setPrototypeOf(arr, injackingPrototype)
 ```
 
+  &emsp;&emsp;顺便提一下，**采用 Vue.set() 方法设置数组元素时，Vue 内部实际上是调用劫持后的 splice() 方法来触发更新**。
+
 ### 四、总结
 
-  &emsp;&emsp;由于 Object.defineProperty() 方法存在的一些缺陷，Vue 中的数据劫持分成两部分：
+  &emsp;&emsp;由上述内容可知，Vue 中的数据劫持分为两大部分：
 
   - **针对 Object 类型，采用 Object.defineProperty() 方法劫持属性的读取和设置方法**；
   - **针对 Array 类型，采用原型相关的知识劫持常用的函数，从而知晓当前数组发生变化**。
   
-  &emsp;&emsp;并且 Object.defineProperty() 方法存在一些缺陷：
+  &emsp;&emsp;并且 Object.defineProperty() 方法存在以下缺陷：
 
   - **每次只能设置一个具体的属性，导致需要遍历对象来设置属性，同时也导致了无法探测新增属性**；
   - **属性描述符 configurable 对其的影响是致命的**。
 
-  &emsp;&emsp;而 ES6 中的 Proxy 可以完美的解决这些问题（目前兼容性是个大问题），这也是 Vue3.0 中的一个大动作，有兴趣的读者可以查阅相关的文章。
+  &emsp;&emsp;而 ES6 中的 Proxy 可以完美的解决这些问题（目前兼容性是个大问题），这也是 Vue3.0 中的一个大动作，有兴趣的读者可以查阅相关的资料。
 
-  &emsp;&emsp;如果本文对您有所帮助，那么点个关注鼓励一下笔者吧。
+  &emsp;&emsp;如果本文对您有所帮助，那么点个关注，鼓励一下笔者吧。
