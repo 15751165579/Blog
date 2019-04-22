@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>performance</title>
+</head>
+<body>
+  <div>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores amet, vel, odit saepe, et culpa delectus quisquam repudiandae similique consequatur neque quos maxime rerum quod quasi blanditiis a eaque voluptate.</p>
+    <button id="js-btn">点击</button>
+  </div>
+
+  <script>
+    window.onload = () => {
+      console.log(window.performance.timeOrigin)
+      const el = document.getElementById('js-btn')
+      el.addEventListener('click', () => {
+        console.log(performance.now())
+      }, false)
+      console.log(performance.now()) // 高精度 单调递增 毫秒 
+
+      // 白屏时间的计算
+      // 开始渲染时间（首字节时间 + HTML下载完成时间） + 头部资源加载时间
+
+      console.log(window.chrome.loadTimes())
+
+      if (window.chrome) { 
+        // 到底是什么单位 ？？？？？
+        console.log(window.chrome.loadTimes())
+        const { firstPaintTime, startLoadTime } = window.chrome.loadTimes()
+        console.log(' ==== Chrome 白屏时间 ==== ')
+        console.log((firstPaintTime - startLoadTime))
+      }
+    }
+
+
+    function calculatePerformance () {
+      console.log(' ==== performance.timing ==== ')
+      // 到底能不能用？？？？？
+      const { loadEventStart, navigationStart, responseStart } = this.performance.timing
+      console.log(' ==== 白屏时间 ==== ')
+      console.log(responseStart - navigationStart)
+      console.log(' ==== 首屏时间 ==== ')
+      console.log(loadEventStart - navigationStart)
+    }
+
+    window.addEventListener('load', calculatePerformance)
+
+  </script>
+</body>
+</html>
