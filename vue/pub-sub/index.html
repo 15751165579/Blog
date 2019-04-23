@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>数据双向绑定</title>
+</head>
+<body>
+  <div id="js-div"></div>
+  <button id="js-button">变化</button>
+  <script>
+
+    // html 页面的指令的解析
+
+    // Watcher 在生命周期 mounted 中初始化 
+    // computed 也是 Watcher 的实现
+    // 更新队列的处理
+    function $ (selector) {
+      return document.querySelector(selector)
+    }
+    const obj = { message: null }
+
+    $('#js-button').addEventListener('click', () => {
+      obj.message = Math.random()
+    }, false)
+
+    // 通过发布订阅模式解耦
+
+    function defineReactive (obj, key) {
+      let val = obj[key]
+      Object.defineProperty(obj, key, {
+        get () {
+          console.log(' === 收集依赖 === ')
+          console.log(' 当前值为：' + val)
+          // 为什么要收集依赖
+          return val
+        },
+        set (newValue) {
+          console.log(' === 通知变更 === ')
+          console.log(' 当前值为：' + newValue)
+          // 通知更新
+          $('#js-div').textContent = newValue
+          val = newValue
+        }
+      })
+    }
+
+    defineReactive(obj, 'message')
+  </script>
+</body>
+</html>
