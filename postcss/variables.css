@@ -1,8 +1,16 @@
 :root {
-  --font-size: 28px;
+  --font-size: 32px;
+  --color: red;
 }
 
+/* 语法编辑器不支持啊 ！！！ */
+/* @define-mixin fontstyle $size, $color {
+  font-size: calc($size/2);
+  color: $color;
+} 
+
 .demo {
-  color: red;
-  font-size: var(--font-size);
-}
+  width: 200px;
+  height: 200px;
+  @mixin fontstyle 32px, #000;
+} */

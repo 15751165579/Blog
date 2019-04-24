@@ -10,6 +10,9 @@ const reporter = require('postcss-reporter')
 
 const variables = require('postcss-css-variables')
 
+const mixins = require('postcss-mixins')
+const calc = require('postcss-calc')
+
 
 // gulp 4.0 中不再通过模块依赖的方式
 // gulp.series：按照顺序执行
@@ -58,6 +61,18 @@ gulp.task('variables', () => {
   return gulp.src('postcss/*.css')
     .pipe(postcss([ variables() ]))
     .pipe(gulp.dest('dist/'))
+})
+
+// 混入与计算
+
+gulp.task('mixins', () => {
+  return gulp.src('postcss/*.css')
+  .pipe(postcss([
+    variables(),
+    mixins(),
+    calc()
+  ]))
+  .pipe(gulp.dest('dist/'))
 })
 
 const watcher = gulp.watch('postcss/examples/chapter1/*.css', gulp.series('default'))
