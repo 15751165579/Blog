@@ -8,6 +8,8 @@ const rename = require('gulp-rename')
 const stylelint = require('stylelint')
 const reporter = require('postcss-reporter')
 
+const variables = require('postcss-css-variables')
+
 
 // gulp 4.0 中不再通过模块依赖的方式
 // gulp.series：按照顺序执行
@@ -49,6 +51,14 @@ gulp.task('lint-styles', () => {
 })
 
 gulp.task('default', gulp.series('lint-styles', 'styles', 'rename'))
+
+
+// 变量的处理
+gulp.task('variables', () => {
+  return gulp.src('postcss/*.css')
+    .pipe(postcss([ variables() ]))
+    .pipe(gulp.dest('dist/'))
+})
 
 const watcher = gulp.watch('postcss/examples/chapter1/*.css', gulp.series('default'))
 

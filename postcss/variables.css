@@ -1,0 +1,8 @@
+:root {
+  --font-size: 28px;
+}
+
+.demo {
+  color: red;
+  font-size: var(--font-size);
+}
