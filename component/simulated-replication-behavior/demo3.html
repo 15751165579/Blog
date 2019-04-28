@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Selection and Range</title>
+  <style>
+    .container {
+      padding: 20px;
+      margin: 50px auto;
+      border: 1px dashed rgb(213,213,213);
+    }
+  </style>
+</head>
+<body>
+  <section class="container">
+    <h5 class="js-h5">title</h5>  
+    <p class="js-p-not">you can not select it</p>
+    <p class="js-p">you can select it</p>
+  </section>
+
+  <section>
+    <p>1</p>
+    <strong>2</strong>
+    <p>3</p>
+    <strong>4</strong>
+  </section>
+
+  <div>
+    <button id="js-button">选中</button>
+  </div>
+
+  <script>
+    window.onload = () => {
+
+      document.getElementById('js-button').addEventListener('click', () => {
+        // 这个例子根本就执行不了
+        const strongs = document.getElementsByTagName('strong')
+        const s = window.getSelection()
+
+        if(s.rangeCount > 0) s.removeAllRanges()
+
+        for(var i = 0; i < strongs.length; i++) {
+          var range = document.createRange()
+          range.selectNode(strongs[i])
+          s.addRange(range)
+        }
+
+        console.log(s.toString())
+      }, false)
+
+      const selection = window.getSelection()
+      selection.removeAllRanges()
+      console.log(selection)
+
+      // 不连续区域的选择
+
+      const range1 = document.createRange()
+
+      range1.selectNodeContents(document.querySelector('.js-h5'))
+
+      console.log(' ** 选区 ** ')
+      console.log(range1)
+      selection.addRange(range1)
+      
+      const range2 = document.createRange()
+      range2.selectNodeContents(document.querySelector('.js-p-not'))
+
+      console.log(' ** 选区 ** ')
+      console.log(range2)
+      selection.addRange(range2)
+
+      const range3 = document.createRange()
+      range3.selectNodeContents(document.querySelector('.js-p'))
+
+      console.log(' ** 选区 ** ')
+      console.log(range3)
+      selection.addRange(range3)
+
+      console.log(' ** 新的 Selection 对象 ** ')
+      console.log(selection)
+
+      console.log(selection.toString())
+
+      // anchor 表示用户开始选择的地方
+      // focus 表示用户结束选择的地方
+      // 区别这两个概念主要是因为 用户可能从左边开始选 也可能从右边开始选择
+
+      // 常用的方法 
+      // selectAllChildren 选择指定节点的子节点
+      // addRange 添加选区
+      // removeAllRanges 移除所有的选区
+      // toString 获取选区的文本内容
+
+      // range 修改选区
+
+      // 相关的 CSS 伪类 :selection
+    }
+  </script>
+</body>
+</html>
