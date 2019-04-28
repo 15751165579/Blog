@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>replication</title>
+  <style>
+    .js-button {
+      padding: 30px;
+    }
+    h4 {
+      text-align: center;
+    }
+    .item {
+      display: flex;
+      flex-flow: column wrap;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <section class="item">
+      <h4> select 元素</h4>
+      <select id="js-select">
+        <option value="apple">apple</option>
+        <option value="banana">banana</option>
+        <option value="peach">peach</option>
+      </select>
+    </section>
+
+    <section class="item">
+      <h4> input 元素</h4>
+      <input type="text" value="just do it" id="js-input">
+    </section>
+
+    <section class="item" tabindex="0">
+      <h4> div 元素</h4>
+      <div id="js-div">
+        <p>just do it</p>
+        <p>no can no bb</p>
+      </div>
+    </section>
+
+    <section id="js-button" class="js-button">
+      <button data-id="js-select">选中 select 元素</button>
+      <button data-id="js-input">选中 input 元素</button>
+      <button data-id="js-div">选中 div 元素</button>
+    </section>
+  </div>
+
+  <script>
+
+    // 选中的元素为 3 中
+
+    // select
+
+    // 输入框 input 以及 textarea
+
+    // 一般的元素
+    
+    document.querySelector('#js-button').addEventListener('click', e => {
+      const target = e.target
+      const id = target.dataset.id
+      const element = document.getElementById(id)
+      console.log(element)
+      if (id === 'js-select') {
+        console.log(' **** select 元素 **** ')
+        element.focus()
+        console.log(element.value)
+      }
+      if (id === 'js-input') {
+       console.log(' **** input 元素 **** ')
+       element.select()
+       console.log(element.value)
+      }
+      if (id === 'js-div') {
+        console.log(' **** 普通元素 **** ')
+        const selection = window.getSelection()
+        const range = document.createRange()
+
+        range.selectNodeContents(element)
+        selection.removeAllRanges()
+        selection.addRange(range)
+
+        console.log(selection.toString())
+      }
+    })
+  </script>
+</body>
+</html>
