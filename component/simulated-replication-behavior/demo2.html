@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>tabindex</title>
+  <style>
+    .item {
+      width: 100px;
+      height: 100px;
+      text-align: center;
+      line-height: 100px;
+      margin: 20px auto;
+      border: 1px dashed red;
+    }
+  </style>
+</head>
+<body>
+  <div>
+      <div class="item item0" >0</div>
+    <div class="item item1" tabindex="-1">1</div>
+    <div class="item item2" tabindex="1">2</div>
+    <div class="item item3" tabindex="2">3</div>
+    <div class="item item4" tabindex="3">4</div>
+    <div class="item item5" tabindex="4">5</div>
+
+    <section>
+      <button id="js-button">聚焦</button>
+    </section>
+  </div>
+
+  <script>
+    // tabindex -1 表示可以被focus 但是不能通过键盘导航来控制
+    // tabindex 0 可以被focus 顺序依附于 DOM 结构
+    // tabindex 正值 可以被focus 顺序由大小决定，相同的话再由 DOM 结构决定
+
+    // focus blur 事件 是不会冒泡的
+    // focusin focusout
+
+    // select 与 focus 的区别 主要在于无法触发 focus 事件
+
+    document.addEventListener('focusin', e => {
+      console.log(' *** focusin *** ')
+      console.log(e.target)
+    }, false)
+
+    document.querySelector('.item1').addEventListener('focus', () => {
+      console.log(' **** focus **** ')
+    })
+
+    document.querySelector('.item2').addEventListener('blur', () => {
+      console.log('失去焦点')
+    }, false)
+
+    document.getElementById('js-button').addEventListener('click', () => {
+      // document.querySelector('.item1').focus()
+      select('.item1')
+    }, false) 
+
+    function select(selector) {
+      const selection = window.getSelection()
+      const range = document.createRange()
+
+      range.selectNodeContents(document.querySelector(selector))
+      selection.removeAllRanges()
+      selection.addRange(range)
+    }
+  </script>
+</body>
+</html>
