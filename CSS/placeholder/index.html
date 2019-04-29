@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>placeholder</title>
+  <style>
+    .container {
+      display: flex;
+      flex-flow: column wrap;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 300px;
+      max-width: 600px;
+      margin: 50px auto;
+    }
+
+    ::placeholder {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <section class="container">
+    <h5>更改 textarea 和 input 中 placeholder 的样式</h5>
+    <input type="text" placeholder="请输入文案">
+    <textarea name="" id="" cols="30" rows="10" placeholder="请输入文案"></textarea>
+  </section>
+</body>
+</html>
