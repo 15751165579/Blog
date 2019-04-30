@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>before and after</title>
+
+  <style>
+    .item {
+      margin: 100px auto;
+      width: 500px;
+      height: 500px;
+      background: red;
+    }
+
+    .item::before {
+      content: "";
+      display: block;
+      width: 100px;
+      height: 100px;
+      background: blue;
+    }
+    .item::after {
+      content: "";
+      display: block;
+      width: 100px;
+      height: 100px;
+      background: orange;
+    }
+
+    .sub {
+      width: 100px;
+      height: 100px;
+      background: palegreen;
+    }
+  </style>
+</head>
+<body>
+  <div class="item">
+    <div class="sub"></div>
+  </div>
+</body>
+</html>
