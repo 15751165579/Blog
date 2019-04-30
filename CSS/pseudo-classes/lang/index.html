@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lang</title>
+  <style>
+    :lang(en) > q { quotes: '\201C' '\201D' '\2018' '\2019'; }
+    :lang(fr) > q { quotes: '« ' ' »'; }
+    :lang(de) > q { quotes: '»' '«' '\2039' '\203A'; }
+
+    :lang(de) {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div lang="en"><q>This English quote has a <q>nested</q> quote inside.</q></div>
+  <div lang="fr"><q>This French quote has a <q>nested</q> quote inside.</q></div>
+  <div lang="de"><q>This German quote has a <q>nested</q> quote inside.</q></div>
+
+  <div lang="en">
+    just do it
+  </div>
+
+  <script>
+    // quotes 主要针对 q 标签
+  </script>
+</body>
+</html>
