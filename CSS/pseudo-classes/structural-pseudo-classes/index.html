@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>structural pseudo class</title>
+  <style>
+    :root {
+      --border-color: red;
+    }
+    .container {
+      width: 800px;
+      margin: 100px auto;
+      padding: 40px;
+      border: 1px dashed var(--border-color);
+    }
+
+    .list {
+      list-style: none;
+    }
+
+    li + li {
+      margin-top: 20px;
+    }
+
+    .list > li:nth-child(odd) {
+      height: 50px;
+      background: red;
+    }
+
+    .list > li:nth-child(even) {
+      height: 50px;
+      background: blue;
+    }
+
+    .demo1 :first-of-type {
+      color: red;
+    }
+
+    .demo2 :only-child {
+      color: olivedrab;
+    }
+
+    .demo3:empty {
+      width: 200px;
+      height: 200px;
+      background: red;
+    }
+
+    .demo4:not(.demo5) {
+      width: 200px;
+      height: 200px;
+      border: 1px dashed orange;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <ul class="list">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+
+  <div class="demo1">
+    <span>111</span>
+    <p class="some">change</p>
+    <p>some</p>
+  </div>
+
+  <div class="demo2">
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias fugiat, et recusandae error sapiente rerum vitae veniam obcaecati magni quisquam cumque placeat architecto aspernatur possimus dolorum. Magnam officia est molestias!</p>
+  </div>
+
+  <div class="demo2">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste tempore nam nobis veniam? Id, aliquam voluptas tenetur non minima sapiente placeat quod dolorem. Corrupti rem qui molestias, necessitatibus ducimus debitis.</p>
+    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officiis, cumque distinctio animi optio accusamus nihil accusantium earum! Facere debitis odit, non sequi, culpa aliquid deserunt repellat qui nostrum quisquam quae!</p>
+  </div>
+
+  <div class="demo3"></div>
+
+  <div class="demo3">
+    <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse rem autem dolores nam aliquam, error obcaecati totam voluptas, ratione officiis dolor doloremque est numquam ad beatae qui quibusdam! Tenetur, quo!</span>
+  </div>
+
+  <div class="demo4"></div>
+  <div class="demo4 demo5"></div>
+  <script>
+    // 对于 :root 在新一代 CSS 常用来定义变量  
+
+    // 这个用法之前用错了。！！！！
+    // 当前元素的兄弟元素 nth-child nth-last-child
+    // 当前元素的相同兄弟元素 nth-of-type nth-last-of-type
+    // first-child 兄弟节点节点的第一个
+    // first-of-type 一组兄弟元素中的第一个 (这个可能和大部分理解的一致)
+    // only-child 仅仅含有一个子元素
+    // empty 没有子元素的元素
+    // not 否定 很有用的
+  </script>
+</body>
+</html>
