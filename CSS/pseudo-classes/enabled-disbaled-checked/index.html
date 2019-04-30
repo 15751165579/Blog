@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>enabled disabled checked</title>
+  <style>
+    :enabled {
+      color: red;
+    }
+    :disabled {
+      color: blue;
+    }
+    :checked + label {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <input type="text" value="123">
+    <input type="text" value="123" disabled>
+    <input type="radio" name="sex" id="woman" value="女">
+    <label for="woman">女</label>
+    <input type="radio" name="sex" value="男" id="man">
+    <label for="man">男</label>
+  </div>
+
+  <script>
+    // UI 状态相关的伪类
+  </script>
+</body>
+</html>
