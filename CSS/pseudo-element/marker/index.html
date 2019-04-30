@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>marker</title>
+  <style>
+    ::marker {
+      /* 可以修改颜色 以及 字体大小 高版本 Safari 支持*/
+      color: red;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+    }
+    li {
+      list-style: disc;
+    }
+
+    .container {
+      width: 400px;
+    }
+    .item {
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      line-height: 1.5;
+    }
+
+    .item::before {
+      content: "1.";
+      width: 50px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .content {
+      margin: 0;
+      flex: 1;
+    }
+
+  </style>
+</head>
+<body>
+  <ul>
+    <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nihil rerum sunt ab est iusto? Dolorem officiis quisquam neque unde cum consequatur tenetur fugiat qui, autem et quaerat perspiciatis tempore enim.</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+  </ul>
+
+  <ul class="container">
+    <li class="item">
+      <p class="content">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt harum odit ad cupiditate voluptate asperiores consequatur reprehenderit ullam iste qui ratione ipsum quo totam in veniam, itaque minima exercitationem? Aspernatur.</p>
+    </li>
+  </ul>
+</body>
+</html>
