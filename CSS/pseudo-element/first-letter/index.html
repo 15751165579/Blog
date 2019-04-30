@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="./dropcap.js"></script>
+  <title>first-letter</title>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Source+Serif+Pro);
+    body { 
+      width: 60%;
+      max-width: 900px;
+      margin: 0 auto;
+      font-family: Source Serif Pro, serif; 
+      margin-top: 5rem;
+    }
+    #dropcap { initial-letter: 3;  color: red; }
+    p { line-height: 1.5; font-size: 2rem; }
+  </style>
+</head>
+<body>
+  <p>
+    <span id="dropcap">M</span>
+    y father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
+
+    <script>
+      // initial-letter 支持率太低 仅仅 Safari 
+      // 
+      // https://github.com/adobe-webplatform/dropcap.js/blob/master/dropcap.js
+      window.onload = () => {
+        function switchsize(state) {
+        if (state.matches) {
+        window.Dropcap.layout(dropcap, 2);
+        } else {
+        window.Dropcap.layout(dropcap, 3); }
+        }
+
+        var dropcap = document.getElementById("dropcap");
+        window.Dropcap.layout(dropcap, 2);
+
+        var narrow = window.matchMedia("screen and (max-width: 600px)");
+        narrow.addListener(switchsize);
+        switchsize(narrow);
+      }
+    </script>
+</body>
+</html>
