@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>a标签相关的伪类</title>
+
+  <style>
+    .container {
+      width: 500px;
+      min-height: 200px;
+      display: flex;
+      flex-flow: column wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    a:hover {
+      color: red;
+    }
+
+    a:link {
+      color: #000;
+    }
+    a:focus {
+      color: blue;
+    }
+    a:visited {
+      color: blueviolet;
+    }
+    a:active {
+      color: chartreuse;
+    }
+    /* 
+      a:link 
+      a:visited 
+      a:hover
+      a:active
+    */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="javascript:void(66);">hahahahh</a>
+    <a href="javascript:void(66);">hahahahh</a>
+    <a href="javascript:void(66);">hahahahh</a>
+    <a href="javascript:void(66);">hahahahh</a>
+    <a href="#123">hahahahh</a>
+  </div>
+</body>
+</html>
