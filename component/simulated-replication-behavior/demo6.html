@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>disabled</title>
+</head>
+<body>
+  <input type="text" id="js-input" value="input disabled">
+  <button id="js-button">复制</button>
+  <script>
+    window.onload = () => {
+      document.getElementById('js-button').addEventListener('click', () => {
+
+        const element = document.getElementById('js-input')
+
+        const s = selectInput(element)
+        console.log(s)
+        const success = copyText()
+
+        if (success) {
+          console.log('复制成功')
+        } else {
+          console.log('复制失败')
+        }
+      }, false)
+
+      function selectInput (element) {
+        return element.select()
+      }
+
+      function copyText () {
+        let success = true
+        try {
+          success = document.execCommand('copy')
+        } catch (e) {
+          success = false
+        }
+        return success
+      }
+    }
+  </script>
+</body>
+</html>

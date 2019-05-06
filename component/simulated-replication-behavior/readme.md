@@ -1,4 +1,4 @@
-# JavaScript 模拟用户的复制操作
+# JavaScript 模拟用户复制操作
 
 ### 一、前言
 
@@ -157,8 +157,26 @@
   }, false)
 ```
 
+### 五、总结
 
+  &emsp;&emsp;采用 JavaScript 模拟用户复制操作主要涉及两方面知识点：
 
+  - 利用 Selection 和 Range 对象完成文本选中操作，比较特殊的是 input 和 textarea 自带 select 方法实现该操作。
+  - 通过 document.execCommand 方法调用 copy 命令将内容保存在系统剪贴板中。
 
-[select.js](https://github.com/zenorocha/select)
-[clipboard.js](https://github.com/zenorocha/clipboard.js)
+  &emsp;&emsp;其中 document.execCommand 方法主要作用于 Selection 对象上，所以当元素无法被选中时，那么就不能通过调用该方法完成复制操作，针对该场景，则需要创建一个透明的 textarea 元素来处理。
+
+  &emsp;&emsp;另外，当元素设置 disabled 属性时，也是无法被选中的，所以在实际使用的过程中，还需要排除这样的场景。
+
+  &emsp;&emsp;**参考文献**
+    
+  - [select.js](https://github.com/zenorocha/select)
+  - [clipboard.js](https://github.com/zenorocha/clipboard.js)
+  - [MDN Selection](https://developer.mozilla.org/zh-CN/docs/Web/API/Selection)
+  - [MDN Range](https://developer.mozilla.org/zh-CN/docs/Web/API/Range)
+  - [MDN execCommand](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand)
+
+  &emsp;&emsp;**相关文章推荐**
+
+  - [图片懒加载的前世今生](https://juejin.im/post/5c9376506fb9a070fc623b2c)
+  - [实现高度“听话”的多行文本输入框](https://juejin.im/post/5c9a1645e51d4559bb5c666f)
