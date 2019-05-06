@@ -1,26 +1,25 @@
-# JavaScript 模拟用户复制操作
+# 前端模拟用户复制操作
 
 ### 一、前言
 
   &emsp;&emsp;用户在浏览网页的过程中执行复制操作的场景是非常多的，例如：复制链接地址、复制分享文案等等。
 
-  &emsp;&emsp;为了优化用户的操作体验，那么就需要深入研究复制操作的机制。
+  &emsp;&emsp;前端通过模拟用户复制的操作，来减少操作的步骤，从而优化用户体验。
 
   &emsp;&emsp;复制操作可以分为如下两部分：
 
-  - 选中文本：用户通过鼠标选中文本的操作。
-  - 操作系统剪贴板：用户按下 Ctrl（command） + C 的操作。
-
+  - 选中文本：对应用户通过鼠标选中文本的操作。
+  - 操作系统剪贴板：对应用户按下 Ctrl（command） + C 的操作。
 
 ### 二、选中文本
 
-  &emsp;&emsp;首先，读者需要明白并不是所有的文本都可以被选中的（后续会提到），笔者这里先介绍几个比较容易理解的情况：
+  &emsp;&emsp;首先，读者需要明白，不是所有的文本都可以被选中的（后续会提到），笔者这里先介绍几个可以选中文本的情况：
 
 ##### 1、input 和 textarea
 
   &emsp;&emsp;由于 input 元素的工作方式因其类型属性的值而有很大的差异，所以这里只讨论 text 的情况。
 
-  &emsp;&emsp;由于 JavaScript 提供了 HTTMLInputElement.select() 方法，所以选中 textarea 和 input 中的内容就变得非常简单：
+  &emsp;&emsp;因为 JavaScript 提供了 HTTMLInputElement.select() 方法，所以选中 textarea 和 input 中的内容就变得非常简单：
 
 ```JavaScript
   document.querySelector('input').select()
@@ -38,7 +37,7 @@
   - 焦点：选区的终止点。
   - 范围：文档中**连续**的一部分。
 
-  &emsp;&emsp;与 Selection 对象息息相关的还有一个 Range 对象，它主要用来定义选区的信息。对于这两个对象不了解的读者，可以查看[MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Selection)，接下来，利用 Selection 和 Range 对象实现上述 select() 方法的效果：
+  &emsp;&emsp;与 Selection 对象息息相关的还有一个 Range 对象，它主要用来自定义选区。对于这两个对象不了解的读者，可以查看文末给出的参考文献，接下来，利用 Selection 和 Range 对象实现上述 select() 方法：
 
 ```JavaScript
   const selection = window.getSelection()
@@ -72,7 +71,7 @@
 
 ### 四、特殊情况的处理
 
-  &emsp;&emsp;在 HTML 中部分元素中的文本是无法被选中的，例如：
+  &esmp;&emsp;上述方案基本上可以应对大部分的情况，但是在 HTML 中，部分元素中的文本是无法被选中的，例如：
 
 ```HTML
   <select id="js-select">
@@ -84,9 +83,9 @@
 
   &emsp;&emsp;既然 select 元素中的文本无法被选中，那么就无法调用 execCommand 方法，又何谈模拟用户复制该文本呢？
 
-  &emsp;&emsp;这里需要采用一个常用的套路：创建一个对用户透明的元素完成一系列的操作。
+  &emsp;&emsp;这里就需要采用以下套路：
 
-##### 1、获取的需要复制的文本
+##### 1、获取需要复制的文本
 
   &emsp;&emsp;首先获取到需要复制的文本内容，对于 select 元素，其文本内容可以根据 value 属性获取：
 
@@ -116,7 +115,7 @@
   &emsp;&emsp;前面也提到选中文本有两种方式：
 
   - 对于 input、textarea 元素，可以直接调用其 select 方法。
-  - 对于大多数元素（这里的 select 元素就是特例），可以通过 Selection 和 Range 完成选中文本的操作。
+  - 对于大多数元素（input 和 textarea 元素就是特例之一），可以通过 Selection 和 Range 完成选中文本的操作。
 
   &emsp;&emsp;由于上述创建的是 textarea，这里直接调用 select 方法：
 
@@ -159,10 +158,10 @@
 
 ### 五、总结
 
-  &emsp;&emsp;采用 JavaScript 模拟用户复制操作主要涉及两方面知识点：
+  &emsp;&emsp;由上文可知，前端模拟用户复制操作主要涉及两方面的知识：
 
   - 利用 Selection 和 Range 对象完成文本选中操作，比较特殊的是 input 和 textarea 自带 select 方法实现该操作。
-  - 通过 document.execCommand 方法调用 copy 命令将内容保存在系统剪贴板中。
+  - 通过 document.execCommand 方法调用 copy 命令将内容保存到系统剪贴板中。
 
   &emsp;&emsp;其中 document.execCommand 方法主要作用于 Selection 对象上，所以当元素无法被选中时，那么就不能通过调用该方法完成复制操作，针对该场景，则需要创建一个透明的 textarea 元素来处理。
 
