@@ -52,7 +52,7 @@
 
 ### 三、操作系统剪贴板
 
-  &emsp;&emsp;document 暴露的 execCommand 方法，可以用来运行命令来操纵可编辑区域的元素。
+  &emsp;&emsp;document 暴露的 execCommand 方法，可以用来运行操作系统提供的命令，并且这些命令大部分作用于 Selection 对象。
 
   &emsp;&emsp;该方法返回的布尔值表示操作是否被支持或者是否被启用，但是调用一个命令之前，不能尝试使用返回值去校验浏览器的兼容性。
 
@@ -70,11 +70,95 @@
 
   &emsp;&emsp;通过 execCommand 执行 copy 命令，将上述选中的文本添加到系统剪贴板中，接下来用户只需要在使用的地方按下 Ctrl（command） + V 即可粘贴该内容。
 
-### 四、
+### 四、特殊情况的处理
 
+  &emsp;&emsp;在 HTML 中部分元素中的文本是无法被选中的，例如：
 
+```HTML
+  <select id="js-select">
+    <option value="apple">apple</option>
+    <option value="banana">banana</option>
+    <option value="peach">peach</option>
+  </select>
+```
+
+  &emsp;&emsp;既然 select 元素中的文本无法被选中，那么就无法调用 execCommand 方法，又何谈模拟用户复制该文本呢？
+
+  &emsp;&emsp;这里需要采用一个常用的套路：创建一个对用户透明的元素完成一系列的操作。
+
+##### 1、获取的需要复制的文本
+
+  &emsp;&emsp;首先获取到需要复制的文本内容，对于 select 元素，其文本内容可以根据 value 属性获取：
+
+```JavaScript
+  const element = document.getElementById('js-select')
+  const text = element.value
+```
+
+##### 2、创建透明元素
+
+  &emsp;&emsp;前面提到的 input、textarea 等元素都是可以被选中的，所以这里笔者选择创建一个透明的 textarea 来实现接下来的功能：
+
+```JavaScript
+  function createFakerElement (text) {
+    const fakerElement = document.createElement('textarea')
+    fakerElement.style.position = 'absolute'
+    fakerElement.style.left = '-9999px'
+    fakerElement.value = text
+    document.body.appendChild(fakerElement)
+
+    return fakerElement
+  }
+```
+
+##### 3、选中文本
+
+  &emsp;&emsp;前面也提到选中文本有两种方式：
+
+  - 对于 input、textarea 元素，可以直接调用其 select 方法。
+  - 对于大多数元素（这里的 select 元素就是特例），可以通过 Selection 和 Range 完成选中文本的操作。
+
+  &emsp;&emsp;由于上述创建的是 textarea，这里直接调用 select 方法：
+
+```JavaScript
+  function selectInput (element) {
+    return element.select()
+  }
+```
+
+##### 4、操作系统剪贴板
+
+  &emsp;&emsp;前文已经提及，这里不再赘述。
+
+  &emsp;&emsp;接下来只要按照顺序执行这些操作即可：
+
+```JavaScript
+  document.getElementById('js-button').addEventListener('click', () => {
+    const element = document.getElementById('js-select')
+    // 1、获取需要的文本内容
+    const text = element.value
+
+    // 2、创建透明的 textarea 元素
+    const fakerElement = createFakerElement(text)
+
+    // 3、选中相应的文本
+    selectInput(fakerElement)
+
+    // 4、执行操作系统剪贴板的 copy 命令
+    const success = copyText()
+
+    if (success) {
+      console.log('复制成功')
+    } else {
+      console.log('复制失败')
+    }
+
+    document.body.removeChild(fakerElement)
+  }, false)
+```
 
 
 
 
 [select.js](https://github.com/zenorocha/select)
+[clipboard.js](https://github.com/zenorocha/clipboard.js)

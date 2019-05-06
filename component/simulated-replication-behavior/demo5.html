@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>select</title>
+</head>
+<body>
+  <div>
+    <select id="js-select">
+      <option value="apple">apple</option>
+      <option value="banana">banana</option>
+      <option value="peach">peach</option>
+    </select>
+
+    <button id="js-button">复制</button>
+  </div>
+
+  <script>
+    window.onload = () => {
+
+      document.getElementById('js-button').addEventListener('click', () => {
+        const element = document.getElementById('js-select')
+        // 1、获取需要的文本内容
+        const text = element.value
+
+        // 2、创建透明的 textarea 元素
+        const fakerElement = createFakerElement(text)
+
+        // 3、选中相应的文本
+        selectInput(fakerElement)
+
+        // 4、执行操作系统剪贴板的 copy 命令
+        const success = copyText()
+
+        if (success) {
+          console.log('复制成功')
+        } else {
+          console.log('复制失败')
+        }
+
+        document.body.removeChild(fakerElement)
+      }, false)
+    }
+
+    function createFakerElement (text) {
+      const fakerElement = document.createElement('textarea')
+      fakerElement.style.position = 'absolute'
+      fakerElement.style.left = '-9999px'
+      fakerElement.value = text
+      document.body.appendChild(fakerElement)
+
+      return fakerElement
+    }
+
+    function selectInput (element) {
+      return element.select()
+    }
+
+    function copyText () {
+      let success = true
+      try {
+        success = document.execCommand('copy')
+      } catch (e) {
+        success = false
+      }
+      return success
+    }
+  </script>
+</body>
+</html>
