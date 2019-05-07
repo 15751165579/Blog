@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    window.onload = () => {
+
+      // 属性是否存在
+      function getCSSPropertyName(property) {
+        const _supportElement = document.createElement('div')
+        function _supported(p) {
+          return p in _supportElement.style
+        }
+        
+        // 先检查标准属性
+        if (_supported(property)) {
+          return property
+        }
+
+        // 检查浏览器私有前缀
+        const prefix = ['-webkit-', '-moz-', '-ms-']
+        for (let i = 0, max = prefix.length; i < max; i++) {
+          const name = `${prefix}property`
+          if (_supported(property)) {
+            return name
+          }
+        }
+        return null
+      }
+
+      console.log(getCSSPropertyName('boxSizing'))
+
+    }  
+  </script>
+</body>
+</html>

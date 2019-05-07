@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>dropcaps</title>
+  <script src="./drapcap.js"></script>
+  <style>
+    .demo {
+      margin: 40px auto;
+      width: 400px;
+      padding: 20px;
+      border: 1px dashed red;
+    }
+
+  </style>
+</head>
+<body>
+  
+  <div class="demo">
+    <p id="js-p"><span id="js-span">M</span>y father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.amily name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
+  </div>
+
+  <div class="demo">
+      <p id="js-p1"><span id="js-span1">M</span>y father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.amily name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
+    </div>
+
+  <script>
+    // https://stackoverflow.com/questions/10180148/how-to-calculate-descender-height-in-javascript
+
+    // https://github.com/nathanhammond/baseline-ratio/blob/master/baseline-ratio.js
+    function createFakerElement(fontStyle) {
+      const el = document.createElement('div')
+      const options = Object.assign({
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        opacity: '0'
+      }, fontStyle)
+      el.style = options
+      const span = document.createElement('span')
+      span.innerHTML = 'X'
+      el.appendChild(span)
+      document.body.appendChild(el)
+      return el
+    }
+    function getFontCSS(el) {
+      const _css = window.getComputedStyle(el)
+      const cssProperties = ['fontFamily', 'fontSize', 'lineHeight']
+      const ret = Object.create(null)
+      for (let i = 0, max = cssProperties.length; i < max; i++) {
+        const property = cssProperties[i]
+        const value = _css.getPropertyValue(transformCamelToHyphen(property))
+        ret[property] = value
+      }
+      return ret
+    }
+    // 连字符 转驼峰
+    // function transformHyphenToCamel(str) {
+    //   return str.replace(/-(\w)/g, (all, letter) => {
+    //     return letter.toUpperCase()
+    //   })
+    // }
+    function transformCamelToHyphen(str) {
+      return str.replace(/([A-Z])/g, '-$1').toLowerCase()
+    }
+
+    function toPXLength(number) {
+      return `${number}px`
+    }
+    const p = document.getElementById('js-p')
+    const obj = getFontCSS(p)
+    console.log(obj)
+    const fakerElement = createFakerElement(obj)
+    
+    // 获取高度
+    const height = fakerElement.offsetHeight
+    const span = document.getElementById('js-span')
+    span.style.fontSize = toPXLength(height * 10)
+    span.style.cssFloat = 'left'
+    span.style.lineHeight = 1 // 设置为字体一致大小
+
+
+    var dropcap = document.getElementById('js-span1')
+    window.Dropcap.layout(dropcap, 10)
+
+
+    function calculateBaselineRatio() {
+      const el = document.createElement('div')
+      el.style.display = "block"
+      el.style.position = "absolute"
+      el.style.bottom = "0"
+      el.style.right = "0"
+      el.style.width = "0px"
+      el.style.height = "0px"
+      el.style.margin = "0"
+      el.style.padding = "0"
+      el.style.visibility = "hidden"
+      el.style.overflow = "hidden"
+
+      const small = document.createElement('span')
+      const large = document.createElement('span')
+
+      small.style.fontSize = '0px'
+      large.style.fontSize = '100px'
+
+      small.innerHTML = 'X'
+      large.innerHTML = 'X'
+    
+      el.appendChild(small)
+      el.appendChild(large)
+
+      document.body.appendChild(el)
+
+      const smalldims = small.getBoundingClientRect()
+      const largedims = large.getBoundingClientRect()
+
+      console.log(smalldims)
+      console.log(largedims)
+
+      const baselinePosition = smalldims.top - largedims.top
+      console.log(baselinePosition)
+
+      return 1 - (baselinePosition / largedims.height)
+    }
+
+    console.log(calculateBaselineRatio())
+  </script>
+</body>
+</html>
