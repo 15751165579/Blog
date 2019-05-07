@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>containing block</title>
+
+  <style>
+    .demo1 {
+      margin: 100px auto;
+      position: relative;
+      width: 400px;
+      height: 400px;
+      border: 1px dashed red;
+    }
+
+    .demo2 {
+      position: fixed;
+      top: 40px;
+      left: 40px;
+      width: 50%;
+      height: 300px;
+      border: 1px solid red;
+    }
+  </style>
+
+</head>
+<body>
+
+
+  <div class="demo1">
+    <div class="demo2"></div>
+  </div>
+
+  <script>
+
+    // 一个元素的尺寸以及位置的计算的参照物 containing block
+
+    // 1、一般情况下 就是最近的块级元素
+
+    // 2、position 如果为 absolute ， 包含块为 最近的 position 不为 static
+
+    // 3、position fixed 则为 viewport
+  </script>
+</body>
+</html>
