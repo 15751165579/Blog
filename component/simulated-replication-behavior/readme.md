@@ -8,7 +8,7 @@
 
   &emsp;&emsp;复制操作主要分为以下两部分：
 
-  - 选中文本：对应用户通过鼠标选中文本的操作。
+  - 选中文本：对应用户通过鼠标或者触屏选中文本的操作。
   - 操作系统剪贴板：对应用户按下 Ctrl（command） + C 的操作。
 
 ### 二、选中文本
@@ -27,9 +27,11 @@
 
   ![select 方法选中 input 元素](./input-select.jpeg)
 
+  &emsp;&emsp;如果 input 和 textarea 元素附加了 disabled 属性，那么其内容是无法被选中的，这种情况最好是将 disabled 替换为 readonly 。
+
 ##### 2、div
 
-  &emsp;&emsp;div 元素并没有 select() 方法，这就需要读者了解一个新的对象： Selection 。
+  &emsp;&emsp;div 元素并没有开箱即用的 select() 方法，这就需要读者了解一个新的对象： Selection 。
 
   &emsp;&emsp;Selection 对象表示用户选择文本的范围以及光标的范围。关于 Selection 对象，读者需要了解以下几个术语：
 
@@ -165,9 +167,9 @@
   - 利用 Selection 和 Range 对象完成文本选中操作，比较特殊的是 input 和 textarea 元素自带 select 方法实现该操作。
   - 通过 document.execCommand 方法调用 copy 命令将内容保存到系统剪贴板中。
 
-  &emsp;&emsp;其中 document.execCommand 方法主要作用于 Selection 对象上，所以当元素无法被选中时，那么就不能通过调用该方法完成复制操作，针对该场景，则可以创建一个透明的 textarea 元素来处理。
+  &emsp;&emsp;其中 document.execCommand 方法主要作用于 Selection 对象，所以当元素无法被选中时，该复制命令则无法达到预期的效果。
 
-  &emsp;&emsp;另外，当元素设置 disabled 属性时，也是无法被选中的，所以在实际使用的过程中，还需要排除这样的场景。
+  &emsp;&emsp;前面也到了 disabled 属性以及 select 元素这样的特例，相比较下，通过创建一个透明的 textarea 来模拟复制操作的方案可用性更高。
 
   &emsp;&emsp;**参考文献**
     
