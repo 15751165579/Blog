@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>dropcaps</title>
+  <script src="./drapcap.js"></script>
   <style>
     .demo {
       margin: 40px auto;
@@ -20,6 +21,10 @@
   <div class="demo">
     <p id="js-p"><span id="js-span">M</span>y father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.amily name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
   </div>
+
+  <div class="demo">
+      <p id="js-p1"><span id="js-span1">M</span>y father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.amily name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
+    </div>
 
   <script>
     // https://stackoverflow.com/questions/10180148/how-to-calculate-descender-height-in-javascript
@@ -72,9 +77,13 @@
     // 获取高度
     const height = fakerElement.offsetHeight
     const span = document.getElementById('js-span')
-    span.style.fontSize = toPXLength(height * 3)
+    span.style.fontSize = toPXLength(height * 10)
     span.style.cssFloat = 'left'
     span.style.lineHeight = 1 // 设置为字体一致大小
+
+
+    var dropcap = document.getElementById('js-span1')
+    window.Dropcap.layout(dropcap, 10)
 
 
     function calculateBaselineRatio() {
