@@ -19,7 +19,7 @@ const source3$ = Rx.Observable.generate(
 )
 source3$.subscribe(console.log)
 
-// repeat 产生了 10 新的 Obserable
+// repeat 产生了 10 新的 Obserable 反复重复上游 Observable 对象
 const source4$ = Rx.Observable.of(1, 2, 3)
 source4$.repeat(10).subscribe(console.log)
 
