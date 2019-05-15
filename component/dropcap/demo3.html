@@ -44,10 +44,16 @@
       height: 15px;
       background: red;
     }
+    .some {
+      width: 20px;
+      height: 64px;
+      background: red;
+      float: left;
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
-  
   <div class="demo">
     <p id="js-p"><span id="js-span">M</span>y father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.amily name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
   </div>
@@ -66,6 +72,8 @@
     // https://stackoverflow.com/questions/10180148/how-to-calculate-descender-height-in-javascript
 
     // https://github.com/nathanhammond/baseline-ratio/blob/master/baseline-ratio.js
+
+    // https://blog.51cto.com/dengshuangfu/1618983
     function createFakerElement(fontStyle) {
       const el = document.createElement('div')
       const options = Object.assign({
@@ -74,7 +82,7 @@
         left: '0',
         opacity: '0'
       }, fontStyle)
-      el.style = options
+      Object.keys(options).forEach(key => el.style[key] = options[key])
       const span = document.createElement('span')
       span.innerHTML = 'X'
       el.appendChild(span)
@@ -111,17 +119,19 @@
     const fakerElement = createFakerElement(obj)
     
     // 获取高度
-    const _x = 2
+    const _x = 3
     const height = fakerElement.offsetHeight
+    
     const span = document.getElementById('js-span')
-    const fontsize = height * _x / 0.71
-    console.log('高度： '  + height * _x)
+    const totalHeight = height * _x - 8
+    const fontsize = totalHeight / 0.71
+    console.log('高度： '  + totalHeight)
     span.style.fontSize = toPXLength(fontsize)
     span.style.cssFloat = 'left'
     span.style.lineHeight = 1 // 设置为字体一致大小
     span.style.verticalAlign = 'middle'
-    span.style.height = height * _x
-    span.style.margin = `-${fontsize * 0.14}px 0 -${fontsize * 0.15}px 0`
+    span.style.height = totalHeight
+    span.style.margin = `-${fontsize * 0.14 - 4}px 0 -${fontsize * 0.15}px 0`
 
 
     const canvas = document.getElementById('canvas')
