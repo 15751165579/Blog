@@ -52,6 +52,7 @@
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^9.5.1",
+    "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
     "conventional-changelog": "^2.0.1",
     "coveralls": "^3.0.0",
