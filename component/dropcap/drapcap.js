@@ -57,7 +57,6 @@
       // Because some browsers may not position the baseline at the same height in 
       // canvas vs HTML we will detect both the cap line and the baseline using a 
       // capital 'E'
-  
       var ratio = -1;
       var canvas = document.createElement('canvas');
       canvas.width = width; 
@@ -128,8 +127,10 @@
       var largeX = newTestGlyph(testBlock);
     
       ret.baselineRatio = zeroX.offsetTop/TEST_SIZE;
+      console.log('框架内base： ' + zeroX.offsetTop/TEST_SIZE)
       try {   
           ret.capHeightRatio = measureCapHeightRatio(testBlock, fontFamily, largeX.offsetWidth, TEST_SIZE);
+          console.log('框架内cap：' + ret.capHeightRatio)
       } catch(e) {
           throw new Error('[dropcap.js] Error computing font metrics: '+ e.message);
       } finally {

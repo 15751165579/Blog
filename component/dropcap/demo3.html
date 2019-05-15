@@ -12,8 +12,38 @@
       width: 400px;
       padding: 20px;
       border: 1px dashed red;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    canvas {
+      border: 1px solid red;
     }
 
+    .demo1 {
+      padding: 0;
+      margin: 0;
+      font-size: 100px;
+      line-height: 1;
+      position: relative;
+      background: rgb(213,213,213);
+    }
+    .cap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+      height: 14px;
+      background: red;
+    }
+
+    .base {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100px;
+      height: 15px;
+      background: red;
+    }
   </style>
 </head>
 <body>
@@ -23,9 +53,15 @@
   </div>
 
   <div class="demo">
-      <p id="js-p1"><span id="js-span1">M</span>y father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.amily name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
-    </div>
+    <p id="js-p1"><span id="js-span1">M</span>y father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.amily name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
+  </div>
+  <canvas id="canvas"></canvas>
 
+  <div class="demo1">
+    <div class="cap"></div>
+    M
+    <div class="base"></div>
+  </div>
   <script>
     // https://stackoverflow.com/questions/10180148/how-to-calculate-descender-height-in-javascript
 
@@ -75,15 +111,90 @@
     const fakerElement = createFakerElement(obj)
     
     // 获取高度
+    const _x = 2
     const height = fakerElement.offsetHeight
     const span = document.getElementById('js-span')
-    span.style.fontSize = toPXLength(height * 10)
+    const fontsize = height * _x / 0.71
+    console.log('高度： '  + height * _x)
+    span.style.fontSize = toPXLength(fontsize)
     span.style.cssFloat = 'left'
     span.style.lineHeight = 1 // 设置为字体一致大小
+    span.style.verticalAlign = 'middle'
+    span.style.height = height * _x
+    span.style.margin = `-${fontsize * 0.14}px 0 -${fontsize * 0.15}px 0`
 
 
+    const canvas = document.getElementById('canvas')
+    const ctx = canvas.getContext('2d')
+
+    canvas.width = 100
+    canvas.height = 100
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0, canvas.width, canvas.height);
+    ctx.font = `100px ${obj.fontFamily}`
+    ctx.fillStyle = '#000000'
+    ctx.textBaseline = 'top'
+    ctx.fillText('M',0,0)
+
+    function _isBlack(imageData, pindex) {
+      const firstByte = pindex * 4
+      const red = imageData[firstByte]
+      const green = imageData[firstByte + 1]
+      const blue = imageData[firstByte + 2]
+      return (red === 0 && green === 0 && blue === 0) ? true : false
+    }
+    const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    const imageData = imageDataObj.data
+    
+    // for (let i = 0; i < canvas.width; i++) {
+    //   for (let j = 0; j < canvas.height; j++) {
+    //     const index = (j * canvas.width + i) * 4
+    //     const red = imageData[index]
+    //     const green = imageData[index + 1]
+    //     const blue = imageData[index + 2]
+    //     if (red === 0 && green === 0 && blue === 0) {
+    //       imageData[index] = 255
+    //       imageData[index + 1] = 0
+    //       imageData[index + 2] = 0
+    //     }
+    //   }
+    // }
+
+    // ctx.putImageData(imageDataObj, 0, 0)
+
+
+    let startX, startY, endY
+    const middleY = canvas.height / 2 - 1
+    for (let i = 0; i < canvas.width; i++) {
+      const index = middleY * canvas.width + i
+      if (_isBlack(imageData, index)) {
+        startX = i
+        break
+      }
+    }
+
+    for (let j = 0; j < canvas.height; j++) {
+      const index = j * canvas.width + startX
+      if (_isBlack(imageData, index)) {
+        startY = j
+        break
+      }
+    }
+
+    for (let j = canvas.height; j >= 0; j--) {
+      const index = j * canvas.width + startX
+      if (_isBlack(imageData, index)) {
+        endY = j
+        break
+      }
+    }
+
+    const spaceRatioTop = startY / 100
+    const spaceRatioBottom = 1 - endY / 100
+    console.log(spaceRatioTop)
+    console.log(spaceRatioBottom)
     var dropcap = document.getElementById('js-span1')
-    window.Dropcap.layout(dropcap, 10)
+    window.Dropcap.layout(dropcap, 2)
 
 
     function calculateBaselineRatio() {
@@ -116,16 +227,15 @@
       const smalldims = small.getBoundingClientRect()
       const largedims = large.getBoundingClientRect()
 
+      const baselinePosition = smalldims.top - largedims.top
       console.log(smalldims)
       console.log(largedims)
-
-      const baselinePosition = smalldims.top - largedims.top
       console.log(baselinePosition)
 
       return 1 - (baselinePosition / largedims.height)
     }
 
-    console.log(calculateBaselineRatio())
+    console.log('底线' + calculateBaselineRatio())
   </script>
 </body>
 </html>
