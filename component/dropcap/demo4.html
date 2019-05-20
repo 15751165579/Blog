@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>JavaScript 模拟实现 dropcap</title>
+  <script src="./first-capital-sink.js"></script>
   <style>
     .demo {
       margin: 40px auto;
@@ -25,131 +26,12 @@
   </div>
 
   <script>
-    // 1、获取文本的样式
-    // 2、创建一个 fakerElement 元素 计算出首字符所占据的高度
-    // 3、通过 canvas 像素级的操作 获取顶部边缘 以及高度边缘
+    const firstCapitalSink = new FirstCapitalSink('#js-span')
+    firstCapitalSink.init(3)
+    // // 1、获取文本的样式
+    // // 2、创建一个 fakerElement 元素 计算出首字符所占据的高度
+    // // 3、通过 canvas 像素级的操作 获取顶部边缘 以及高度边缘
 
-    // 连字符 转驼峰
-    // 连字符 转 驼峰
-    // function transformHyphenToCamel(str) {
-    //   return str.replace(/-(\w)/g, (all, letter) => {
-    //     return letter.toUpperCase()
-    //   })
-    // }
-    // 驼峰 转 连字符
-    function transformCamelToHyphen(str) {
-      return str.replace(/([A-Z])/g, '-$1').toLowerCase()
-    }
-
-    // 获取元素 字体相关的样式
-    function getFontCSS(el) {
-      const _css = window.getComputedStyle(el)
-      const cssProperties = ['fontFamily', 'fontSize', 'lineHeight']
-      const ret = Object.create(null)
-      for (let i = 0, max = cssProperties.length; i < max; i++) {
-        const property = cssProperties[i]
-        const value = _css.getPropertyValue(transformCamelToHyphen(property))
-        ret[property] = value
-      }
-      return ret
-    }
-
-    // 创建 fakerElement
-    function createFakerElement(fontStyle) {
-      const el = document.createElement('div')
-      const options = Object.assign({
-        position: 'fixed',
-        top: '0',
-        left: '0',
-        opacity: '0'
-      }, fontStyle)
-      Object.keys(options).forEach(key => el.style[key] = options[key])
-      const span = document.createElement('span')
-      span.innerHTML = 'X'
-      el.appendChild(span)
-      document.body.appendChild(el)
-      return el
-    }
-
-    // 得出大写首字符所占据的高度
-    function calculateHeight(line, offsetHeight, lineSpace) {
-      return offsetHeight * line - lineSpace / 2
-    }
-
-    // canvas 计算上边界 以及下边界
-    function calculateEdgeByCanvas(text, fontSize, fontFamily, width, height) {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
-      
-      canvas.width = width
-      canvas.height = height
-
-      ctx.fillStyle = "#ffffff"
-      ctx.fillRect(0,0, canvas.width, canvas.height)
-      ctx.font = `${fontSize} ${fontFamily}`
-      ctx.fillStyle = '#000000'
-      ctx.textBaseline = 'top'
-      ctx.fillText(text, 0, 0)
-
-      // console.log(ctx.measureText(text)) 很多属性并没有实现
-
-      // document.body.appendChild(canvas)
-
-      function _isBlack(imageData, index) {
-        const firstByte = index * 4
-        const red = imageData[firstByte]
-        const green = imageData[firstByte + 1]
-        const blue = imageData[firstByte + 2]
-        return (red === 0 && green === 0 && blue === 0) ? true : false
-      }
-
-      const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      const imageData = imageDataObj.data
-      let startEdgeY, endEdgeY
-
-      startState:
-      for (let row = 0; row < height; row++) {
-        for (let col = 0; col < width; col++) {
-          const index = row * width + col
-          if (_isBlack(imageData, index)) {
-            startEdgeY = row
-            break startState
-          }
-        }
-      }
-
-      endState:
-      for (let row = height; row >= 0; row--) {
-        for (let col = 0; col < width; col++) {
-          const index = row * width + col
-          if (_isBlack(imageData, index)) {
-            endEdgeY = row
-            break endState
-          }
-        }
-      }
-
-      return {
-        startEdgeYRatio: startEdgeY / height,
-        endEdgeYRatio: 1 - endEdgeY / height
-      }
-    }
-
-    const span = document.getElementById('js-span')
-    const fontCSS = getFontCSS(span)
-    const fakerElement = createFakerElement(fontCSS)
-    const lineSpace = Number.parseInt(fontCSS.lineHeight, 10) - Number.parseInt(fontCSS.fontSize, 10)
-    const totalHeight = calculateHeight(3, fakerElement.offsetHeight, lineSpace)
-    const { startEdgeYRatio, endEdgeYRatio } = calculateEdgeByCanvas('M', '100px', fontCSS.fontFamily, 100, 100)
-    
-    const fz = totalHeight / (1 - startEdgeYRatio - endEdgeYRatio )
-
-    span.style.cssText = `float: left;font-size:${fz}px;line-height:1;padding-top:${lineSpace / 2}px;margin: -${fz * startEdgeYRatio}px 0 -${fz * endEdgeYRatio}px 0;`
-    // span.style.cssFloat = 'left'
-    // span.style.fontSize = fz + 'px'
-    // span.style.lineHeight = 1
-    // span.style.paddingTop = `${lineSpace / 2}px`
-    // span.style.margin = `-${fz * startEdgeYRatio}px 0 -${fz * endEdgeYRatio}px 0`
   </script>
 </body>
 </html>
