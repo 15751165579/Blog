@@ -160,7 +160,7 @@ class FirstCapitalSink {
    * @param {Number} line
    * @memberof FirstCapitalSink
    */
-  init (line) {
+  init (line, text) {
     if (typeof line !== 'number') {
       throw new Error('line must be number!')
     }
@@ -168,7 +168,7 @@ class FirstCapitalSink {
     const fakerElement = this.createFakerElement(fontCSS)
     const lineSpace = Number.parseInt(fontCSS.lineHeight, 10) - Number.parseInt(fontCSS.fontSize, 10)
     const totalHeight = this.calculateHeight(line, fakerElement.offsetHeight, lineSpace)
-    const { startEdgeYRatio, endEdgeYRatio } = this.calculateEdgeByCanvas('M', '100px', fontCSS.fontFamily, 100, 100)
+    const { startEdgeYRatio, endEdgeYRatio } = this.calculateEdgeByCanvas(text, '100px', fontCSS.fontFamily, 100, 100)
     
     const fz = totalHeight / (1 - startEdgeYRatio - endEdgeYRatio )
 

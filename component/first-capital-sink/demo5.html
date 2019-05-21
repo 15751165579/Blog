@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>canvas string</title>
+  <style>
+    canvas {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="letter"></canvas>
+  <canvas id="no-letter"></canvas>
+
+  <script>
+    window.onload = () => {
+
+      const fontsize = 300
+
+      drawText('letter', fontsize, 'C')
+
+      drawText('no-letter', fontsize, '国')
+
+      function drawText(id, fontsize, text) {
+        const canvas =  document.getElementById(id)
+        const ctx = canvas.getContext('2d')
+
+        canvas.width = fontsize
+        canvas.height = fontsize
+
+        ctx.font = `${fontsize}px PingFang SC`
+        ctx.textBaseline = 'top'
+        ctx.fillStyle = '#000000'
+        ctx.fillText(text, 0, 0)
+      }
+
+    }
+  </script>
+</body>
+</html>
