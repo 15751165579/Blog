@@ -19,7 +19,7 @@ function transformHyphenToCamel(str) {
   })
 }
 
-class FirstCapitalSink {
+class FirstCharacterSink {
   constructor(selector) {
     if (typeof selector === 'string') {
       this.el = document.querySelector(selector)
