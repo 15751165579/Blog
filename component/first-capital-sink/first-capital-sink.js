@@ -1,15 +1,15 @@
 /* eslint-disable */
 /**
- * 驼峰转连字符
+ * 驼峰 -> 连字符
  *
- * @param {*} str
+ * @param {String} str
  * @returns
  */
 function transformCamelToHyphen(str) {
   return str.replace(/([A-Z])/g, '-$1').toLowerCase()
 }
 /**
- * 连字符转驼峰
+ * 连字符 -> 驼峰
  * @param {String} str
  * @returns
  */
@@ -50,38 +50,25 @@ class FirstCapitalSink {
     return ret
   }
   /**
-   * 创建测试块级元素
+   * 将对象转化为 cssText 
    *
-   * @param {Object} fontStyle
-   * @returns
+   * @param { Object } obj
    * @memberof FirstCapitalSink
    */
-  createFakerElement(fontStyle) {
-    const el = document.createElement('div')
-    const options = Object.assign({
-      position: 'fixed',
-      top: '0',
-      left: '0',
-      opacity: '0'
-    }, fontStyle)
-    Object.keys(options).forEach(key => el.style[key] = options[key])
-    const span = document.createElement('span')
-    span.innerHTML = 'X'
-    el.appendChild(span)
-    document.body.appendChild(el)
-    return el
+  transfromObjectToCSSText(obj) {
+    return Object.keys(obj).map(key => `${transformCamelToHyphen(key)}:${obj[key]}`).join(';')
   }
   /**
    * 计算总高度
    *
-   * @param {*} line
-   * @param {*} offsetHeight
-   * @param {*} lineSpace
+   * @param {Number} rowNumber 行数
+   * @param {Number} height 行高
+   * @param {Number} lineSpace 行距
    * @returns
    * @memberof FirstCapitalSink
    */
-  calculateHeight(line, offsetHeight, lineSpace) {
-    return offsetHeight * line - lineSpace
+  calculateHeight(rowNumber, height, lineSpace) {
+    return height * rowNumber - lineSpace
   }
   /**
    * 判断当前位置是否为黑色
@@ -99,9 +86,9 @@ class FirstCapitalSink {
     return (red === 0 && green === 0 && blue === 0) ? true : false
   }
   /**
-   * 计算文字的上下边缘距离
+   * 计算字符的上下留白比例
    *
-   * @param {String} text 需要测量的大写字母
+   * @param {String} text
    * @param {String} fontSize
    * @param {String} fontFamily
    * @param {Number} width
@@ -160,18 +147,24 @@ class FirstCapitalSink {
    * @param {Number} line
    * @memberof FirstCapitalSink
    */
-  init (line, text) {
-    if (typeof line !== 'number') {
-      throw new Error('line must be number!')
+  init (rowNumber, text) {
+    if (typeof rowNumber !== 'number') {
+      throw new Error('rowNumber must be number!')
     }
-    const fontCSS = this.getFontCSS(this.el)
-    const fakerElement = this.createFakerElement(fontCSS)
-    const lineSpace = Number.parseInt(fontCSS.lineHeight, 10) - Number.parseInt(fontCSS.fontSize, 10)
-    const totalHeight = this.calculateHeight(line, fakerElement.offsetHeight, lineSpace)
-    const { startEdgeYRatio, endEdgeYRatio } = this.calculateEdgeByCanvas(text, '100px', fontCSS.fontFamily, 100, 100)
+    const { lineHeight, fontSize, fontFamily } = this.getFontCSS(this.el)
+    const height = Number.parseInt(lineHeight, 10)
+    const lineSpace = height - Number.parseInt(fontSize, 10)
+    const totalHeight = this.calculateHeight(rowNumber, height, lineSpace)
+    const { startEdgeYRatio, endEdgeYRatio } = this.calculateEdgeByCanvas(text, '100px', fontFamily, 100, 100)
     
     const fz = totalHeight / (1 - startEdgeYRatio - endEdgeYRatio )
-
-    this.el.style.cssText = `float: left;font-size:${fz}px;line-height:1;padding:${lineSpace / 2}px 0;margin: -${fz * startEdgeYRatio}px 0 -${fz * endEdgeYRatio}px 0;`
+    const options = {
+      float: 'left',
+      fontSize: `${fz}px`,
+      lineHeight: 1,
+      padding: `${lineSpace / 2}px 0`,
+      margin: `-${fz * startEdgeYRatio}px 0 -${fz * endEdgeYRatio}px 0`
+    }
+    this.el.style.cssText = this.transfromObjectToCSSText(options)
   }
 }
