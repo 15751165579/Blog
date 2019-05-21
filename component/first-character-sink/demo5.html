@@ -9,11 +9,19 @@
     canvas {
       border: 1px solid red;
     }
+    p {
+      padding: 0;
+      margin: 0;
+      border: 1px solid red;
+      font-size: 300px;
+      line-height: 1;
+    }
   </style>
 </head>
 <body>
   <canvas id="letter"></canvas>
   <canvas id="no-letter"></canvas>
+  <p>国</p>
 
   <script>
     window.onload = () => {
@@ -33,6 +41,7 @@
 
         ctx.font = `${fontsize}px PingFang SC`
         ctx.textBaseline = 'top'
+        ctx.transform(1, 0, 0, 1, 0, 50)
         ctx.fillStyle = '#000000'
         ctx.fillText(text, 0, 0)
       }
