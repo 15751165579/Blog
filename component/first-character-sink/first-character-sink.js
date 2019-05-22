@@ -99,25 +99,29 @@ class FirstCharacterSink {
   calculateEdgeByCanvas(text, fontSize, fontFamily, width, height) {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
+
+    const x = width
+    const y = height * 1.5
     
-    canvas.width = width
-    canvas.height = height
+    canvas.width = x
+    canvas.height = y
 
     ctx.fillStyle = "#ffffff"
     ctx.fillRect(0,0, canvas.width, canvas.height)
     ctx.font = `${fontSize} ${fontFamily}`
     ctx.fillStyle = '#000000'
-    ctx.textBaseline = 'top'
-    ctx.fillText(text, 0, 0)
+    ctx.textBaseline = 'middle'
+    ctx.textAlign = 'center'
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2)
 
     const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height)
     const imageData = imageDataObj.data
     let startEdgeY, endEdgeY
 
     startState:
-    for (let row = 0; row < height; row++) {
-      for (let col = 0; col < width; col++) {
-        const index = row * width + col
+    for (let row = 0; row < y; row++) {
+      for (let col = 0; col < x; col++) {
+        const index = row * x + col
         if (this.isBlack(imageData, index)) {
           startEdgeY = row
           break startState
@@ -126,19 +130,18 @@ class FirstCharacterSink {
     }
 
     endState:
-    for (let row = height; row >= 0; row--) {
-      for (let col = 0; col < width; col++) {
-        const index = row * width + col
+    for (let row = y; row >= 0; row--) {
+      for (let col = 0; col < x; col++) {
+        const index = row * x + col
         if (this.isBlack(imageData, index)) {
           endEdgeY = row
           break endState
         }
       }
     }
-
     return {
-      startEdgeYRatio: startEdgeY / height,
-      endEdgeYRatio: 1 - endEdgeY / height
+      startEdgeYRatio: (startEdgeY - height / 4) / height,
+      endEdgeYRatio: 1 - (endEdgeY - height / 4) / height
     }
   }
   /**
@@ -158,12 +161,14 @@ class FirstCharacterSink {
     const { startEdgeYRatio, endEdgeYRatio } = this.calculateEdgeByCanvas(text, '100px', fontFamily, 100, 100)
     
     const fz = totalHeight / (1 - startEdgeYRatio - endEdgeYRatio )
+    console.log(startEdgeYRatio, endEdgeYRatio)
     const options = {
       float: 'left',
       fontSize: `${fz}px`,
       lineHeight: 1,
+      fontFamily,
       padding: `${lineSpace / 2}px 0`,
-      margin: `-${fz * startEdgeYRatio}px 0 -${fz * endEdgeYRatio}px 0`
+      margin: `${-fz * startEdgeYRatio}px 0 ${-fz * endEdgeYRatio}px 0`
     }
     this.el.style.cssText = this.transfromObjectToCSSText(options)
   }
