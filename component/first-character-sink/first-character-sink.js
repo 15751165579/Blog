@@ -101,7 +101,7 @@ class FirstCharacterSink {
     const ctx = canvas.getContext('2d')
 
     const x = width
-    const y = height * 1.5
+    const y = height * 1.5 // Windows 部分文字绘制时超出 fontt-size 大小
     
     canvas.width = x
     canvas.height = y
@@ -111,8 +111,9 @@ class FirstCharacterSink {
     ctx.font = `${fontSize} ${fontFamily}`
     ctx.fillStyle = '#000000'
     ctx.textBaseline = 'middle'
-    ctx.textAlign = 'center'
-    ctx.fillText(text, canvas.width / 2, canvas.height / 2)
+    // 是否能修复 Windows Chrome 文字偏上的缺陷
+    ctx.transform(1,0,0,1,0,y / 2)
+    ctx.fillText(text, 0, 0)
 
     const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height)
     const imageData = imageDataObj.data
