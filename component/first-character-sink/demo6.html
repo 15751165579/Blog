@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  </style>
+</head>
+<body>
+
+  <script>
+
+    // 计算文本的高度
+    function calculateTextContentArea(fontSize, text) {
+      const el = document.createElement('div')
+      el.style.display = "block"
+      el.style.position = "absolute"
+      el.style.lineHeight = 1
+      el.style.top = "0"
+      el.style.right = "0"
+      el.style.width = "0px"
+      el.style.height = "0px"
+      el.style.margin = "0"
+      el.style.padding = "0"
+      el.style.visibility = "hidden"
+      el.style.overflow = "hidden"
+
+      const span = document.createElement('span')
+      span.style.fontSize = fontSize
+
+      span.innerHTML = text
+    
+      el.appendChild(span)
+
+      document.body.appendChild(el)
+
+      const contentAreaHeight = span.getBoundingClientRect().height
+
+      document.body.removeChild(el)
+
+      return contentAreaHeight
+    }
+
+    console.log(calculateTextContentArea('100px', 'M'))
+  </script>
+</body>
+</html>
