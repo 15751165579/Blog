@@ -24,15 +24,28 @@
       font-size: 300px;
       line-height: 1;
       font-family: "PingFang SC";
-      height: 282px;
+      height: 300px;
       overflow: hidden;
-      margin-top: -27px;
+      margin-top: -36px;
+    }
+
+    .some {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: inline-block;
+      border: 1px solid red;
+      height: 600px;
+      line-height: 600px;
+      font-size: 300px;
+      font-family: "PingFang SC";
     }
   </style>
 </head>
 <body>
   <canvas id="letter"></canvas>
   <canvas id="no-letter"></canvas>
+  <p class="some">国</p>
   <div>
     <p>
       <span>国</span>
@@ -56,12 +69,15 @@
         const ctx = canvas.getContext('2d')
 
         canvas.width = fontsize
-        canvas.height = fontsize
+        canvas.height = fontsize * 2
 
         ctx.font = `${fontsize}px/1 PingFang SC`
-        ctx.textBaseline = 'top' // top firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=737852
+        // ctx.textBaseline = 'top' // top firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=737852
+
+        // windows chrome canvas 向上偏移未知距离
+        ctx.textBaseline = 'middle'
         ctx.fillStyle = '#000000'
-        ctx.fillText(text, 0, 0)
+        ctx.fillText(text, 0, canvas.height / 2)
       }
 
       const { startEdgeYRatio, endEdgeYRatio } = calculateEdgeByCanvas('国', '100px', 'PingFang SC', 100, 100)
@@ -99,7 +115,7 @@
         const y = height // 这里就不采用 getBoundingClientRect() 来计算。
         
         canvas.width = x
-        canvas.height = y
+        canvas.height = y * 1.5
 
         ctx.fillStyle = "#ffffff"
         ctx.fillRect(0,0, canvas.width, canvas.height)
