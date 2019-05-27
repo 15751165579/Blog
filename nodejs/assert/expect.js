@@ -1,3 +1,4 @@
+/* eslint-disable */
 (function (global, module) {
 
   var exports = module.exports;

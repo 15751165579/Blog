@@ -1,3 +1,4 @@
+/* eslint-disable */
 // 关于Node process对象的小知识点
 const program = require('commander')
 const chalk = require('chalk')

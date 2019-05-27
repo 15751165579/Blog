@@ -1,3 +1,4 @@
+/* eslint-disable */
 const puppeteer = require('puppeteer')
 const device = require('puppeteer/DeviceDescriptors')
 
