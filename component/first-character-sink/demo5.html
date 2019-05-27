@@ -9,26 +9,45 @@
     canvas {
       border: 1px solid red;
     }
-    p {
+    div {
+      margin-top: 400px;
+      border: 1px solid red;
+    }
+    * {
       padding: 0;
       margin: 0;
-      border: 1px solid red;
+    }
+    span {
+      display: inline-block;
+      padding: 0;
+      margin: 0;
       font-size: 300px;
       line-height: 1;
+      font-family: "PingFang SC";
+      height: 282px;
+      overflow: hidden;
+      margin-top: -27px;
     }
   </style>
 </head>
 <body>
   <canvas id="letter"></canvas>
   <canvas id="no-letter"></canvas>
-  <p>国</p>
+  <div>
+    <p>
+      <span>国</span>
+    </p>
+  </div>
 
   <script>
     window.onload = () => {
 
       const fontsize = 300
 
-      drawText('letter', fontsize, 'C')
+      const el = document.documentElement
+      console.log(window.getComputedStyle(el)['font-family'])
+
+      drawText('letter', fontsize, 'M')
 
       drawText('no-letter', fontsize, '国')
 
@@ -39,13 +58,87 @@
         canvas.width = fontsize
         canvas.height = fontsize
 
-        ctx.font = `${fontsize}px PingFang SC`
-        ctx.textBaseline = 'top'
+        ctx.font = `${fontsize}px/1 PingFang SC`
+        ctx.textBaseline = 'top' // top firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=737852
         ctx.fillStyle = '#000000'
-        // ctx.transform(1, 0, 0, 1, 0, 50)
         ctx.fillText(text, 0, 0)
       }
 
+      const { startEdgeYRatio, endEdgeYRatio } = calculateEdgeByCanvas('国', '100px', 'PingFang SC', 100, 100)
+      const heightRatio = 1 - startEdgeYRatio - endEdgeYRatio
+      console.log(startEdgeYRatio, endEdgeYRatio)
+      console.log(300 * heightRatio)
+      console.log(300 * startEdgeYRatio)
+
+      // 字体的高度 （1 - endEdgeYRatio） * font-size 
+      // margin-top: -startEdgeYRatio * font-size
+
+      function isBlack(imageData, index) {
+        const firstByte = index * 4
+        const red = imageData[firstByte]
+        const green = imageData[firstByte + 1]
+        const blue = imageData[firstByte + 2]
+        return (red === 0 && green === 0 && blue === 0) ? true : false
+      }
+      /**
+       * 计算字符的上下留白比例
+       *
+       * @param {String} text
+       * @param {String} fontSize
+       * @param {String} fontFamily
+       * @param {Number} width
+       * @param {Number} height
+       * @returns
+       * @memberof FirstCapitalSink
+       */
+      function calculateEdgeByCanvas(text, fontSize, fontFamily, width, height) {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+
+        const x = width
+        const y = height // 这里就不采用 getBoundingClientRect() 来计算。
+        
+        canvas.width = x
+        canvas.height = y
+
+        ctx.fillStyle = "#ffffff"
+        ctx.fillRect(0,0, canvas.width, canvas.height)
+        ctx.font = `${fontSize} ${fontFamily}`
+        ctx.fillStyle = '#000000'
+        ctx.textBaseline = 'top'
+        ctx.fillText(text, 0, 0)
+
+        const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        const imageData = imageDataObj.data
+        let startEdgeY, endEdgeY
+
+        startState:
+        for (let row = 0; row < y; row++) {
+          for (let col = 0; col < x; col++) {
+            const index = row * x + col
+            if (isBlack(imageData, index)) {
+              startEdgeY = row
+              break startState
+            }
+          }
+        }
+
+        endState:
+        for (let row = y; row >= 0; row--) {
+          for (let col = 0; col < x; col++) {
+            const index = row * x + col
+            if (isBlack(imageData, index)) {
+              endEdgeY = row
+              break endState
+            }
+          }
+        }
+        console.log(startEdgeY, endEdgeY)
+        return {
+          startEdgeYRatio: startEdgeY / height,
+          endEdgeYRatio: 1 - endEdgeY / height
+        }
+      }
     }
   </script>
 </body>
