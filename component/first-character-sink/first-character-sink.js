@@ -101,7 +101,7 @@ class FirstCharacterSink {
     const ctx = canvas.getContext('2d')
 
     const x = width
-    const y = height * 1.5 // Windows 部分文字绘制时超出 fontt-size 大小
+    const y = height * 1.5 // 这里就不采用 getBoundingClientRect() 来计算。
     
     canvas.width = x
     canvas.height = y
@@ -111,8 +111,6 @@ class FirstCharacterSink {
     ctx.font = `${fontSize} ${fontFamily}`
     ctx.fillStyle = '#000000'
     ctx.textBaseline = 'middle'
-    // 是否能修复 Windows Chrome 文字偏上的缺陷
-    ctx.transform(1,0,0,1,0,y / 2)
     ctx.fillText(text, 0, 0)
 
     const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -162,7 +160,6 @@ class FirstCharacterSink {
     const { startEdgeYRatio, endEdgeYRatio } = this.calculateEdgeByCanvas(text, '100px', fontFamily, 100, 100)
     
     const fz = totalHeight / (1 - startEdgeYRatio - endEdgeYRatio )
-    console.log(startEdgeYRatio, endEdgeYRatio)
     const options = {
       float: 'left',
       fontSize: `${fz}px`,

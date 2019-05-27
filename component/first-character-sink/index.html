@@ -29,12 +29,35 @@
       font-weight: bold;
     }
 
-    .demo2::first-letter {
-      font-size: 410%;
+    .demo21 {
+      font-family: 'PingFang SC';
+    }
+
+    .demo21::first-letter {
+      /* 各个浏览器不一致的浮动情况 导致各种问题 */
+      font-size: 4.8rem;
       font-weight: bold;
+      font-family: 'PingFang SC';
       float: left;
+      line-height: 1;
       text-transform: uppercase;
-      margin: -12px 4px -20px 0;
+      background: red;
+    }
+
+    .demo2 {
+      font-family: 'PingFang SC';
+    }
+
+    .cap {
+      font-size: 4.8rem;
+      height: 4.2rem;
+      font-weight: bold;
+      font-family: 'PingFang SC';
+      float: left;
+      line-height: 1;
+      text-transform: uppercase;
+      margin: -0.3rem 0 0 0;
+      overflow: hidden;
     }
   </style>
 </head>
@@ -53,8 +76,14 @@
     
     <div class="container">
       <!-- 缺点也很明显 字体大小的灵活调整？margin 值的设置 ？-->
-      <h3>float + font-size + margin 的 Polyfill</h3>
-      <p class="demo2">My father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
+      <h3>float + font-size + margin 的 Polyfill(各浏览器一致的情况)</h3>
+      <p class="demo2"><span class="cap">M</span>y father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
+    </div>
+
+    <div class="container">
+      <!-- 缺点也很明显 字体大小的灵活调整？margin 值的设置 ？-->
+      <h3>float + font-size + margin 的 Polyfill(这种情况，你无法设置第一个字符的高度，保证上下区域的留白)</h3>
+      <p class="demo21">My father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
     </div>
 
     <div class="container">
