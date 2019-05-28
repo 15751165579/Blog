@@ -1,3 +1,10 @@
+/**
+ * 计算两数之和
+ * @param {Number} a 
+ * @param {Number} b 
+ * 
+ * @returns Number
+ */
 function add(a, b) {
   const type = '[object Number]'
   const toStringProto = Object.prototype.toString
