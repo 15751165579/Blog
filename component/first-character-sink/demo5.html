@@ -6,6 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>canvas string</title>
   <style>
+    @font-face {
+      font-family: customfont;
+      src:url(./font/MicrosoftYaqiHei-2.ttf);
+    }
     canvas {
       border: 1px solid red;
     }
@@ -38,7 +42,7 @@
       height: 600px;
       line-height: 600px;
       font-size: 300px;
-      font-family: "PingFang SC";
+      font-family: "Heiti SC";
     }
   </style>
 </head>
@@ -53,6 +57,12 @@
   </div>
 
   <script>
+    // mac 上表现一致的字体 
+    // 1、华文细黑 STXihei
+    // 2、黑体-简 Heiti SC
+    // 3、苹方 PingFang SC （firefox 上 canvas中偏上）
+
+    // windows Microsoft Yahei
     window.onload = () => {
 
       const fontsize = 300
@@ -70,8 +80,8 @@
 
         canvas.width = fontsize
         canvas.height = fontsize * 2
-
-        ctx.font = `${fontsize}px/1 PingFang SC`
+        // PingFang SC
+        ctx.font = `${fontsize}px/1 Heiti SC`
         // ctx.textBaseline = 'top' // top firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=737852
 
         // windows chrome canvas 向上偏移未知距离

@@ -27,7 +27,7 @@
   <script>
 
     // 文本的高度分为 context-area 高度  和 em-square 高度（上下留有空白主要是避免上下行文字挤在一起）
-    // 计算文本的高度
+    // 计算文本的高度 只有 chrome 中可以计算
     function calculateTextContentArea(fontSize, text) {
       const el = document.createElement('p')
       el.style.display = "block"

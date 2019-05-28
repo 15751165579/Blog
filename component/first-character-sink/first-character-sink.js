@@ -18,6 +18,13 @@ function transformHyphenToCamel(str) {
     return letter.toUpperCase()
   })
 }
+/**
+ * 将数字转化为 px字符串
+ * @param {Number} size 
+ */
+function toPXString(size) {
+  return `${size}px`
+}
 
 class FirstCharacterSink {
   constructor(selector) {
@@ -30,6 +37,7 @@ class FirstCharacterSink {
     if (typeof this.el === 'undefined') {
       throw new Error('selector must be string of object')
     }
+    this._testSize = 100
   }
   /**
    * 获取元素字体样式
@@ -91,17 +99,16 @@ class FirstCharacterSink {
    * @param {String} text
    * @param {String} fontSize
    * @param {String} fontFamily
-   * @param {Number} width
-   * @param {Number} height
+   * @param {Number} size
    * @returns
    * @memberof FirstCapitalSink
    */
-  calculateEdgeByCanvas(text, fontSize, fontFamily, width, height) {
+  calculateEdgeByCanvas(text, fontSize, fontFamily, size) {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
 
-    const x = width
-    const y = height * 1.5 // 这里就不采用 getBoundingClientRect() 来计算。
+    const x = size
+    const y = size * 1.5 // 这里就不采用 getBoundingClientRect() 来计算。
     
     canvas.width = x
     canvas.height = y
@@ -111,7 +118,7 @@ class FirstCharacterSink {
     ctx.font = `${fontSize} ${fontFamily}`
     ctx.fillStyle = '#000000'
     ctx.textBaseline = 'middle'
-    ctx.fillText(text, 0, 0)
+    ctx.fillText(text, 0, canvas.height / 2)
 
     const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height)
     const imageData = imageDataObj.data
@@ -139,8 +146,8 @@ class FirstCharacterSink {
       }
     }
     return {
-      startEdgeYRatio: (startEdgeY - height / 4) / height,
-      endEdgeYRatio: 1 - (endEdgeY - height / 4) / height
+      startEdgeYRatio: (startEdgeY - size / 4) / size,
+      endEdgeYRatio: 1 - (endEdgeY - size / 4) / size
     }
   }
   /**
@@ -155,18 +162,24 @@ class FirstCharacterSink {
     }
     const { lineHeight, fontSize, fontFamily } = this.getFontCSS(this.el)
     const height = Number.parseInt(lineHeight, 10)
+    // 行距
     const lineSpace = height - Number.parseInt(fontSize, 10)
+    // 首字符占据的空间
     const totalHeight = this.calculateHeight(rowNumber, height, lineSpace)
-    const { startEdgeYRatio, endEdgeYRatio } = this.calculateEdgeByCanvas(text, '100px', fontFamily, 100, 100)
+    // 计算
+    const { startEdgeYRatio, endEdgeYRatio } = this.calculateEdgeByCanvas(text, toPXString(this._testSize), fontFamily, this._testSize)
     
     const fz = totalHeight / (1 - startEdgeYRatio - endEdgeYRatio )
+    const actualHeight = fz * (1 - endEdgeYRatio)
+    const capHeight = fz * startEdgeYRatio
     const options = {
       float: 'left',
-      fontSize: `${fz}px`,
+      fontSize: toPXString(fz),
+      height: toPXString(actualHeight), // 解决 firefox 中 float 高度的问题
       lineHeight: 1,
       fontFamily,
-      padding: `${lineSpace / 2}px 0`,
-      margin: `${-fz * startEdgeYRatio}px 0 ${-fz * endEdgeYRatio}px 0`
+      padding: `${toPXString(lineSpace / 2)} 0`,
+      marginTop: toPXString(-capHeight)
     }
     this.el.style.cssText = this.transfromObjectToCSSText(options)
   }
