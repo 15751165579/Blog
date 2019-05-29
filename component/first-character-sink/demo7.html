@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    canvas {
+      border: 1px solid red;
+    }
+
+    .demo {
+      position: absolute;
+      top: 100px;
+      left: 200px;
+      font-size: 80px;
+      line-height: 1;
+      border: 1px solid red;
+    }
+
+    .masker {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+      height: 28px;
+      background: rgba(0,0,0,.3);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="demo1"></div>
+
+  <div class="demo">
+    <div class="masker"></div>
+    <span>M</span>
+  </div>
+  <script>
+    window.onload = () => {
+      const text = '任'
+      const _css = window.getComputedStyle(document.body)
+      const fontFamily = _css.getPropertyValue('font-family')
+      const baselineRatio = calculateBaselineRatio(fontFamily, text)
+      const heightRatio = calculateEdgeByCanvas(text, '100px', fontFamily, 100, 100)
+      console.log(`baseline ----- ${baselineRatio}`)
+      console.log(`heightRatio ---- ${heightRatio}`)
+      console.log(baselineRatio - heightRatio)
+      createMasker(100 * (baselineRatio - heightRatio))
+    }
+
+    function createMasker(height) {
+      const el = document.createElement('div')
+      el.style.display = 'block'
+      el.style.position = 'absolute'
+      el.style.top = '0'
+      el.style.right = '0'
+      el.style.width = '100px'
+      el.style.height = `${height}px`
+      el.style.background = 'rgba(0,0,0,.1)'
+      document.body.appendChild(el)
+    }
+    
+    // 计算 baseline
+    function calculateBaselineRatio(fontFamily, text) {
+      const el = document.createElement('div')
+      el.style.display = "block"
+      el.style.position = "absolute"
+      el.style.top = "0"
+      el.style.right = "0"
+      el.style.lineHeight = 1
+      // el.style.width = "0px"
+      // el.style.height = "0px"
+      el.style.margin = "0"
+      el.style.padding = "0"
+      el.style.fontFamily = fontFamily
+      // el.style.visibility = "hidden"
+      // el.style.overflow = "hidden"
+
+      const small = document.createElement('span')
+      const large = document.createElement('span')
+
+      small.style.fontSize = '0px'
+      large.style.fontSize = '100px'
+
+      small.innerHTML = text
+      large.innerHTML = text
+    
+      el.appendChild(small)
+      el.appendChild(large)
+
+      document.body.appendChild(el)
+
+      const smalldims = small.getBoundingClientRect()
+      const largedims = large.getBoundingClientRect()
+      console.log(smalldims)
+      console.log(largedims)
+
+      const baselinePosition = smalldims.top
+
+      return baselinePosition / 100
+    }
+  
+    function isBlack(imageData, index) {
+      const firstByte = index * 4
+      const red = imageData[firstByte]
+      const green = imageData[firstByte + 1]
+      const blue = imageData[firstByte + 2]
+      return (red === 0 && green === 0 && blue === 0) ? true : false
+    }
+    /**
+     * 计算字符的上下留白比例
+     *
+     * @param {String} text
+     * @param {String} fontSize
+     * @param {String} fontFamily
+     * @param {Number} width
+     * @param {Number} height
+     * @returns
+     * @memberof FirstCapitalSink
+     */
+    function calculateEdgeByCanvas(text, fontSize, fontFamily, width, height) {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+
+      const x = width
+      const y = height * 1.5
+      
+      canvas.width = x
+      canvas.height = y
+
+      ctx.fillStyle = "#ffffff"
+      ctx.fillRect(0,0, canvas.width, canvas.height)
+      ctx.font = `${fontSize} ${fontFamily}`
+      ctx.fillStyle = '#000000'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(text, 0, canvas.height / 2)
+
+      document.body.appendChild(canvas)
+
+      const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      const imageData = imageDataObj.data
+      let startEdgeY, endEdgeY
+
+      startState:
+      for (let row = 0; row < y; row++) {
+        for (let col = 0; col < x; col++) {
+          const index = row * x + col
+          if (isBlack(imageData, index)) {
+            startEdgeY = row
+            break startState
+          }
+        }
+      }
+
+      endState:
+      for (let row = y; row >= 0; row--) {
+        for (let col = 0; col < x; col++) {
+          const index = row * x + col
+          if (isBlack(imageData, index)) {
+            endEdgeY = row
+            break endState
+          }
+        }
+      }
+      console.log(startEdgeY, endEdgeY)
+      return (endEdgeY - startEdgeY) / width
+    }
+  </script>
+</body>
+</html>
