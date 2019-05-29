@@ -13,6 +13,9 @@ expect({a: 1, b: 2}).to.contains.keys('a')
 
 console.log(Assertion.prototype)
 
+console.log(expect(3).to.equal(3).and.to.be.a('number'))
+console.log(expect('1').to.be.a('string'))
+
 // =========
 // 浅谈源码
 // =========
@@ -26,8 +29,10 @@ console.log(Assertion.prototype)
 // assertion 核心断言构造函数 最终主要采用 util/test 其中提供 addProperty addChainableMethod addMethod 扩展原型链 （创建一个新的断言对象，并且拷贝旧的断言对象的 __flags 属性中的对象）
 // 一种是什么也不操作如 to 
 // 修改__flags中的标记属性 如 not
-// eq addMethod 利用apply指定函数正确的this, 再代理给 原型 源码中兼容了proxy 的方式 (proxyify 需要实践一下)
-// a addChainableMethod 这个方法不太懂
+// eq addMethod 利用apply指定函数正确的this, 再代理给 原型 源码中兼容了proxy 的方式
+// a addChainableMethod 理解了
+// ---> expect({b: 2}).to.have.a.property('b')
+// ---> expect('foo').to.be.a('string')
 
 // core 添加的一些方法 主要是三种 （property 本质上不会有太大的影响）
 // 以上实现的就是 expect 
