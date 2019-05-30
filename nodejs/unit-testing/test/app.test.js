@@ -4,6 +4,8 @@ const models = require('../models')
 const app = require('../api/app')
 const api = supertest(app)
 
+// 也可以利用 chai-http 插件 代替 supertest
+
 describe(' **** 接口测试 ****', () => {
 
   before(async () => {

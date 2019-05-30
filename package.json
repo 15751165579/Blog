@@ -109,6 +109,7 @@
     "ioredis": "^4.0.0",
     "joi": "^13.2.0",
     "jsonwebtoken": "^8.2.1",
+    "karma": "^4.1.0",
     "koa": "^2.5.2",
     "koa-body-parser": "^1.1.2",
     "koa-bodyparser": "^4.2.1",
