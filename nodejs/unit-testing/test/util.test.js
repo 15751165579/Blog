@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const { add } = require('../util')
+const add = require('../util')
 
 /**
  * describe 测试场景
@@ -18,7 +18,7 @@ const { add } = require('../util')
 // 测试套件
 describe('Test add()', () => {
 
-  before(() => console.log(' **** 开始 add 函数的测试'))
+  before(() => console.log(' **** 开启测试'))
 
   // 测试用例
   it('参数问题', () => {
@@ -30,6 +30,6 @@ describe('Test add()', () => {
     expect(add(1, 4)).to.equal(5)
   })
 
-  after(() => console.log(' **** 完成 add 函数的测试'))
+  after(() => console.log(' **** 完成测试'))
 
 })
