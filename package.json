@@ -8,7 +8,8 @@
     "coverall": "nyc report --reporter=text-lcov | coveralls",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "addChangelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "dev": "node app.js"
+    "dev": "node app.js",
+    "test1": "nyc mocha nodejs/unit-testing/test/app.test.js"
   },
   "config": {
     "validate-commit-msg": {
@@ -75,7 +76,7 @@
     "postcss-mixins": "^6.2.1",
     "postcss-reporter": "^6.0.1",
     "stylelint": "^10.0.1",
-    "supertest": "^3.0.0",
+    "supertest": "^3.4.2",
     "validate-commit-msg": "^2.14.0"
   },
   "dependencies": {
@@ -109,6 +110,8 @@
     "joi": "^13.2.0",
     "jsonwebtoken": "^8.2.1",
     "koa": "^2.5.2",
+    "koa-body-parser": "^1.1.2",
+    "koa-bodyparser": "^4.2.1",
     "koa-compose": "^4.1.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
@@ -122,6 +125,7 @@
     "mongoose": "^5.0.15",
     "morgan": "^1.9.0",
     "multer": "^1.3.1",
+    "mysql2": "^1.6.5",
     "node-uuid": "^1.4.8",
     "parseurl": "^1.3.2",
     "pixelmatch": "^4.0.2",
@@ -133,6 +137,7 @@
     "redis-rebloom": "^1.0.0",
     "request": "^2.88.0",
     "rxjs": "^5.5.12",
+    "sequelize": "^5.8.7",
     "stacktrace-js": "^2.0.0",
     "utils-merge": "^1.0.1",
     "uuid": "^3.3.2"
