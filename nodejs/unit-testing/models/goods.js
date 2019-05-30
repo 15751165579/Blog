@@ -9,8 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: DataTypes.STRING,
     category: DataTypes.STRING
-  }, {
-    initialAutoIncrement: 10000
   });
   return Goods;
 };

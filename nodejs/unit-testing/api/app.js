@@ -2,10 +2,27 @@ const Koa = require('koa')
 const Router = require('koa-router')
 const bodyParser = require('koa-bodyparser')
 const models = require('../models')
+const Joi = require('joi')
 
 const app = new Koa()
 const router = new Router()
 app.use(bodyParser())
+
+async function validateGoodsParams(ctx, next) {
+  const { id } = ctx.params
+  const scheme = Joi.object({
+    id: Joi.number()
+  })
+  const valid = scheme.validate({id})
+  if (valid.error) {
+    ctx.status = 400
+    return ctx.body = {
+      code: 10020,
+      msg: '参数不合法'
+    }
+  }
+  await next()
+}
 
 // 添加商品
 router.post('/goods', async ctx => {
@@ -18,9 +35,9 @@ router.post('/goods', async ctx => {
 })
 
 // 根据id获取商品
-router.get('/goods/:id', async ctx => {
+router.get('/goods/:id', validateGoodsParams, async ctx => {
   const { id } = ctx.params
-  ctx.body  = await models.Goods.findOne({
+  ctx.body = await models.Goods.findOne({
     where: {
       id
     }
