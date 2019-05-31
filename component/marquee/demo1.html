@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>marquee</title>
+  <style>
+    .container {
+      border: 1px dashed red;
+      padding: 0 20px;
+      margin: 50px auto;
+      width: 400px;
+    }
+
+    .demo1 {
+      white-space:nowrap;
+      overflow: hidden;
+    }
+    .demo1 > div {
+      overflow: hidden;
+    }
+    .marquee {
+      display: inline-block;
+      animation: marquee 30s linear infinite;
+      padding-left: 100%;
+      will-change: transform;
+    }
+
+    .marquee:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(-100%, 0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <marquee behavior="scroll" direction="left">
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, asperiores delectus? Ipsa officia hic quaerat vel nihil vero veniam nemo! Autem repudiandae accusantium quod deserunt, impedit aperiam optio eum tempora.</p>
+    </marquee>
+  </div>
+
+  <div class="container demo1">
+    <div>
+      <p class="marquee">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis repudiandae necessitatibus, at explicabo eos quo amet quis. Voluptatem quia temporibus quos ducimus, unde saepe harum impedit neque voluptatibus nam officiis.</p>
+    </div>
+  </div>
+
+  <script>
+  
+  </script>
+</body>
+</html>
