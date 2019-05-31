@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>css-prefix</title>
+  <script src="./index.js"></script>
+</head>
+<body>
+  <script>
+    
+    /**
+     * css 可以采用 autoprefixer
+     * 
+     * js 处理 css 时 添加前缀
+     * */
+    console.log(finalPropName('transform'))
+    console.log(finalPropName('appRegion'))
+
+    function fisrtCharacterUpperCase(name) {
+      return name.replace(/\b(\w)(\w*)/g, (str, $1, $2) => `${$1.toUpperCase()}${$2}`)
+    }
+
+    function fisrtCharacterUpperCase1(name) {
+      return name[0].toUpperCase() + name.slice(1)
+    }
+
+    console.log(fisrtCharacterUpperCase('appRegion'))
+    console.log(fisrtCharacterUpperCase1('appRegion'))
+  </script>
+</body>
+</html>
