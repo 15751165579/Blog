@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Marquee JavaScript</title>
-
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="./marquee.js"></script>
   <style>
     .marquee {
+      margin: 100px auto;
       width: 300px;
       overflow: hidden;
       border: 1px solid #ccc;
@@ -18,10 +16,13 @@
   </style>
 </head>
 <body>
-  <div class="marquee">jQuery marquee is the best marquee plugin in the world</div>
+  <div class="marquee" data-duration="12000">
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, asperiores delectus? Ipsa officia hic quaerat vel nihil vero veniam nemo! Autem repudiandae accusantium quod deserunt, impedit aperiam optio eum tempora.</p>
+  </div>
 
-  <script>
-    $('.marquee').marquee();
+  <script type="module">
+    import Marquee from './marquee.js'
+    const marquee = new Marquee('.marquee')
   </script>
 </body>
 </html>
