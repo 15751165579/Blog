@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>transition</title>
+  <style>
+    .demo {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      background: red;
+      transition: 2s width cubic-bezier(.17,.67,1,-0.93), 2s 2s height cubic-bezier(0.23, 1, 0.320, 1);
+    }
+    .demo:hover {
+      width: 600px;
+      height: 600px;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo"></div>
+
+  <script>
+    // 渐变的属性 持续的时间 以及 缓动函数
+    // transition 动画相对比较简单 只需要指定起始值 和 终止值 ，它会自动计算出中间值，特别需要主要 这些值必须是具体的，例如上述 width 如果指定 auto ，则无法计算出中间值
+    // 另外并不是所有的属性都支持过渡效果
+    
+    // transition 动画需要事件触发，无法自动执行
+    // transition 从起始状态 或者 终止状态 过渡一次，再次触发仍需手动触发
+  </script>
+</body>
+</html>
