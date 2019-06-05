@@ -6,21 +6,55 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>transition</title>
   <style>
-    .demo {
+    .product-item {
+      margin: 200px auto;
       position: relative;
-      width: 200px;
-      height: 200px;
-      background: red;
-      transition: 2s width cubic-bezier(.17,.67,1,-0.93), 2s 2s height cubic-bezier(0.23, 1, 0.320, 1);
+      width: 305px;
+      height: 429px;
+      border: 1px solid rgb(213,213,213);
+      transition: box-shadow .15s ease-out;
+      display: flex;
+      flex-flow: column wrap;
+      align-items: center;
+      justify-content: space-around;
     }
-    .demo:hover {
-      width: 600px;
-      height: 600px;
+    .product-item:hover {
+      box-shadow: inset 0 0 38px rgba(0,0,0,.08);
+    }
+
+    .product-item__pic {
+      width: 216px;
+      height: 216px;
+      padding: 45px 0 20px;
+    }
+
+    .product-item__title {
+      line-height: 1.2;
+      font-size: 14px;
+      color: #333;
+      font-weight: 700;
+      margin: 0 8px;
+    }
+
+    .product-item__price {
+      font-size: 18px;
+      font-family: Arial;
+      color: #d44d44;
+      font-weight: 700;
+      margin-top: 20px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="demo"></div>
+  <figure class="product-item">
+    <img class="product-item__pic" src="./24c6437342c9ea969e13f00b82f7e3e5.png" alt="">
+    <figcaption class="product-item__title">Smartisan T恤 红白机</figcaption>
+    <p class="product-item__price">
+      <i>¥</i>
+      <span>149.00</span>
+    </p>
+  </figure>
 
   <script>
     // 渐变的属性 持续的时间 以及 缓动函数
