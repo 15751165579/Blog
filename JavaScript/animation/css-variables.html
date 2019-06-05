@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CSS Variables</title>
+  <style>
+    :root {
+      --scale: 1.5;
+      --radius: 300px;
+      --length: 400px;
+    }
+
+    .ball {
+      margin: 200px 50px;
+      width: var(--radius);
+      height: var(--radius);
+      background: #D92659;
+      border-radius: 50%;
+      /* animation: move 4s ease-in-out infinite alternate; */
+      transition: transform 1s ease-in-out;
+      transform: scale(var(--scale))
+    }
+
+    .ball-1 {
+      margin: 200px 50px;
+      width: 50px;
+      height: 50px;
+      background: #D92659;
+      border-radius: 50%;
+      animation: move 1s ease-in-out infinite alternate;
+    }
+    @keyframes move {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(var(--scale));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ball"></div>
+  <div class="ball-1"></div>
+  <div>
+    <button id="js-btn">变小😭</button>
+  </div>
+  <script>
+    window.onload = () => {
+
+      // 全局与局部作用域
+
+      // 无法通过 改变 CSS Variables 来动态更改 keyframes 从而实现动画
+      // 结合 transition 可以
+
+      let [targetX, targetY, posX, posY, diif] = [0, 0, 0, 0]
+
+      const doc = document.documentElement
+      const docStyle = window.getComputedStyle(doc)
+      docStyle.getPropertyValue('--scale')
+
+      document.querySelector('#js-btn').addEventListener('click', () => {
+        doc.style.setProperty('--scale', Math.random())
+        doc.style.setProperty('--length', Math.floor(Math.random() * 100) + 'px')
+      })
+    }
+  </script>
+</body>
+</html>
