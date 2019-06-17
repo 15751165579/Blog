@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <style>
+    .demo {
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <p class="some">Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque eius molestias quibusdam blanditiis sunt sequi quo quam quaerat officia exercitationem ipsa corporis laboriosam voluptatum, qui adipisci inventore, sit, reprehenderit facilis.</p>
+  <script>
+
+    // 由于各大浏览器对于 CSS3 新增属性的支持进度不一致，所以在使用 CSS3 属性时，有两种方式处理其兼容性
+    
+    // 采用渐进增强的写法 
+
+    // .demo {
+    //   -webkit-border-radius: 50%;
+    //   -moz-border-radius: 50%;
+    //   -ms-border-radius: 50%;
+    //   border-radius: 50%;
+    // }
+
+    // 这种繁琐的工作现在都是交给 postcss 中的 autoprefixer 插件处理
+
+    // 但是有的属性吧 根本就没有几个浏览器支持 initial-letter 但是可以通过一些 polyfill 的方式 完成类似的效果
+
+    // 此时就不能采用上述的写法 必须得知道该属性是否支持
+
+    // 早些时候 要实现这样的效果 只能依靠 Modernizr 这样的库来处理兼容性
+
+    const cssPrefixes = ['', '-webkit-', '-moz-', '-ms-']
+    function supportCSSProperty(name, value) {
+      for (let i = 0, max = cssPrefixes.length; i < max; i++) {
+        const propertyName = `${cssPrefixes[i]}${name}`
+        if (CSS.supports(propertyName, value)) {
+          return true
+        }
+      }
+      return false
+    }
+    const result = supportCSSProperty('initial-letter', '1.5')
+
+    const span = document.createElement('span')
+    span.innerHTML = `CSS supports method: <b>${result}</b>`
+    document.body.appendChild(span)
+
+    const emptyStyle = document.createElement('div').style
+    function supportCSSProperty1(name) {
+      for (let i = 0, max = cssPrefixes.length; i < max; i++) {
+        const propertyName = `${cssPrefixes[i]}${name}`
+        if (propertyName in emptyStyle) {
+          return true
+        }
+      }
+      return false
+    }
+
+    const result1 = supportCSSProperty1('initial-letter')
+    const p = document.createElement('p')
+    p.innerHTML = `JS Polyfill <b>${result1}</b>`
+    document.body.appendChild(p)
+  </script>
+</body>
+</html>

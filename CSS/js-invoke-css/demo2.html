@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>initial-letter</title>
+  <style>
+    body {
+      line-height: 1.5;
+    }
+    .article-container {
+      width: 500px;
+      margin: 100px auto;
+      padding: 20px;
+      border: 1px dashed rgb(213,213,213);
+    }
+    .article-content::first-letter {
+      -webkit-initial-letter: 3;
+      initial-letter: 3;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    @supports not ((initial-letter: 3) or (-webkit-initial-letter: 3)) {
+      .article-content::first-letter {
+        font-size: 5.2rem;
+        height: 4.2rem;
+        font-weight: bold;
+        float: left;
+        line-height: 1;
+        text-transform: uppercase;
+        margin: -0.3rem 0.3rem -0.4rem 0;
+        overflow: hidden;
+      }
+    }
+  </style>
+</head>
+<body>
+  <article class="article-container">
+    <p class="article-content">My father’s family name being Pirrip, and my Christian name Philip, my infant tongue could make of both names nothing longer or more explicit than Pip. So, I called myself Pip, and came to be called Pip.</p>
+  </article>
+</body>
+</html>

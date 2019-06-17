@@ -23,5 +23,5 @@ function finalPropName(name) {
   if (name in emptyStyle) {
     return name
   }
-  return vendorProps[name] = vendorPropName(name) || name
+  return vendorProps[name] = vendorPropName(name)
 }
