@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TweenMax.min.js"></script>
+  <title>文字特效</title>
+  <style>
+    .container {
+      min-width: 500px;
+      margin: 200px auto;
+      font-size: 50px;
+    }
+
+.letter-wrap__word {
+  display: inline-flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.letter-wrap__char {
+  display: inline-block;
+  position: relative;
+  text-transform: uppercase;
+}
+.letter-wrap__char-inner {
+  display: inline-block;
+  pointer-events: none;
+}
+.letter-wrap__char-inner:after {
+  content: attr(data-letter);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  color: red;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="letter-wrap">Hello world</h2>
+  </div>
+
+  <div class="container">
+    <h2 class="letter-wrap" data-duration="0.4" data-stagger="0.1">Good morning</h2>
+  </div>
+
+  <script>
+    const letterClass = 'letter-wrap'
+    const letterWrapElements = Array.from(document.getElementsByClassName(letterClass))
+
+
+    letterWrapElements.forEach(el => {
+      letterWrap(el, letterClass)
+      letterAnimation(el, letterClass)
+    })
+
+    function letterWrap(el, letterClass) {
+      const words = el.textContent.split(' ')
+      const letters = []
+
+      words.forEach(word => {
+
+        let html = ''
+
+        for (let letterIndex in word) {
+          html += `
+            <span class="${letterClass}__char">
+              <span class="${letterClass}__char-inner" data-letter="${word[letterIndex]}">
+                ${word[letterIndex]}
+              </span>
+            </span>
+          `
+        }
+
+        let wrapperWord = `<span class="${letterClass}__word">${html}</span>`
+        letters.push(wrapperWord)
+      })
+
+      return el.innerHTML = letters.join(' ')
+    }
+
+
+    function letterAnimation(el, letterClass) {
+      const tl = new TimelineMax({ paused: true })
+
+      const characters = el.querySelectorAll(`.${letterClass}__char-inner`)
+      const duration = el.hasAttribute('data-duration') ? el.dataset.duration : 0.3
+      const stagger = el.hasAttribute('data-stagger') ? el.dataset.stagger : 0.03
+
+      el.animation = tl.staggerTo(characters, duration, {
+        y: '-100%',
+        ease: Power4.easeOut
+      }, stagger)
+
+      el.addEventListener('mouseenter', event => event.currentTarget.animation.play());
+      el.addEventListener('mouseout', event => el.animation.reverse());
+    }
+  </script>
+</body>
+</html>
