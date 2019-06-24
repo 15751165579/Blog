@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+  <script>
+    const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined' && typeof navigator !== 'undefined'
+    
+    const timeoutDuration = 1
+
+    function microTask(fn) {
+      let called = false
+      return function _microTask() {
+        if (called) {
+          return
+        }
+        called = true
+        window.Promise.resolve().then(() => {
+          called = false
+          fn()
+        })
+      }
+    }
+
+    function macroTask(fn) {
+      let called = false
+      return function _macroTask() {
+        if (called) {
+          return
+        }
+        called = true
+        setTimeout(() => {
+          called = false
+          fn()
+        }, timeoutDuration)
+      }
+    }
+
+    const supportMicroTask = isBrowser && window.Promise
+
+    const task = supportMicroTask ? microTask : macroTask
+  </script>
+</body>
+</html>
