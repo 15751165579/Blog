@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const url = 'https://www.baidu.com/s?id=123&name=why&phone=13876769797'
+
+    const urlParams = new URLSearchParams(url)
+
+    for (let [key, value] of urlParams) {
+      console.log(key + ' ' + value)
+    }  
+  </script>
+</body>
+</html>
