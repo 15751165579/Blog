@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function myInterval(callback, interval) {
+      let timer = null
+      let startTime = performance.now()
+      let endTime = startTime
+      const loop = function () {
+        endTime = performance.now()
+        if (endTime - startTime >= interval) {
+          startTime = endTime = performance.now()
+          callback && callback()
+        }
+        timer = requestAnimationFrame(loop)
+      }
+
+      timer = requestAnimationFrame(loop)
+      return timer
+    }
+
+    myInterval(() => {
+      console.log('111')
+    }, 1000)  
+  </script>
+</body>
+</html>
